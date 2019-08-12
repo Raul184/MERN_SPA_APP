@@ -1,0 +1,17 @@
+///////////////////////////////////////////////////
+//EXPRESS
+///////////////////////////////////////////////////
+
+//express app => up and running , ready to listen for requests
+const app = express(); 
+
+app.get('/', (req, res) => {
+	res.send("ey wassap from Express");
+});
+
+app.listen(3500);
+
+const port = 3500;
+app.listen(port, () => console.log('a node JS API is listen in port: 3500'));
+
+----------------------------

@@ -1,0 +1,21 @@
+
+npm i morgan	(MIDDLEWARE)	==> What routes am I getting the requests from
+																It helps you see in the console the route paths
+
+A Log   FOR   Requests	which allows you to restart the process till specifications are met (being these ones requests, responses , authentications...)
+
+//////////////////////////////
+
+
+
+MONGO DB
+
+const uri = "mongodb+srv://Rrchaos:56474782563868Dnd111@usersdb-uuc75.mongodb.net/test?retryWrites=true&w=majority";
+
+const client = new MongoClient(uri, { useNewUrlParser: true });
+client.connect(err => {
+	const collection = client.db("sample_training").collection("companies");
+	console.log('DB connected');
+  // perform actions on the collection object
+  client.close();
+});
