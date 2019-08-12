@@ -20,4 +20,3 @@ Post.create({
 }, (error, post) => {
 	console.log(error , post);
 });
-
