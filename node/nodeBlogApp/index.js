@@ -2,7 +2,7 @@ const path = require('path');
 
 const express = require('express');
 
-//Views templating
+//Views templating Engine
 const expressEdge = require('express-edge');
 
 //SET DB Connection
