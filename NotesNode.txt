@@ -43,7 +43,7 @@ node debugger app.js
 
 
 ////////////////////////////////////////////
-//TEMPLATING ENGINES
+//TEMPLATING ENGINES  [edge, mustache, ...] different template Tools for this
 ////////////////////////////////////////////
 
 const expressEdge = require('express-edge');
@@ -62,8 +62,25 @@ app.get('/', (req, res) => {
 	2.	views/layouts/app.edge >> 	Create @!section('content') for different content showed in every page
 
 	3. 	views/index.edge	>>	Attach @section('content') for different displays of content in every page of my app
- 
-			
+
+
+///////////////////////////////////////////
+// STATIC ASSETS
+//////////////////////////////////////////
+
+app.use(express.static(path.resolve(__dirname, 'public')));
+
+
+ 			
 ////////////////////////////////////////////
+//	PROJECT GENERATORS [ turbo-cli >> node.express generator]
+////////////////////////////////////////////
+npm i turbo-cli
+
+turbo new + nameProject
+
+
+///////////////////////////////////////////
 //
-////////////////////////////////////////////
+///////////////////////////////////////////
+
