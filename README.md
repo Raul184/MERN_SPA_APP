@@ -1,2 +1,2 @@
 # JS_Backend
-Node, Express and MongoDB technologies explained
+Projects built with Node, Express and MongoDB stack
