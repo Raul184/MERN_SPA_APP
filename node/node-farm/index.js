@@ -1,7 +1,7 @@
-
 //Modules
 const fs = require('fs');
-const server = require('http');
+const http = require('http');
+const url = require('url');
 //HTML Templates
 const rootData = fs.readFileSync(`${__dirname}/templates/template-overview.html` , 'utf-8');
 const rootCard = fs.readFileSync(`${__dirname}/templates/template-card.html` , 'utf-8');
@@ -9,7 +9,7 @@ const rootProduct = fs.readFileSync(`${__dirname}/templates/template-product.htm
 //To be brought from an API
 const data = fs.readFileSync(`${__dirname}/dev-data/data.json` , 'utf-8');
 const dataObj = JSON.parse(data);
-
+// console.log(dataObj);
 
 //Templating inputs
 const replaceTemplate = (template , item) => {
@@ -30,22 +30,24 @@ const replaceTemplate = (template , item) => {
   }
   return output;
 }
-server.createServer( (req , res) => {
-  const pathName = req.url;
+const server = http.createServer( (req , res) => {
+  const { query , pathname } = url.parse( req.url , true);
 
-  if( pathName === '/' || pathName === '/overview'){
+  if( pathname === '/' || pathname === '/overview'){
     res.writeHead( 200 , { 'Content-type': 'text/html' });
+    
     //templating
     const data = dataObj.map( item => replaceTemplate( rootCard , item)).join('');
-    
     const output = rootData.replace( '{%PRODUCT_CARDS%}' , data);
-  
     res.end(output);
   }
-  else if( pathName === '/product'){
-    res.end(rootProduct);
+  else if( pathname === `/product`){
+    //Select
+    const product = dataObj[query.id];
+    const output = replaceTemplate( rootProduct , product);
+    res.end(output);
   }
-  else if( pathName === '/api'){
+  else if( pathname === '/api'){
 
   }
   else{
@@ -53,6 +55,7 @@ server.createServer( (req , res) => {
       'Content-type': 'text/html'
     })
   }
-  res.end('yeah , I got this');
-}).listen(4000);
+  res.end('Page Not Found');
+})
+server.listen(4000);
 
