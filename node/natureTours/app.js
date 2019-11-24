@@ -1,19 +1,21 @@
 //express
 const express = require('express');
 const app = express();
+//Middleware
+app.use(express.json());
 
+const PORT = process.env.PORT || 4000; 
+//homepage
 app.get('/' , (req , res) => {
-  res
-    .status(200)
-    .json({
-      message: "Checking rootPage" ,
-      app: 'NatureTours'
-    })
+  res.status(200)
+     .send({
+       msg: 'Server running..'
+     });
 });
 
 
-const PORT = process.env.PORT || 3000; 
-app.listen(PORT , () => {
-  console.log('Server running..');
-})
+// ROUTES
+app.use('/api/v1/tours' , require('./routes/tours.js'));
 
+
+app.listen(PORT , () => console.log('Server running..'))
