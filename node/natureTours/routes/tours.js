@@ -11,6 +11,7 @@ const tours= JSON.parse(fs.readFileSync(`${__dirname}/../dev-data/data/tours-sim
 router.get('/' , (req , res) => {
   res.status(200).json({
     status: 'Success',
+    results: tours.length,
     data: {
       tours
     }
@@ -18,8 +19,22 @@ router.get('/' , (req , res) => {
 })
 
 router.post('/' , (req , res) => {
-  console.log(req.body);
-  res.send('done');
-})
+  const nueId = tours[tours.length - 1].id + 1;
+  const nueTour = Object.assign({ id: nueId} , req.body);
+  tours.push(nueTour);
+
+  fs.writeFile(
+    `${__dirname}/../dev-data/data/tours-simple.json` , 
+    JSON.parse(tours) , 
+    err => {
+      res.status(201).json({
+        status: 'success',
+        data: {
+          tour: nueTour
+        }
+      })
+    } 
+  )
+});
 
 module.exports = router;

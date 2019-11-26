@@ -1,7 +1,7 @@
 //express
 const express = require('express');
 const app = express();
-//Middleware
+//Middleware to get data from req/res
 app.use(express.json());
 
 const PORT = process.env.PORT || 4000; 
