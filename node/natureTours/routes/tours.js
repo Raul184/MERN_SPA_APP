@@ -2,6 +2,8 @@ const fs = require('fs');
 //Router
 const express = require('express');
 const router= express.Router();
+// const morgan = require('morgan');
+
 
 const tours= JSON.parse(fs.readFileSync(`${__dirname}/../dev-data/data/tours-simple.json`));
 

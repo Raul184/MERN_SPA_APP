@@ -1,8 +1,13 @@
 //express
 const express = require('express');
+const morgan = require('morgan');
 const app = express();
-//Middleware to get data from req/res
+
+//Middlewares 
+app.use( morgan('dev'));
+// req/res cycle
 app.use(express.json());
+
 
 const PORT = process.env.PORT || 4000; 
 //homepage
@@ -10,7 +15,7 @@ app.get('/' , (req , res) => {
   res.status(200)
      .send({
        msg: 'Server running..'
-     });
+     })
 });
 
 
