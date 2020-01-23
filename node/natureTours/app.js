@@ -21,6 +21,7 @@ app.get('/' , (req , res) => {
 
 // ROUTES
 app.use('/api/v1/tours' , require('./routes/tours.js'));
+app.use('/api/v1/users' , require('./routes/users.js'))
 
 
 app.listen(PORT , () => console.log('Server running..'))
