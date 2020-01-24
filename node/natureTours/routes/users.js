@@ -1,43 +1,8 @@
-const fs = require('fs');
 //Router
 const express = require('express');
 const router= express.Router();
-
-// @Route           / 
-// @Description     Get all tours
-// @Access          Public
-const getAllUsers = ( req , res ) => {
-  res.status(202).json({
-
-  })
-}
-
-// @Route           /:id 
-// @Description     Get 1 tours
-// @Access          Public
-const getUser = ( req, res ) => {
-  res.status(202).json({
-    
-  })
-}
-
-// @Route           /:id 
-// @Description     Update user
-// @Access          Public
-const updateUser = (req , res ) => {
-  res.status(202).json({
-    
-  })
-}
-
-// @Route           /:id 
-// @Description     Delete user
-// @Access          Public
-const deleteUser = ( req , res ) => {
-  res.status(202).json({
-    
-  })
-}
+const usersController = require('../controllers/usersController');
+const { getAllUsers , getUser , updateUser , deleteUser } = usersController;
 
 
 
