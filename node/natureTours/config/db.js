@@ -1,3 +1,6 @@
+// Another way to connect to MongoDB 
+// 1 dotenv npm package
+// 2 config npm package   *** this way here
 const mongoose = require('mongoose');
 const config = require('config');
 const db = config.get("mongoUri");
