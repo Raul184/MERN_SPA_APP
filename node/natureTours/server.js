@@ -3,8 +3,9 @@ const express = require('express');
 const dotenv = require('dotenv');
 const morgan = require('morgan');
 const app = express();
+const db = require('./config/db');
 
-//Middlewares 
+//Middlewares =====================
 if(process.env.NODE_ENV === 'development'){
   app.use( morgan('dev'));
 }
@@ -12,7 +13,8 @@ if(process.env.NODE_ENV === 'development'){
 app.use(express.json());
 // static Files
 app.use(express.static(`${__dirname}/public`))
-
+//            ============
+db();
 // Node Environmnet Vars
 // console.log(process.env.NODE_ENV);
 dotenv.config({ path: './config.env'});
