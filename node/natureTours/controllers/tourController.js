@@ -1,106 +1,81 @@
-const fs = require('fs');
-
-const tours= JSON.parse(fs.readFileSync(`${__dirname}/../dev-data/data/tours-simple.json`));
+const TourModel = require('../models/tour');
 
 
-// Middleware for Id
-exports.checkID = ( req, res, next, val ) => {
-  if(req.params.id * 1 > tours.length ){
-    return res.status(404).json({
-      msg: 'Invalid Id'
-    })
+
+exports.getAllTours = async (req , res) => {
+  try {
+    const tours = await TourModel.find()
+    if(tours.length > 0){
+      return res.status(200).json({
+        results: tours.length ,
+        data: tours
+      })
+    }
+    else{
+      return res.status(404).json({
+        msg: `Sorry, we don't have available tours right now`
+      })
+    }
+      
+  } 
+  catch (error) {
+    return res.status(500).json({ msg: error.array() })
   }
-  next();
 } 
 
-// Middleware for body-checking
-exports.checkBody = ( req , res , next , val ) => {
-  if(!req.body.name || !req.body.price ){
-    return res.status(400).json({
-      msg: "Please complete all fields"
-    })
+exports.getATour = async (req , res) => {
+  try {
+    const tour = await TourModel.findById(req.params.id)
+    if(tour){
+      return res.status(200).json({
+        data: tour
+      })
+    }else{
+      return res.status(404).json({ msg: `Sorry, we couldn't find any associated tour`})
+    }
+  } 
+  catch (error) {
+    return res.status(500).json({ msg: error.array() })
   }
-  next();
 }
-// @Route           / 
-// @Description     Get all tours
-// @Access          Public
-exports.getAllTours = (req , res) => {
-  return res.status(200).json({
-    status: 'Success',
-    results: tours.length,
-    data: {
-      tours
-    }
-  })
-} 
-// @Route           /:id 
-// @Description     Get 1 tour
-// @Access          Public
-exports.getATour = (req , res) => {
-  const tour = tours.filter(el => el.id === req.params.id)
-  return res.status(200).json({
-    status: 'Success',
-    data:{
-      tour
-    }
-  });
-}
-// @Route           /:tour 
-// @Description     Add a new tour
-// @Access          Private
-exports.addTour = (req , res) => {
-  const nueId = tours[tours.length - 1].id + 1;
-  const nueTour = Object.assign({ id: nueId} , req.body);
-  tours.push(nueTour);
- 
-  fs.writeFile(
-    `${__dirname}/../dev-data/data/tours-simple.json` , 
-    JSON.parse(tours) , 
-    err => {
-      res.status(201).json({
-        status: 'success',
-        data: {
-          tour: nueTour
-        }
-      })
-    } 
-  )
-}
-// @Route           /:tour 
-// @Description     Update a tour
-// @Access          Private
-exports.updateTour = (req , res) => {
-  const updating = tours.map(el => {
-    el.id === req.params.id ? req.body : el
-  })
-  
-  fs.writeFile(
-    `${__dirname}/../dev-data/data/tours-simple.json` , 
-    JSON.parse(updating) , 
-    err => {
-      res.status(201).json({
-        status: 'success',
-        data: {
-          tour: updating
-        }
-      })
-    } 
-  )
-}
-// @Route           /:id
-// @Description     DELETE a  tour
-// @Access          Private
 
-exports.deleteTour = ( req , res ) => {
-  
-  tours = tours.filter(el => el.id !== JSON.parse(req.params.id) )
-  fs.writeFile( 
-    `${__dirname}/../dev-data/data/tours-simple.json` , 
-    JSON.parse(tours) ,
-    err => {
-      res.status(200).json({ msg: "Tour deleted" })
-    }
-  )
+exports.addTour = async (req , res) => {
+  try {
+    const res = await TourModel.create( req.body )
+    return res.status(200).json({ 
+      msg: "Tour added" ,
+      data: res
+    })  
+  } 
+  catch (error) {
+    return res.status(500).json({ msg: error.array() })
+  }
+}
+
+exports.updateTour = async (req , res) => {
+  try {
+    const updt = await TourModel.findByIdAndUpdate(
+      req.params.id , 
+      req.body, 
+      { 
+        new: true ,
+        runValidators: true 
+      }
+    )
+    return res.status(200).json({ data: updt })
+  } 
+  catch (error) {
+    return res.status(500).json({ msg: error })
+  }
+}
+
+exports.deleteTour = async ( req , res ) => {
+  try {
+    await TourModel.findByIdAndDelete(req.params.id)
+    return res.status(204).json({ msg: 'Tour successfully removed' })
+  } 
+  catch (error) {
+    return res.status(500).json({ msg: error })
+  }
 }
 

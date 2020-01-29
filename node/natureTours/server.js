@@ -38,8 +38,8 @@ app.get('/' , (req , res) => {
      })
 });
 // ROUTES
-app.use('/api/v1/tours' , require('./routes/tours.js'));
-app.use('/api/v1/users' , require('./routes/users.js'))
+app.use('/api/v1/tours' , require('./routes/tourRoutes.js'));
+app.use('/api/v1/users' , require('./routes/userRoutes.js'))
 
 
 app.listen(PORT , () => console.log(`Server running at port: ${PORT}`))

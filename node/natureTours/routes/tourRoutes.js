@@ -8,16 +8,29 @@ const {
   getAllTours , 
   updateTour , 
   deleteTour , 
-  addTour , checkID , checkBody } = tourController;
+  addTour ,
+  checkBody 
+} = tourController;
 
-//Middleware
-router.param('id' , checkID);
 
-
+// @Description     Get all tours
+// @Access          Public
 router.get( '/' , getAllTours )
+ 
+// @Description     Get 1 tour
+// @Access          Public
 router.get( '/:id' , getATour );
-router.post( '/:tour' , checkBody , addTour);
+ 
+// @Description     Add a new tour
+// @Access          Private
+router.post( '/:tour' , addTour);
+ 
+// @Description     Update a tour
+// @Access          Private
 router.put( '/:id' , updateTour )
+
+// @Description     DELETE a  tour
+// @Access          Private
 router.delete( '/:id' , deleteTour )
   
   
