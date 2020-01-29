@@ -4,7 +4,15 @@ const TourModel = require('../models/tour');
 
 exports.getAllTours = async (req , res) => {
   try {
-    const tours = await TourModel.find()
+    // Filter ==> query Functionality
+    const queryObj = { ...req.query }
+    const excluded = [ 'page' , 'sort' , 'limit' , 'fields']
+    excluded.forEach(el => delete queryObj[el])
+    
+    const query = TourModel.find( queryObj )
+
+    const tours = await query;
+    
     if(tours.length > 0){
       return res.status(200).json({
         results: tours.length ,
@@ -16,7 +24,6 @@ exports.getAllTours = async (req , res) => {
         msg: `Sorry, we don't have available tours right now`
       })
     }
-      
   } 
   catch (error) {
     return res.status(500).json({ msg: error.array() })

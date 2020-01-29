@@ -8,7 +8,7 @@ const tour = new mongoose.Schema({
     required: [ true , `Please , don't forget to name the tour`] ,
     unique: true
   },
-  durations: {
+  duration: {
     type: Number ,
     required: [true , `Please don't forget to state how long it takes`] 
   },
@@ -16,7 +16,7 @@ const tour = new mongoose.Schema({
     type: Number ,
     required: [ true , `Max number of travellers`]
   },
-  dificulty: {
+  difficulty: {
     type: String ,
     required: [ true , `Physical conditions demanded for this tour`]
   },
@@ -55,6 +55,6 @@ const tour = new mongoose.Schema({
 });
 
 
-const TourModel = mongoose.model( 'Tour' , tour );
+const TourModel = mongoose.model( 'tours' , tour );
 
 module.exports = TourModel;

@@ -1,9 +1,12 @@
 //express
 const express = require('express');
-const dotenv = require('dotenv');
-const morgan = require('morgan');
 const mongoose = require('mongoose');
+const morgan = require('morgan');
+const dotenv = require('dotenv');
+// To work With Node Environmnet Vars => process.env.NODE_ENV
+dotenv.config({ path: './config.env'});
 const app = express();
+
 
 //Middlewares =====================
 if(process.env.NODE_ENV === 'development'){
@@ -11,11 +14,9 @@ if(process.env.NODE_ENV === 'development'){
 }
 // req/res cycle
 app.use(express.json());
-// static Files
-app.use(express.static(`${__dirname}/public`))
+// // static Files
+// app.use(express.static(`${__dirname}/public`))
 
-// To work With Node Environmnet Vars => process.env.NODE_ENV
-dotenv.config({ path: './config.env'});
 
 // DB
 mongoose.connect( process.env.MONGO_URI , {
