@@ -9,7 +9,7 @@ const {
   updateTour , 
   deleteTour , 
   addTour ,
-  checkBody 
+  getTop
 } = tourController;
 
 
@@ -33,7 +33,9 @@ router.put( '/:id' , updateTour )
 // @Access          Private
 router.delete( '/:id' , deleteTour )
   
-  
+// @Description     GET + demanded Tours
+// @Access          Public
+router.get('/top5' , getTop , getAllTours)
 
 module.exports = router;
 
