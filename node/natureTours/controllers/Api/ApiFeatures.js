@@ -8,6 +8,7 @@ class ApiFeatures {
     const queryObj = { ...this.queryString }
     const excluded = [ 'page' , 'sort' , 'limit' , 'fields']
     excluded.forEach(el => delete queryObj[el])
+
     // 2. Advanced Filtering
     this.queryStr = JSON.stringify(queryObj)
     this.queryStr = this.queryStr.replace(/\b(gte|gt|lte|lt)\b/g , match => `$${match}`)
@@ -51,4 +52,6 @@ class ApiFeatures {
     return this;
   }
 }
+
+
 module.exports = ApiFeatures;
