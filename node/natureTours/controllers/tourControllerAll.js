@@ -92,12 +92,12 @@ exports.addTour = async (req , res) => {
   try {
     const res = await TourModel.create( req.body )
     return res.status(200).json({ 
-      msg: "Tour added" ,
-      data: res
+      msg: "Tour added" 
+      // data: res
     })  
   } 
   catch (error) {
-    return res.status(500).json({ msg: error.array() })
+    return res.status(500).json({ msg: error.message })
   }
 }
 

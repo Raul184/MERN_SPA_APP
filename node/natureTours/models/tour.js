@@ -1,5 +1,5 @@
 const mongoose = require('mongoose');
-
+const slugify = require('slugify');
 
 const tour = new mongoose.Schema({
   name: {
@@ -8,6 +8,7 @@ const tour = new mongoose.Schema({
     required: [ true , `Please , don't forget to name the tour`] ,
     unique: true
   },
+  slug: String ,
   duration: {
     type: Number ,
     required: [true , `Please don't forget to state how long it takes`] 
@@ -53,8 +54,28 @@ const tour = new mongoose.Schema({
     select: false
   },
   startDates: [ Date ]
+}, {
+  toJSON: { virtuals: true } ,
+  toObject: { virtuals: true }
 });
 
+// Virtual Field
+tour.virtual('durationWeeks').get(
+  function(){
+    return this.duration/7
+  }
+)
+
+// Mongoose DOCUMENT Midleware runs ==> .save() .create()
+tour.pre( 'save' , function( next ){
+  this.slug = slugify(this.name , { lower: true });
+  next();
+})
+
+// tour.post( 'save' , function( doc , next){
+//   console.log(doc);
+//   next();
+// })
 
 const TourModel = mongoose.model( 'tours' , tour );
 

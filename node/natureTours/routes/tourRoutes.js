@@ -43,7 +43,7 @@ router.get( '/:id' , getATour );
 
 // @Description     Add a new tour
 // @Access          Private
-router.post( '/:tour' , addTour);
+router.post( '/' , addTour);
  
 
 // @Description     Update a tour
