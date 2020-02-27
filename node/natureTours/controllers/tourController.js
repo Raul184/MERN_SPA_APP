@@ -12,25 +12,20 @@ exports.getTop = async (req , res , next) => {
 exports.getAllTours = async (req , res) => {
   try {
     const features = new ApiFeatures( TourModel.find() , req.query  )
-    // .filter()
+    .filter()
     .sort()
     .limitFields()
     .paginate();
 
     const tours = await features.query;
-    console.log(tours);
+    // console.log(tours);
     
-    if(tours.length > 0){
-      return res.status(200).json({
+    res.status(200).json({
         results: tours.length ,
-        data: tours
-      })
-    }
-    else{
-      return res.status(404).json({
-        msg: `Sorry, we don't have available tours right now`
-      })
-    }
+        data: {
+          tours
+        }
+    })
   } 
   catch (error) {
     return res.status(500).json({ msg: error.message })
@@ -56,12 +51,10 @@ exports.getATour = async (req , res) => {
 exports.addTour = async (req , res) => {
   try {
     const res = await TourModel.create( req.body )
-    if(res){
-      return res.status(200).json({ 
-        msg: "Tour added" ,
-        data: res
-      })  
-    }
+    return res.status(200).json({ 
+      msg: "Tour added" ,
+      data: res
+    })  
   } 
   catch (error) {
     return res.status(500).json({ msg: error.message })
