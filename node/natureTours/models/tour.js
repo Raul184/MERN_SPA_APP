@@ -1,12 +1,18 @@
 const mongoose = require('mongoose');
 const slugify = require('slugify');
+// PLUS validations dope for Mongoose
+const validator = require('validator');
+
 
 const tour = new mongoose.Schema({
   name: {
     type: String ,
-    trim: true ,
     required: [ true , `Please , don't forget to name the tour`] ,
-    unique: true
+    unique: true ,
+    trim: true ,
+    maxlength: [ 40 , `The name can't contain + 40 characters`] ,
+    minlength: [ 10 , `The name can't contain + 10 characters`] ,
+    // validate: [ validator.isAlpha , 'Please use just characters']
   },
   slug: String ,
   duration: {
@@ -19,11 +25,17 @@ const tour = new mongoose.Schema({
   },
   difficulty: {
     type: String ,
-    required: [ true , `Physical conditions demanded for this tour`]
+    required: [ true , `Physical conditions demanded for this tour`] ,
+    enum: {
+      values: [ 'easy' , 'medium' , 'difficult'] ,
+      message: 'Please name a valid value: easy / medium / difficult'
+    }
   },
   ratingsAverage: {
     type: Number ,
-    default: 4.5
+    default: 4.5 ,
+    min: [ 1 , 'Please rate above 1'] ,
+    max: [ 5 , 'Please the best score is 5']
   },
   ratingsQuantity: {
     type: Number ,
@@ -33,7 +45,16 @@ const tour = new mongoose.Schema({
     type: Number ,
     required: [ true , `Please don't forget to price the your`]
   },
-  priceDiscount: Number ,
+  priceDiscount: {
+    type: Number ,
+    // Custom 
+    validate: {
+      validator: function( val ){
+        return val < this.price  // 100 < 200
+      },
+      message: 'Discount price error , please check amount ({VALUE})' 
+    }
+  } ,
   summary: {
     type: String ,
     trim: true ,
@@ -72,7 +93,7 @@ tour.virtual('durationWeeks').get(
   }
 )
 
-// Mongoose DOCUMENT Midleware 
+// Mongoose DOCUMENT Middleware 
 //        runs ==> .save() .create()
 tour.pre( 'save' , function( next ){
   this.slug = slugify(this.name , { lower: true });
@@ -92,6 +113,13 @@ tour.post( /^find/ , function(docs , next){
   // console.log(docs);
   next();
 })
+
+// Mongoose AGREGATION Middleware
+tour.pre( 'aggregate' , function( next ){
+  this.pipeline().unshift({ $match: { secretTours: { $ne: true } } })
+  next();
+})
+
 const TourModel = mongoose.model( 'tours' , tour );
 
 module.exports = TourModel;
