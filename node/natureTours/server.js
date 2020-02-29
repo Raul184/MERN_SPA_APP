@@ -6,8 +6,8 @@ const dotenv = require('dotenv');
 // To work With Node Environmnet Vars => process.env.NODE_ENV
 dotenv.config({ path: './config.env'});
 const app = express();
-//Global Error Handler middleware
-const globalErrors = require('./GlobalErrorHandler/ErrorHandler');
+const AppError = require('./utils/ErrorHandler');
+const globalErrorHandler = require('./controllers/errorController');
 
 //Middlewares =====================
 if(process.env.NODE_ENV === 'development'){
@@ -45,13 +45,12 @@ app.get('/' , (req , res) => {
 app.use('/api/v1/tours' , require('./routes/tourRoutes.js'));
 app.use('/api/v1/users' , require('./routes/userRoutes.js'))
 // Invalid Routes
-app.all(
-  '*' , 
-  (req , res , next) => res.status(404).json({ msg: 'Undefined url bro' })
+app.all( '*' , (req , res , next) => {
+    next( new AppError(`Can't find ${req.originalUrl} here!` , 404));
+  } 
 )
 
 // Global Errors Handler Middleware
-app.use( globalErrors )
-
+app.use( globalErrorHandler )
 
 app.listen(PORT , () => console.log(`Server running at port: ${PORT}`))
