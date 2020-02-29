@@ -1,4 +1,4 @@
-import React, { Component } from 'react'
+
 
 class ErrorHandler extends Error {
   constructor(message , statusCode){
@@ -10,13 +10,6 @@ class ErrorHandler extends Error {
     'error'
     this.isOperational = true
     Error.captureStackTrace( this, this.constructor );
-  }
-  render() {
-    return (
-      <div>
-        
-      </div>
-    )
   }
 }
 

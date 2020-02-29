@@ -1,5 +1,6 @@
 const TourModel = require('../models/tour');
-const ApiFeatures = require('./Api/ApiFeatures')
+const ApiFeatures = require('./Api/ApiFeatures');
+const AppError = require('../utils/ErrorHandler');
 
 // Middleware
 exports.getTop = async (req , res , next) => {
@@ -11,7 +12,7 @@ exports.getTop = async (req , res , next) => {
 
 exports.getAllTours = async (req , res) => {
   try {
-    const features = await new ApiFeatures( TourModel.find() , req.query  )
+    const features = new ApiFeatures( TourModel.find() , req.query  )
     .filter()
     .sort()
     .limitFields()
@@ -40,7 +41,7 @@ exports.getATour = async (req , res) => {
         data: tour
       })
     }else{
-      return res.status(404).json({ msg: `Sorry, we couldn't find any associated tour`})
+      return next( new AppError(`Sorry, we couldn't find any associated tour` , 404))
     }
   } 
   catch (error) {
@@ -69,8 +70,11 @@ exports.updateTour = async (req , res) => {
       { 
         new: true ,
         runValidators: true 
-      }
-    )
+    })
+    if(!updt){
+      return next( new AppError(`Sorry, we couldn't find any associated tour` , 404))
+    }
+
     return res.status(200).json({ data: updt })
   } 
   catch (error) {
@@ -80,8 +84,15 @@ exports.updateTour = async (req , res) => {
 
 exports.deleteTour = async ( req , res ) => {
   try {
-    await TourModel.findByIdAndDelete(req.params.id)
-    return res.status(204).json({ msg: 'Tour successfully removed' })
+    const tour = await TourModel.findByIdAndDelete(req.params.id)
+
+    if(!tour){
+      return next( new AppError(`Sorry, we couldn't find any associated tour` , 404))
+    }
+
+    return res.status(204).json({ 
+      msg: 'Tour successfully removed' 
+    })
   } 
   catch (error) {
     return res.status(500).json({ msg: error.message })
