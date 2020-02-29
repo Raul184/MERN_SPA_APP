@@ -11,7 +11,7 @@ exports.getTop = async (req , res , next) => {
 
 exports.getAllTours = async (req , res) => {
   try {
-    const features = new ApiFeatures( TourModel.find() , req.query  )
+    const features = await new ApiFeatures( TourModel.find() , req.query  )
     .filter()
     .sort()
     .limitFields()
@@ -20,7 +20,7 @@ exports.getAllTours = async (req , res) => {
     const tours = await features.query;
     // console.log(tours);
     
-    res.status(200).json({
+    return res.status(200).json({
         results: tours.length ,
         data: {
           tours
@@ -115,7 +115,7 @@ exports.getTourStats = async ( req, res ) => {
         }
       }
     ])  
-    res.status(200).json({
+    return res.status(200).json({
       data: {
         stats
       }
@@ -160,7 +160,7 @@ exports.getMonthlyPlan = async ( req, res ) => {
         $sort: { numStarts : -1 }
       }
     ])  
-    res.status(200).json({
+    return res.status(200).json({
       data: {
         plan
       }

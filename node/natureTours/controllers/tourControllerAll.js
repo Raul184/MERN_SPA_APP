@@ -114,7 +114,7 @@ exports.updateTour = async (req , res) => {
     return res.status(200).json({ data: updt })
   } 
   catch (error) {
-    return res.status(500).json({ msg: error })
+    return res.status(404).json({ msg: error.message })
   }
 }
 
