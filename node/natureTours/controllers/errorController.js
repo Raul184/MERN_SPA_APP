@@ -4,6 +4,10 @@ const handleCastErrorDB = err => {
   const message = `Invalid ${err.path}: ${err.value}`;
   return new AppError( message , 400);
 }
+
+const handleJWTError = error => new AppError('Invalid Token' , 401)
+
+const handleJWTExpired = error => new AppError('Token Expired' , 401)
 module.exports = (err , req , res , next ) => {
   err.statusCode = err.statusCode || 500;
   err.status = err.status || 'error';
@@ -26,8 +30,9 @@ module.exports = (err , req , res , next ) => {
   else if(process.env.NODE_ENV === 'production')
   {
     let error = { ...err };
-    if(error.name === 'CastError') handleCastErrorDB(error);
-   
+    if(error.name === 'CastError') error = handleCastErrorDB(error);
+    if(error.name === 'JsonWebTokenError') error = handleJWTError(error);
+    if(error.name === 'TokenExpiredError') error = handleJWTExpired(error)
     return res.status(500).json({
       status: 'error',
       message: 'Something wrong just happened , sorry'

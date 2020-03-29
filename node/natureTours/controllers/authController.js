@@ -1,3 +1,4 @@
+const { promisify } = require('util')
 const User = require('../models/user');
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcrypt');
@@ -64,21 +65,33 @@ exports.logIn = async ( req , res , next ) => {
 // Middleware for PROTECTED ROUTES
 
 exports.protect = async (req , res , next) => {
-  let token;
-  // Check for token
-  if(req.headers.authorization && req.headers.authorization.startsWith('Bearer')) {
-    token = req.headers.authorization.split(' ')[1]
+  try {
+    let token;
+    // Check for token
+    if(
+      req.headers.authorization && 
+      req.headers.authorization.startsWith('Bearer')
+    ) {
+      token = req.headers.authorization.split(' ')[1]
+    }
+    if(!token){
+      return next( new AppError( 'User not logged in' , 401 ))
+    }
+
+    // Verify token
+    const decoded = await promisify(jwt.verify)( token , process.env.JWT_SECRET ) 
+    console.log(decoded);
+    
+    // User exists ?
+    
+
+    // User changed password after JWT issued ?
+
+    
+    
+    next();
+  } 
+  catch (error) {
+    res.status(500).json({ msg: error.message })
   }
-  if(!token){
-    return next( new AppError( 'User not logged in' , 401 ))
-  }
-  
-  // Verify token
-  
-  // User exists ?
-
-  // User changed password after JWT issued ?
-
-
-  next();
 } 
