@@ -61,3 +61,24 @@ exports.logIn = async ( req , res , next ) => {
   }
 }
 
+// Middleware for PROTECTED ROUTES
+
+exports.protect = async (req , res , next) => {
+  let token;
+  // Check for token
+  if(req.headers.authorization && req.headers.authorization.startsWith('Bearer')) {
+    token = req.headers.authorization.split(' ')[1]
+  }
+  if(!token){
+    return next( new AppError( 'User not logged in' , 401 ))
+  }
+  
+  // Verify token
+  
+  // User exists ?
+
+  // User changed password after JWT issued ?
+
+
+  next();
+} 

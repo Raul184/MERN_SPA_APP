@@ -13,12 +13,14 @@ const {
   getTourStats ,
   getMonthlyPlan
 } = tourController;
+const authController = require('../controllers/authController');
+const { protect } = authController;
 
 
 
 // @Description     Get all tours
 // @Access          Public
-router.get( '/' , getAllTours )
+router.get( '/' , protect , getAllTours )
 
 
 // @Description     GET + demanded Tours
