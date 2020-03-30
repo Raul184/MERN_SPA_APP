@@ -80,15 +80,31 @@ exports.protect = async (req , res , next) => {
 
     // Verify token
     const decoded = await promisify(jwt.verify)( token , process.env.JWT_SECRET ) 
-    console.log(decoded);
     
-    // User exists ?
-    
+    // User with current Token exists ?
+    const currentUser = await User.findById(decoded.id)
+    if(!currentUser)
+    {
+      return next( new AppError('User associated with this token does not longer exists' , 401))
+    }
 
     // User changed password after JWT issued ?
+    const { passwordChangedAt } = currentUser
+  
+    if(passwordChangedAt) { 
+      //Profiling a valid comparison iat vs timeStampToken 
+      const timeSFormat = parseInt( passwordChangedAt.getTime() / 1000 , 10 )
+      const boleano = decoded.iat < timeSFormat
+      
+      if(boleano) {
+        return next(
+          new AppError( 'New password recently set , please log in again' , 401 )
+        )
+      } 
+    }
 
-    
-    
+    // Everythink OK , Access Granted
+    req.user = currentUser;
     next();
   } 
   catch (error) {

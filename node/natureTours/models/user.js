@@ -35,7 +35,8 @@ const users = new mongoose.Schema({
       } ,
       message: `Password don't match`
     }
-  }
+  },
+  passwordChangedAt: Date
 });
 // Pre ==> to Manipulate Data Always Before it gets saved into DB
 users.pre('save' , async function(next){
