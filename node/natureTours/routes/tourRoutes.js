@@ -13,8 +13,9 @@ const {
   getTourStats ,
   getMonthlyPlan
 } = tourController;
+
 const authController = require('../controllers/authController');
-const { protect } = authController;
+const { protect , restrictTo } = authController;
 
 
 
@@ -55,7 +56,7 @@ router.put( '/:id' , updateTour )
 
 // @Description     DELETE a  tour
 // @Access          Private
-router.delete( '/:id' , deleteTour )
+router.delete( '/:id' , protect , restrictTo('admin' , 'lead-guide') , deleteTour )
 
 
 

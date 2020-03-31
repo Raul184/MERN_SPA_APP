@@ -18,6 +18,11 @@ const users = new mongoose.Schema({
     validate: [ validator.isEmail , 'Please input a valid email']
   },
   photo: String  ,
+  role: {
+    type: String , 
+    enum: ['user' , 'guide' , 'lead-guide' , 'admin'] ,
+    default: 'guide'  
+  },  
   password: {
     type: String ,
     required: [ true , 'A password is required'] ,
@@ -38,6 +43,8 @@ const users = new mongoose.Schema({
   },
   passwordChangedAt: Date
 });
+
+// BUILT-IN Middlewares for Mongoose
 // Pre ==> to Manipulate Data Always Before it gets saved into DB
 users.pre('save' , async function(next){
   if(!this.isModified('password')) return next();

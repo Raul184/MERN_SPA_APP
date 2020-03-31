@@ -102,7 +102,6 @@ exports.protect = async (req , res , next) => {
         )
       } 
     }
-
     // Everythink OK , Access Granted
     req.user = currentUser;
     next();
@@ -111,3 +110,16 @@ exports.protect = async (req , res , next) => {
     res.status(500).json({ msg: error.message })
   }
 } 
+
+// Roles for Admins & Users
+exports.restrictTo = (...roles) => {
+  return ( req , res , next ) => {
+    // roles [ 'admin' ]  ==> role='user'
+    if(!roles.includes( req.user.role )){
+      return next(
+        new AppError( 'Sorry, you do not have permission' , 403 )
+      );
+    }
+    next();
+  }
+}
