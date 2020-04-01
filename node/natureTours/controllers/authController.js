@@ -123,3 +123,31 @@ exports.restrictTo = (...roles) => {
     next();
   }
 }
+
+// Forgot Password
+exports.forgotPassword = async (  req , res , next ) => {
+  try {    
+  //Get user from his mail
+    const user = await User.findOne({ email: req.body.email })
+    if(!user){
+      return next( new AppError("There's no user with that email" , 404))
+    }
+
+  //Generate random token & save modifications into DB
+    const resetToken = user.generateToken() 
+    
+    // down validators req. on model
+    await user.save({ validateBeforeSave: false })
+
+  //Send it by mail
+    
+  } 
+  catch (error) {
+    res.status(500).json({ msg: error.message })
+  }
+}
+
+// Reset Password
+exports.resetPassword = ( req , res , next ) => {
+
+}

@@ -1,7 +1,7 @@
 const mongoose = require('mongoose');
 const validator = require('validator');
 const bcrypt = require('bcrypt');
-
+const crypto = require('crypto');
 
 const users = new mongoose.Schema({
   name: {
@@ -21,7 +21,7 @@ const users = new mongoose.Schema({
   role: {
     type: String , 
     enum: ['user' , 'guide' , 'lead-guide' , 'admin'] ,
-    default: 'guide'  
+    default: 'user'  
   },  
   password: {
     type: String ,
@@ -41,7 +41,9 @@ const users = new mongoose.Schema({
       message: `Password don't match`
     }
   },
-  passwordChangedAt: Date
+  passwordChangedAt: Date ,
+  passwordResetToken: String ,
+  passwordResetExpires: Date
 });
 
 // BUILT-IN Middlewares for Mongoose
@@ -56,7 +58,9 @@ users.pre('save' , async function(next){
 })
 
 
-// Instant Methods
+// Instant Methods -------------
+
+// Compare & verify passwords for token login
 users.methods.correctPassword = async function (
    candidatePass , 
    userPass 
@@ -64,6 +68,17 @@ users.methods.correctPassword = async function (
   return await bcrypt.compare( candidatePass , userPass )
 }
 
+// Reset password for user
+users.methods.generateToken = function(){
+  const resetToken = crypto.randomBytes(32).toString('hex')
+  // temp. token 
+  this.passwordResetToken = crypto.createHash('sha256').update(resetToken).digest('hex')
+
+  // time discount 10 minutes
+  this.passwordResetExpires = Date.now() + 10 * 60 * 1000
+
+  return resetToken
+}
 
 const UserModel = mongoose.model('User' , users);
 module.exports = UserModel;

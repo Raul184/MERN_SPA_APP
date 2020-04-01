@@ -4,15 +4,20 @@ const router= express.Router();
 const usersController = require('../controllers/usersController');
 const authController = require('../controllers/authController');
 const { getAllUsers , getUser , updateUser , deleteUser } = usersController;
-const { signup , logIn } = authController;
+const { signup , logIn , forgotPassword , resetPassword } = authController;
 
 
 // SignUP Users
 router.post( '/signup' , signup )
 
 // Login User
- router.post( '/login' , logIn )
+router.post( '/login' , logIn )
 
+// Forgot Password
+router.post('/forgotPassword' , forgotPassword )
+
+// Reset Password
+router.post('/resetPassword' , resetPassword )
 // REST
 router.get('/' , getAllUsers);
 router.get('/:id' , getUser);
