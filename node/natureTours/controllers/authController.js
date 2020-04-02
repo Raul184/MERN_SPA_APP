@@ -1,10 +1,10 @@
 const { promisify } = require('util')
-const User = require('../models/user');
 const jwt = require('jsonwebtoken');
-const bcrypt = require('bcrypt');
-//Global Errors Handler
+const User = require('../models/user');
+// Global Errors Handler
 const AppError = require('../utils/ErrorHandler');
-
+// Emails
+const sendEmail = require('../utils/email');
 
 exports.signup = async ( req , res , next ) => {
   try {
@@ -12,7 +12,8 @@ exports.signup = async ( req , res , next ) => {
       name: req.body.name ,
       email: req.body.email ,
       password: req.body.password ,
-      passwordConfirm: req.body.passwordConfirm
+      passwordConfirm: req.body.passwordConfirm ,
+      role: req.body.role
     });
     const token = jwt.sign(
       { id: nueUser._id} , 
@@ -129,25 +130,48 @@ exports.forgotPassword = async (  req , res , next ) => {
   try {    
   //Get user from his mail
     const user = await User.findOne({ email: req.body.email })
+    
     if(!user){
       return next( new AppError("There's no user with that email" , 404))
     }
 
   //Generate random token & save modifications into DB
     const resetToken = user.generateToken() 
-    
-    // down validators req. on model
+  // down validators req. on model
     await user.save({ validateBeforeSave: false })
 
   //Send it by mail
+    // Url
+    const resetURL = `${req.protocol}://${req.get('host')}/api/v1/users/resetPassword/${resetToken}`;
     
+    // Message
+    const message = `
+    Forgot your password ? Click here: ${resetURL}`
+    
+    await sendEmail({
+      email: user.email ,
+      subject: 'Your password reset token will expires in the next 10 minutes' ,
+      message 
+    })
+
+    res.status(200).json({ 
+      status: 'success' ,
+      msg: 'Token sent by email' 
+    })
   } 
   catch (error) {
-    res.status(500).json({ msg: error.message })
+    user.passwordResetToken = undefined 
+    user.passwordResetExpires = undefined
+    await user.save({ validateBeforeSave: false })
+
+    return next( 
+      new AppError ('Error on the way, please try again later!'),
+      500
+    ) 
   }
 }
 
 // Reset Password
-exports.resetPassword = ( req , res , next ) => {
+exports.resetPassword = async ( req , res , next ) => {
 
 }

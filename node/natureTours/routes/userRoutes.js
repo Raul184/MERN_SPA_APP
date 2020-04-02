@@ -17,7 +17,8 @@ router.post( '/login' , logIn )
 router.post('/forgotPassword' , forgotPassword )
 
 // Reset Password
-router.post('/resetPassword' , resetPassword )
+router.patch('/resetPassword/:token' , resetPassword )
+
 // REST
 router.get('/' , getAllUsers);
 router.get('/:id' , getUser);
