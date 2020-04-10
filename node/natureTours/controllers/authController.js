@@ -127,27 +127,26 @@ exports.restrictTo = (...roles) => {
 
 // Forgot Password
 exports.forgotPassword = async (  req , res , next ) => {
-  try {    
   //Get user from his mail
-    const user = await User.findOne({ email: req.body.email })
-    
-    if(!user){
-      return next( new AppError("There's no user with that email" , 404))
-    }
+  const user = await User.findOne({ email: req.body.email })
+  if(!user){
+    return next( new AppError("There's no user with that email" , 404))
+  }
 
   //Generate random token & save modifications into DB
-    const resetToken = user.generateToken() 
+  const resetToken = user.generateToken() 
   // down validators req. on model
-    await user.save({ validateBeforeSave: false })
+  await user.save({ validateBeforeSave: false })
 
   //Send it by mail
-    // Url
-    const resetURL = `${req.protocol}://${req.get('host')}/api/v1/users/resetPassword/${resetToken}`;
-    
-    // Message
-    const message = `
-    Forgot your password ? Click here: ${resetURL}`
-    
+  // Url
+  const resetURL = `${req.protocol}://${req.get('host')}/api/v1/users/resetPassword/${resetToken}`;
+  
+  // Message
+  const message = `
+  Forgot your password ? Click here: ${resetURL}`
+  
+  try {
     await sendEmail({
       email: user.email ,
       subject: 'Your password reset token will expires in the next 10 minutes' ,
@@ -165,7 +164,7 @@ exports.forgotPassword = async (  req , res , next ) => {
     await user.save({ validateBeforeSave: false })
 
     return next( 
-      new AppError ('Error on the way, please try again later!'),
+      new AppError ( error.message ),
       500
     ) 
   }
