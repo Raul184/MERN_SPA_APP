@@ -1,6 +1,7 @@
 const nodemailer = require('nodemailer');
 
 const sendEmail = async options => {
+  console.log(options);
   // Create Transporter
   const transporter = nodemailer.createTransport({
     // service: 'Gmail' , 
@@ -8,15 +9,15 @@ const sendEmail = async options => {
     port: process.env.EMAIL_PORT ,
     auth: {
       user: process.env.EMAIL_USERNAME ,
-      password: process.env.EMAIL_PASSWORD
+      pass: process.env.EMAIL_PASSWORD
     }
   })
   // Emails Format
   const mailOptions = {
     from: 'Roco Sifredi <rogo@sifredi.io>' ,
     to: options.email ,
-    to: options.subject ,
-    to: options.message
+    subject: options.subject ,
+    text: options.message
   }
   // Send Emails
   await transporter.sendMail(mailOptions)

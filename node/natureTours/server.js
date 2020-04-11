@@ -50,6 +50,7 @@ app.all( '*' , (req , res , next) => {
   } 
 )
 
+
 // Global Errors Handler Middleware
 app.use( globalErrorHandler )
 
