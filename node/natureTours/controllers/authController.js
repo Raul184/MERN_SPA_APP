@@ -1,3 +1,4 @@
+const crypto = require('crypto')
 const { promisify } = require('util')
 const jwt = require('jsonwebtoken');
 const User = require('../models/user');
@@ -48,7 +49,7 @@ exports.logIn = async ( req , res , next ) => {
 
     // Avoid giving specific info 
     if( !user ||!correct ) {
-      return next( new AppError('Sorry , user not found' , 404 ))
+      return next( new AppError('Incorrect email or password' , 401 ))
     }
     // Send token
     const token = jwt.sign(
@@ -175,5 +176,46 @@ exports.forgotPassword = async (  req , res , next ) => {
 
 // Reset Password
 exports.resetPassword = async ( req , res , next ) => {
+  try {
+    // Get user based on token
+    const hashedToken = crypto
+    .createHash('sha256')
+    .update(req.params.token)
+    .digest('hex')
 
+    const user = await User.findOne({ 
+      passwordResetToken: hashedToken , 
+      passwordResetExpires: { $gt: Date.now()} 
+    })
+    // Token did not expire ? User exists? ==> set new password
+    if(!user){
+      return next( new AppError( 'Token invalid or has expired' , 400 ))
+    }
+    user.password = req.body.password;
+    user.passwordConfirm = req.body.passwordConfirm;
+    user.passwordResetToken = undefined;
+    user.passwordResetExpires = undefined;
+
+    await user.save()
+
+    // Update changePasswordAt field for current user
+    
+    
+    // log user in => send JWT
+    const token = jwt.sign(
+      { id: user._id} , 
+      process.env.JWT_SECRET ,
+      { expiresIn: process.env.JWT_EXPIRES_IN }
+    )
+    return res.status(200).json({
+      status: 'success' ,
+      token
+    });  
+  } 
+  catch (error) {
+    return next( 
+      new AppError ( error.message ),
+      500
+    ) 
+  }
 }

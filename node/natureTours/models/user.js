@@ -57,7 +57,14 @@ users.pre('save' , async function(next){
   next();
 })
 
+// to update changedPasswordAt when User forgot Password
+users.pre('save' , async function(next){
+  if(!this.isModified('password') || this.isNew) return next()
 
+  this.passwordChangedAt = Date.now() - 1000;
+  next();
+  
+})
 // Instant Methods -------------
 
 // Compare & verify passwords for token login
