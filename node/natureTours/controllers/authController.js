@@ -8,13 +8,16 @@ const sendEmail = require('../utils/email');
 
 exports.signup = async ( req , res , next ) => {
   try {
+    // Sign User Up
     const nueUser = await User.create({
       name: req.body.name ,
       email: req.body.email ,
       password: req.body.password ,
-      passwordConfirm: req.body.passwordConfirm ,
-      role: req.body.role
+      passwordConfirm: req.body.passwordConfirm 
+      // Roles Only to be updated from MongoCompass only
+      // role: req.body.role
     });
+    // Login
     const token = jwt.sign(
       { id: nueUser._id} , 
       process.env.JWT_SECRET ,
