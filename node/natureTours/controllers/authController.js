@@ -199,7 +199,7 @@ exports.resetPassword = async ( req , res , next ) => {
     await user.save()
 
     // Update changePasswordAt field for current user
-    
+    // => line 60 at userModel   
     
     // log user in => send JWT
     const token = jwt.sign(
@@ -217,5 +217,38 @@ exports.resetPassword = async ( req , res , next ) => {
       new AppError ( error.message ),
       500
     ) 
+  }
+}
+
+// User updating his pass while logged in
+exports.updatePassword = async ( req , res , next ) => {
+  try {
+    // Get user => req.user.id => coz user logged in
+    const user = await User.findById(req.user.id).select('+password');
+    
+    // Current Pass => ok ?
+    if(!(await user.correctPassword( req.body.passwordCurrent , user.password))){
+      return next(
+        new AppError( 'Wrong password', 401 )
+      )
+    }
+    // ok ? then update Pass
+    user.password = req.body.password
+    user.passwordConfirm = req.body.passwordConfirm
+    await user.save()
+
+    // Log user in , send JWT  
+    const token = jwt.sign(
+      { id: user._id} , 
+      process.env.JWT_SECRET ,
+      { expiresIn: process.env.JWT_EXPIRES_IN }
+    )
+    return res.status(200).json({
+      status: 'success' ,
+      user
+    });  
+  } 
+  catch (error) {
+    return next( new AppError ( error.message ), 500) 
   }
 }

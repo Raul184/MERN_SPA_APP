@@ -4,7 +4,7 @@ const router= express.Router();
 const usersController = require('../controllers/usersController');
 const authController = require('../controllers/authController');
 const { getAllUsers , getUser , updateUser , deleteUser } = usersController;
-const { signup , logIn , forgotPassword , resetPassword } = authController;
+const { signup , logIn , forgotPassword , resetPassword , protect , updatePassword } = authController;
 
 
 // SignUP Users
@@ -24,6 +24,10 @@ router.get('/' , getAllUsers);
 router.get('/:id' , getUser);
 router.get('/:id' , updateUser);
 router.get('/:id' , deleteUser);
-
+router.patch(
+  '/updateMyPassword' , 
+  protect , 
+  updatePassword 
+)
 
 module.exports = router;

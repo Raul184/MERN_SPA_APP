@@ -46,8 +46,9 @@ const users = new mongoose.Schema({
   passwordResetExpires: Date
 });
 
-// BUILT-IN Middlewares for Mongoose
-// Pre ==> to Manipulate Data Always Before it gets saved into DB
+// BUILT-IN Middlewares => Pre => Manipulate Data Before saved in DB
+
+// To ENCRYPT Passwords / new  Passwords
 users.pre('save' , async function(next){
   if(!this.isModified('password')) return next();
   
@@ -57,17 +58,20 @@ users.pre('save' , async function(next){
   next();
 })
 
-// to update changedPasswordAt when User forgot Password
-users.pre('save' , async function(next){
+// To UPDATE timeStamp ==> passwordChangedAt 
+users.pre('save' , async function(next){ 
+                                    // doc is new
   if(!this.isModified('password') || this.isNew) return next()
-
+  
+  // saving to DB slower than => issuing JWT => 
+  // timeStamp changedPassword is set after JWT was created 
   this.passwordChangedAt = Date.now() - 1000;
   next();
-  
 })
-// Instant Methods -------------
 
-// Compare & verify passwords for token login
+// Instant Methods FOR the Controller 
+
+// Compare & verify passwords 
 users.methods.correctPassword = async function (
    candidatePass , 
    userPass 
