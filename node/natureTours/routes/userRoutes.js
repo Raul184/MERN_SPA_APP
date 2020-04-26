@@ -3,7 +3,7 @@ const express = require('express');
 const router= express.Router();
 const usersController = require('../controllers/usersController');
 const authController = require('../controllers/authController');
-const { getAllUsers , getUser , updateUser , deleteUser } = usersController;
+const { getAllUsers , getUser , updateUser , deleteUser , updateMe  } = usersController;
 const { signup , logIn , forgotPassword , resetPassword , protect , updatePassword } = authController;
 
 
@@ -19,15 +19,22 @@ router.post('/forgotPassword' , forgotPassword )
 // Reset Password
 router.patch('/resetPassword/:token' , resetPassword )
 
-// REST
-router.get('/' , getAllUsers);
-router.get('/:id' , getUser);
-router.get('/:id' , updateUser);
-router.get('/:id' , deleteUser);
 router.patch(
   '/updateMyPassword' , 
   protect , 
   updatePassword 
 )
+
+router.patch(
+  '/updateMe' , 
+  protect , 
+  updateMe
+)
+
+// REST
+router.get('/' , getAllUsers);
+router.get('/:id' , getUser);
+router.get('/:id' , updateUser);
+router.get('/:id' , deleteUser);
 
 module.exports = router;
