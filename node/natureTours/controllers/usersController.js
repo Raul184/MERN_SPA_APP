@@ -85,3 +85,20 @@ exports.updateMe = async ( req , res , next ) => {
     return res.status(500).json({ msg: error.message })
   }
 }
+
+// @Route           /deleteMe
+// @Description     Delete => account
+// @Access          Private
+exports.deleteMe = async ( req , res , next ) => {
+  try {
+    await User.findByIdAndUpdate( req.user._id , { active: false })
+
+    return res.status(200).json({
+      status: 'success' ,
+      data: null
+    });
+  } 
+  catch (error) {
+    return res.status(500).json({ msg: error.message })
+  }
+}

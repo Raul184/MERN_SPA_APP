@@ -43,7 +43,12 @@ const users = new mongoose.Schema({
   },
   passwordChangedAt: Date ,
   passwordResetToken: String ,
-  passwordResetExpires: Date
+  passwordResetExpires: Date ,
+  active: {
+    type: Boolean ,
+    default: true ,
+    select: false
+  }
 });
 
 // BUILT-IN Middlewares => Pre => Manipulate Data Before saved in DB
@@ -66,6 +71,12 @@ users.pre('save' , async function(next){
   // saving to DB slower than => issuing JWT => 
   // timeStamp changedPassword is set after JWT was created 
   this.passwordChangedAt = Date.now() - 1000;
+  next();
+})
+
+users.pre(/^find/ , function(next){
+  // this ==> query Obj
+  this.find({ active: { $ne: false } })
   next();
 })
 
