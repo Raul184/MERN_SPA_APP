@@ -6,6 +6,9 @@ const User = require('../models/user');
 const AppError = require('../utils/ErrorHandler');
 // Emails
 const sendEmail = require('../utils/email');
+// Tools
+const signYsendToken = require('../utils/tools')
+
 
 exports.signup = async ( req , res , next ) => {
   try {
@@ -18,18 +21,8 @@ exports.signup = async ( req , res , next ) => {
       // Roles Only to be updated from MongoCompass only
       // role: req.body.role
     });
-    // Login
-    const token = jwt.sign(
-      { id: nueUser._id} , 
-      process.env.JWT_SECRET ,
-      { expiresIn: process.env.JWT_EXPIRES_IN }
-    )
 
-    return res.status(201).json({
-      status: 'success',
-      token ,
-      data: nueUser
-    })  
+    signYsendToken(201 , nueUser , res)
   } 
   catch (error) {
     return res.status(400).json({ msg: error.message })
@@ -51,16 +44,8 @@ exports.logIn = async ( req , res , next ) => {
     if( !user ||!correct ) {
       return next( new AppError('Incorrect email or password' , 401 ))
     }
-    // Send token
-    const token = jwt.sign(
-      { id: user._id} , 
-      process.env.JWT_SECRET ,
-      { expiresIn: process.env.JWT_EXPIRES_IN }
-    )
 
-    return res.status(200).json({
-      token
-    })
+    signYsendToken(200 , user , res)
   } 
   catch (error) {
     return res.status(500).json({ msg: error.message })
@@ -82,7 +67,6 @@ exports.protect = async (req , res , next) => {
     if(!token){
       return next( new AppError( 'User not logged in' , 401 ))
     }
-
     // Verify token
     const decoded = await promisify(jwt.verify)( token , process.env.JWT_SECRET ) 
     
@@ -95,12 +79,10 @@ exports.protect = async (req , res , next) => {
 
     // User changed password after JWT issued ?
     const { passwordChangedAt } = currentUser
-  
     if(passwordChangedAt) { 
       //Profiling a valid comparison iat vs timeStampToken 
       const timeSFormat = parseInt( passwordChangedAt.getTime() / 1000 , 10 )
       const boleano = decoded.iat < timeSFormat
-      
       if(boleano) {
         return next(
           new AppError( 'New password recently set , please log in again' , 401 )
@@ -136,16 +118,13 @@ exports.forgotPassword = async (  req , res , next ) => {
   if(!user){
     return next( new AppError("There's no user with that email" , 404))
   }
-
   //Generate random token & save modifications into DB
   const resetToken = user.generateToken() 
   // down validators req. on model
   await user.save({ validateBeforeSave: false })
 
   //Send it by mail
-  // Url
   const resetURL = `${req.protocol}://${req.get('host')}/api/v1/users/resetPassword/${resetToken}`;
-  
   // Message
   const message = `
   Forgot your password ? Click here: ${resetURL}`
@@ -200,17 +179,7 @@ exports.resetPassword = async ( req , res , next ) => {
 
     // Update changePasswordAt field for current user
     // => line 60 at userModel   
-    
-    // log user in => send JWT
-    const token = jwt.sign(
-      { id: user._id} , 
-      process.env.JWT_SECRET ,
-      { expiresIn: process.env.JWT_EXPIRES_IN }
-    )
-    return res.status(200).json({
-      status: 'success' ,
-      token
-    });  
+    signYsendToken(200 , user , res)
   } 
   catch (error) {
     return next( 
@@ -237,16 +206,7 @@ exports.updatePassword = async ( req , res , next ) => {
     user.passwordConfirm = req.body.passwordConfirm
     await user.save()
 
-    // Log user in , send JWT  
-    const token = jwt.sign(
-      { id: user._id} , 
-      process.env.JWT_SECRET ,
-      { expiresIn: process.env.JWT_EXPIRES_IN }
-    )
-    return res.status(200).json({
-      status: 'success' ,
-      user
-    });  
+    signYsendToken(200 , user , res , sent=false )
   } 
   catch (error) {
     return next( new AppError ( error.message ), 500) 
