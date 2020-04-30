@@ -41,7 +41,7 @@ exports.logIn = async ( req , res , next ) => {
     const correct = await user.correctPassword( password , user.password);
 
     // Avoid giving specific info 
-    if( !user ||!correct ) {
+    if( !user ||!correct || correct === null ) {
       return next( new AppError('Incorrect email or password' , 401 ))
     }
 

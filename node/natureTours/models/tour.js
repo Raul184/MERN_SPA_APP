@@ -2,7 +2,8 @@ const mongoose = require('mongoose');
 const slugify = require('slugify');
 // PLUS validations dope for Mongoose
 const validator = require('validator');
-
+// User
+const User = require('./user')
 
 const tour = new mongoose.Schema({
   name: {
@@ -105,7 +106,8 @@ const tour = new mongoose.Schema({
       description: String,
       date: Number
     }
-  ]
+  ] ,
+  guides: []
 },
  {
   toJSON: { virtuals: true } ,
@@ -128,6 +130,14 @@ tour.pre( 'save' , function( next ){
   this.slug = slugify(this.name , { lower: true });
   next();
 })
+
+// Attach guides to a tour when created
+tour.pre( 'save' , async function(next) {
+  const guidesPromises = this.guides.map( async id => await User.findById(id))
+  this.guides = await Promise.all(guidesPromises)
+  next();
+})
+
 
 // Mongoose QUERY Middleware
 tour.pre( /^find/ , function(next){
