@@ -78,13 +78,42 @@ const tour = new mongoose.Schema({
   secretTours: {
     type: Boolean ,
     default: false
-  }
+  },
+  // Locations from Tours to be included in the Tours model
+  // Embbedded || Denormalized ==> Data Modelling
+  //GeoSpaceData on MongoDB
+  startLocation: {
+    type: {
+      type: String ,
+      default: 'Point' ,
+      enum: ['Point']
+    } ,
+    // Longitude - Latitude
+    coordinates: [Number] ,
+    address: String ,
+    description: String
+  },
+  locations: [
+    {
+      type: {
+        type: String ,
+        default: 'Point' ,
+        enum: ['Point']
+      },
+      coordinates: [Number],
+      address: String ,
+      description: String,
+      date: Number
+    }
+  ]
 },
  {
   toJSON: { virtuals: true } ,
   toObject: { virtuals: true }
  }
 );
+
+
 
 // Virtual Field
 tour.virtual('durationWeeks').get(

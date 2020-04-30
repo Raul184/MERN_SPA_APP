@@ -55,11 +55,6 @@ app.use(hpp({
   ]
 }));
 
-// Tests || Debugging purposes
-app.use( (req , res, next) => {
-  req.requestTime = new Date().toISOString;
-  // console.log(req.headers);
-})
 
 // DB  ==========================================
 mongoose.connect( process.env.MONGO_URI , {
