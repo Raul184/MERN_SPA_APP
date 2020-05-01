@@ -35,7 +35,11 @@ exports.getAllTours = async (req , res) => {
 
 exports.getATour = async (req , res) => {
   try {
-    const tour = await TourModel.findById(req.params.id)
+    const tour = await TourModel.findById(req.params.id)//.populate({
+    //   path: 'guides' ,
+    //   select: '-__v'
+    // })   ==> Refactored => Query Middleware to avoid repetition => ln 13
+
     if(tour){
       return res.status(200).json({
         data: tour
@@ -51,10 +55,10 @@ exports.getATour = async (req , res) => {
 
 exports.addTour = async (req , res) => {
   try {
-    const res = await TourModel.create( req.body )
+    const tourAdd = await TourModel.create( req.body )
     return res.status(200).json({ 
       msg: "Tour added" ,
-      data: res
+      data: tourAdd
     })  
   } 
   catch (error) {

@@ -3,7 +3,7 @@ const slugify = require('slugify');
 // PLUS validations dope for Mongoose
 const validator = require('validator');
 // User
-const User = require('./user')
+// const User = require('./user')
 
 const tour = new mongoose.Schema({
   name: {
@@ -12,7 +12,7 @@ const tour = new mongoose.Schema({
     unique: true ,
     trim: true ,
     maxlength: [ 40 , `The name can't contain + 40 characters`] ,
-    minlength: [ 10 , `The name can't contain + 10 characters`] ,
+    minlength: [ 10 , `The name must contain + 10 characters`] ,
     // validate: [ validator.isAlpha , 'Please use just characters']
   },
   slug: String ,
@@ -81,7 +81,7 @@ const tour = new mongoose.Schema({
     default: false
   },
   // Locations from Tours to be included in the Tours model
-  // Embbedded || Denormalized ==> Data Modelling
+  // Embbedded || Denormalized ==> Data Modelling approach
   //GeoSpaceData on MongoDB
   startLocation: {
     type: {
@@ -107,7 +107,14 @@ const tour = new mongoose.Schema({
       date: Number
     }
   ] ,
-  guides: []
+  // Normalized || Reference ==> Data Modelling approach
+  // Step 1
+  guides: [
+    {
+      type: mongoose.Schema.ObjectId ,
+      ref: 'User'
+    }
+  ]
 },
  {
   toJSON: { virtuals: true } ,
@@ -131,15 +138,15 @@ tour.pre( 'save' , function( next ){
   next();
 })
 
-// Attach guides to a tour when created
-tour.pre( 'save' , async function(next) {
-  const guidesPromises = this.guides.map( async id => await User.findById(id))
-  this.guides = await Promise.all(guidesPromises)
-  next();
-})
+// Attach guides to a tour when created => Denormalized/Embedding approach
+// tour.pre( 'save' , async function(next) {
+//   const guidesPromises = this.guides.map( async id => await User.findById(id))
+//   this.guides = await Promise.all(guidesPromises)
+//   next();
+// })
 
 
-// Mongoose QUERY Middleware
+// Mongoose QUERY Middleware ==================================
 tour.pre( /^find/ , function(next){
   this.find({ secretTours: { $ne: true } });
   //Execution time
@@ -147,13 +154,23 @@ tour.pre( /^find/ , function(next){
   next();
 })
 
-tour.post( /^find/ , function(docs , next){
-  console.log(`Query took ${Date.now() - this.start} miliseconds`);
-  // console.log(docs);
+// Step 2
+tour.pre(/^find/ , function(next){
+  this.populate({
+    path: 'guides' ,
+    select: '-__v'
+  })
   next();
 })
 
-// Mongoose AGREGATION Middleware
+
+tour.post( /^find/ , function(docs , next){
+  console.log(`Query took ${Date.now() - this.start} miliseconds`);
+  next();
+})
+
+
+// Mongoose AGREGATION Middleware ==================================
 tour.pre( 'aggregate' , function( next ){
   this.pipeline().unshift({ $match: { secretTours: { $ne: true } } })
   next();
