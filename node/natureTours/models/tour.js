@@ -115,6 +115,14 @@ const tour = new mongoose.Schema({
       ref: 'User'
     }
   ]
+  // to keep tour & belonging reviews in check
+  // Approach 1. Child-referencing ( bad for DB ==> TOO Many reviews on future)
+  // reviews: [
+  //   {
+  //     type: mongoose.Schema.ObjectId ,
+  //     ref: 'Reviews'
+  //   }
+  // ]
 },
  {
   toJSON: { virtuals: true } ,
@@ -130,6 +138,13 @@ tour.virtual('durationWeeks').get(
     return this.duration/7
   }
 )
+// Approach 2. Virtual Populating approach
+// Creating the fields as they are requested to go by
+tour.virtual('reviews' , {
+  ref: 'Reviews' ,
+  foreignField: 'tourReviewed' ,
+  localField: '_id' 
+}) 
 
 // Mongoose DOCUMENT Middleware 
 //        runs ==> .save() .create()
@@ -176,6 +191,6 @@ tour.pre( 'aggregate' , function( next ){
   next();
 })
 
-const TourModel = mongoose.model( 'tours' , tour );
+const TourModel = mongoose.model( 'Tours' , tour );
 
 module.exports = TourModel;

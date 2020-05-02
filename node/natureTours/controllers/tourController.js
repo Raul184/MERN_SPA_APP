@@ -35,7 +35,10 @@ exports.getAllTours = async (req , res) => {
 
 exports.getATour = async (req , res) => {
   try {
-    const tour = await TourModel.findById(req.params.id)//.populate({
+    const tour = await TourModel.findById(req.params.id).populate('reviews');
+    
+    // Refactored on 1/May/20 (onTesting)
+    //.populate({
     //   path: 'guides' ,
     //   select: '-__v'
     // })   ==> Refactored => Query Middleware to avoid repetition => ln 13

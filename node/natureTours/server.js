@@ -80,8 +80,10 @@ app.get('/' , (req , res) => {
 
 // ROUTES  ==========================================
 app.use('/api/v1/tours' , require('./routes/tourRoutes.js'));
-app.use('/api/v1/users' , require('./routes/userRoutes.js'))
-// Invalid Routes
+app.use('/api/v1/users' , require('./routes/userRoutes.js'));
+app.use('/api/v1/reviews' , require('./routes/reviewRoutes.js'));
+
+// Invalid 
 app.all( '*' , (req , res , next) => {
     next( new AppError(`Can't find ${req.originalUrl} here!` , 404));
   } 
