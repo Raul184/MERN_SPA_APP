@@ -1,8 +1,11 @@
 //Router
 const express = require('express');
-const router= express.Router();
+// Controllers
 const reviewController = require('../controllers/reviewController');
 const authController = require('../controllers/authController');
+
+const router= express.Router({ mergeParams: true });
+
 const {
   createReview ,
   getAllReviews
@@ -20,7 +23,7 @@ router.get( '/' , getAllReviews )
 
 // @Description     Create 1 review
 // @Access          Private
-router.post( '/createReview' , protect , restrictTo('user') , createReview )
+router.post( '/' , protect , restrictTo('user') , createReview )
 
 
 module.exports = router;

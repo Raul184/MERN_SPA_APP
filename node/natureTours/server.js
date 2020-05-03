@@ -9,7 +9,10 @@ const helmet= require('helmet');
 const mongoSanitize = require('express-mongo-sanitize');
 const xss= require('xss-clean');
 const hpp = require('hpp');
-
+// Routers
+const tourRouter = require('./routes/tourRoutes.js');
+const userRouter = require('./routes/userRoutes.js');
+const reviewRouter = require('./routes/reviewRoutes.js');
 
 // To work With Node Environmnet Vars => process.env.NODE_ENV
 dotenv.config({ path: './config.env'});
@@ -79,9 +82,9 @@ app.get('/' , (req , res) => {
 
 
 // ROUTES  ==========================================
-app.use('/api/v1/tours' , require('./routes/tourRoutes.js'));
-app.use('/api/v1/users' , require('./routes/userRoutes.js'));
-app.use('/api/v1/reviews' , require('./routes/reviewRoutes.js'));
+app.use('/api/v1/tours' , tourRouter );
+app.use('/api/v1/users' , userRouter );
+app.use('/api/v1/reviews' , reviewRouter );
 
 // Invalid 
 app.all( '*' , (req , res , next) => {

@@ -3,6 +3,8 @@ const validator = require('validator');
 const bcrypt = require('bcrypt');
 const crypto = require('crypto');
 
+
+
 const users = new mongoose.Schema({
   name: {
     type: String ,
@@ -101,6 +103,8 @@ users.methods.generateToken = function(){
 
   return resetToken
 }
+
+
 
 const UserModel = mongoose.model('User' , users);
 module.exports = UserModel;

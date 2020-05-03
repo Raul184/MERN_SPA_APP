@@ -3,6 +3,10 @@ const express = require('express');
 const router= express.Router();
 //controllers
 const tourController = require('../controllers/tourController');
+const authController = require('../controllers/authController');
+// Routes
+const reviewRouter = require('./../routes/reviewRoutes');
+
 const { 
   getATour , 
   getTop ,
@@ -13,10 +17,14 @@ const {
   getTourStats ,
   getMonthlyPlan
 } = tourController;
-
-const authController = require('../controllers/authController');
 const { protect , restrictTo } = authController;
 
+
+
+
+// Nested Route for reviews
+// router.post('/:tourId/reviews' , protect , restrictTo('user') , createReview )
+router.use('/:tourId/reviews' , reviewRouter )
 
 
 // @Description     Get all tours

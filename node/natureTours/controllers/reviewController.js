@@ -3,8 +3,14 @@ const Reviews = require('../models/review');
 
 
 exports.getAllReviews = async ( req , res ) => {
+
+  // if a tour Id is provided ==> bring back review for that tour
+  let filter = {}
+  if(req.params.tourId) filter = { tour: req.params.tourId }
+
   try {
-    const allReviews = await Reviews.find()
+    // If tour Id is not provided => Bring all reviews
+    const allReviews = await Reviews.find(filter)
 
     if(allReviews.length === 0 ) {
       return res.status(404).json({
@@ -25,12 +31,11 @@ exports.getAllReviews = async ( req , res ) => {
 
 exports.createReview = async ( req , res ) => {
   try {
-    const reviewSaved = await Reviews.create({
-      review: req.body.review ,
-      rating: req.body.rating ,
-      userWhoReviewed: req.body.userWhoReviewed ,
-      tourReviewed: req.body.tourReviewed
-    })
+    // Pass in tour id 
+    if(!req.body.tourReviewed) req.body.tourReviewed = req.params.tourId;
+    if(!req.body.userWhoReviewed) req.body.userWhoReviewed = req.user._id;
+
+    const reviewSaved = await Reviews.create(req.body);
 
     return res.status(200).json({
       status: 'success' ,
