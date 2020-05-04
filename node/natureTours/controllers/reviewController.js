@@ -47,8 +47,10 @@ exports.createReview = async ( req , res ) => {
   }
 }
 
-
+// U
+exports.updateReview = factory.updateOne(Reviews)
 // D
 exports.deleteReview = factory.deleteOne(Reviews)
 
 
+ 

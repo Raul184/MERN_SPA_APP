@@ -31,17 +31,13 @@ exports.getUser = ( req, res ) => {
 
 // @Route           /:id 
 // @Description     Update user
-// @Access          Public
-exports.updateUser = (req , res ) => {
-  res.status(202).json({
-    
-  })
-}
+// @Access          NOT to UPDATE PASSWORDS
+exports.updateUser = factory.updateOne( UserModel );
 
 // @Route           /:id 
 // @Description     Delete user
 // @Access          Admin
-exports.deleteUser = factory.deleteOne( UserModel )
+exports.deleteUser = factory.deleteOne( UserModel );
 
 
 // @Route           /updateMe

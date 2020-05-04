@@ -9,6 +9,7 @@ const router= express.Router({ mergeParams: true });
 const {
   createReview ,
   getAllReviews ,
+  updateReview ,
   deleteReview
 } = reviewController;
 const {
@@ -26,6 +27,16 @@ router.get( '/' , getAllReviews )
 // @Access          Private
 router.post( '/' , protect , restrictTo('user') , createReview )
 
+
+// @Description     Delete 1 review
+// @Access          Private
 router.delete( '/:id' , protect , deleteReview )
+
+
+// @Description     Update 1 review
+// @Access          Private
+router.patch( '/:id' , protect , updateReview )
+
+
 
 module.exports = router;

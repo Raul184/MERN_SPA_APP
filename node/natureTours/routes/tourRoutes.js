@@ -54,12 +54,12 @@ router.get( '/:id' , getATour );
 
 // @Description     Add a new tour
 // @Access          Private
-router.post( '/' , addTour);
+router.post( '/' , protect , restrictTo('admin' , 'lead-guide') , addTour);
  
 
 // @Description     Update a tour
 // @Access          Private
-router.put( '/:id' , updateTour )
+router.put( '/:id' , protect , restrictTo('admin' , 'lead-guide') , updateTour )
 
 
 // @Description     DELETE a  tour

@@ -59,39 +59,8 @@ exports.getATour = async (req , res) => {
   }
 }
 
-exports.addTour = async (req , res) => {
-  try {
-    const tourAdd = await TourModel.create( req.body )
-    return res.status(200).json({ 
-      msg: "Tour added" ,
-      data: tourAdd
-    })  
-  } 
-  catch (error) {
-    return res.status(500).json({ msg: error.message })
-  }
-}
-
-exports.updateTour = async (req , res) => {
-  try {
-    const updt = await TourModel.findByIdAndUpdate(
-      req.params.id , 
-      req.body, 
-      { 
-        new: true ,
-        runValidators: true 
-    })
-    if(!updt){
-      return next( new AppError(`Sorry, we couldn't find any associated tour` , 404))
-    }
-
-    return res.status(200).json({ data: updt })
-  } 
-  catch (error) {
-    return res.status(500).json({ msg: error })
-  }
-}
-
+exports.addTour = factory.createOne( TourModel );
+exports.updateTour = factory.updateOne(TourModel);
 exports.deleteTour = factory.deleteOne(TourModel);
 
 
