@@ -13,39 +13,12 @@ exports.getTop = async (req , res , next) => {
   next();
 }
 
-exports.getAllTours = async (req , res) => {
-  try {
-    const features = new ApiFeatures( TourModel.find() , req.query  )
-    .filter()
-    .sort()
-    .limitFields()
-    .paginate();
+exports.getAllTours = factory.getAllOnes( TourModel );
 
-    const tours = await features.query;
-    // console.log(tours);
-    
-    return res.status(200).json({
-        results: tours.length ,
-        data: {
-          tours
-        }
-    })
-  } 
-  catch (error) {
-    return res.status(500).json({ msg: error.message })
-  }
-} 
 
 exports.getATour = async (req , res) => {
   try {
     const tour = await TourModel.findById(req.params.id).populate('reviews');
-    
-    // Refactored on 1/May/20 (onTesting)
-    //.populate({
-    //   path: 'guides' ,
-    //   select: '-__v'
-    // })   ==> Refactored => Query Middleware to avoid repetition => ln 13
-
     if(tour){
       return res.status(200).json({
         data: tour

@@ -2,31 +2,12 @@ const Reviews = require('../models/review');
 const factory = require('./factory');
 
 
-exports.getAllReviews = async ( req , res ) => {
+exports.getAllReviews = factory.getAllOnes( Reviews );
+  // ***End point created for this functionality
+  // // if a tour Id is provided ==> bring back review for that tour
+  // let filter = {}
+  // if(req.params.tourId) filter = { tour: req.params.tourId }
 
-  // if a tour Id is provided ==> bring back review for that tour
-  let filter = {}
-  if(req.params.tourId) filter = { tour: req.params.tourId }
-
-  try {
-    // If tour Id is not provided => Bring all reviews
-    const allReviews = await Reviews.find(filter)
-
-    if(allReviews.length === 0 ) {
-      return res.status(404).json({
-        msg: `There are not reviews at this moment , come back later`
-      })
-    }  
-
-    return res.status(200).json({
-      status: 'success' ,
-      data: allReviews
-    })
-  } 
-  catch (error) {
-    return res.status(500).json({ msg: error.message })
-  }  
-} 
 
 // C
 exports.createReview = async ( req , res ) => {
@@ -46,11 +27,12 @@ exports.createReview = async ( req , res ) => {
     return res.status(500).json({ msg: error.message })
   }
 }
-
+// R
+exports.getAReview = factory.getOne(Reviews);
 // U
-exports.updateReview = factory.updateOne(Reviews)
+exports.updateReview = factory.updateOne(Reviews);
 // D
-exports.deleteReview = factory.deleteOne(Reviews)
+exports.deleteReview = factory.deleteOne(Reviews);
 
 
  

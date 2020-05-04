@@ -9,6 +9,7 @@ const router= express.Router({ mergeParams: true });
 const {
   createReview ,
   getAllReviews ,
+  getAReview ,
   updateReview ,
   deleteReview
 } = reviewController;
@@ -22,6 +23,9 @@ const {
 // @Access          Public
 router.get( '/' , getAllReviews )
 
+// @Description     Get a review
+// @Access          Public
+router.get( '/:id' , getAReview )
 
 // @Description     Create 1 review
 // @Access          Private
