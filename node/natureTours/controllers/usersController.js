@@ -1,14 +1,14 @@
-const User = require('../models/user');
+const UserModel = require('../models/user');
 const AppError = require('../utils/ErrorHandler');
 const filterObj = require('../utils/tools.js')
-
+const factory = require('./factory');
 
 // @Route           / 
 // @Description     Get all tours
 // @Access          Public
 exports.getAllUsers = async ( req , res ) => {
   try {
-    const users = await User.find();
+    const users = await UserModel.find();
  
     return res.status(200).json({
       results: users.length ,
@@ -40,12 +40,8 @@ exports.updateUser = (req , res ) => {
 
 // @Route           /:id 
 // @Description     Delete user
-// @Access          Public
-exports.deleteUser = ( req , res ) => {
-  res.status(202).json({
-    
-  })
-}
+// @Access          Admin
+exports.deleteUser = factory.deleteOne( UserModel )
 
 
 // @Route           /updateMe
@@ -91,6 +87,7 @@ exports.updateMe = async ( req , res , next ) => {
 // @Access          Private
 exports.deleteMe = async ( req , res , next ) => {
   try {
+    // account deactivated => not deleted
     await User.findByIdAndUpdate( req.user._id , { active: false })
 
     return res.status(200).json({

@@ -1,6 +1,9 @@
 const TourModel = require('../models/tour');
 const ApiFeatures = require('./Api/ApiFeatures');
 const AppError = require('../utils/ErrorHandler');
+const factory = require('./factory');
+
+
 
 // Middleware
 exports.getTop = async (req , res , next) => {
@@ -89,24 +92,10 @@ exports.updateTour = async (req , res) => {
   }
 }
 
-exports.deleteTour = async ( req , res ) => {
-  try {
-    const tour = await TourModel.findByIdAndDelete(req.params.id)
+exports.deleteTour = factory.deleteOne(TourModel);
 
-    if(!tour){
-      return next( new AppError(`Sorry, we couldn't find any associated tour` , 404))
-    }
 
-    return res.status(204).json({ 
-      msg: 'Tour successfully removed' 
-    })
-  } 
-  catch (error) {
-    return res.status(500).json({ msg: error.message })
-  }
-}
-
-//                            =============  STATS  ===============
+//=============  STATS  ===============
 
 // GET Customized stats 
 exports.getTourStats = async ( req, res ) => {

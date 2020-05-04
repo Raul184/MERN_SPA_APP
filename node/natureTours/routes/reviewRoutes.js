@@ -8,7 +8,8 @@ const router= express.Router({ mergeParams: true });
 
 const {
   createReview ,
-  getAllReviews
+  getAllReviews ,
+  deleteReview
 } = reviewController;
 const {
   protect ,
@@ -25,5 +26,6 @@ router.get( '/' , getAllReviews )
 // @Access          Private
 router.post( '/' , protect , restrictTo('user') , createReview )
 
+router.delete( '/:id' , protect , deleteReview )
 
 module.exports = router;

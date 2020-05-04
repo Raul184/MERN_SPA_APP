@@ -42,8 +42,8 @@ router.delete(
 // REST
 router.get('/' , getAllUsers);
 router.get('/:id' , getUser);
-router.get('/:id' , updateUser);
-router.get('/:id' , deleteUser);
+router.patch('/:id' , updateUser);
+router.delete('/:id' , deleteUser);
 
 
 

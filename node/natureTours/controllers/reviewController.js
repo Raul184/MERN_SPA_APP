@@ -1,5 +1,5 @@
 const Reviews = require('../models/review');
-
+const factory = require('./factory');
 
 
 exports.getAllReviews = async ( req , res ) => {
@@ -28,7 +28,7 @@ exports.getAllReviews = async ( req , res ) => {
   }  
 } 
 
-
+// C
 exports.createReview = async ( req , res ) => {
   try {
     // Pass in tour id 
@@ -48,7 +48,7 @@ exports.createReview = async ( req , res ) => {
 }
 
 
-
-
+// D
+exports.deleteReview = factory.deleteOne(Reviews)
 
 
