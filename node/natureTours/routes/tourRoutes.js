@@ -20,16 +20,14 @@ const {
 const { protect , restrictTo } = authController;
 
 
-
-
 // Nested Route for reviews
 // router.post('/:tourId/reviews' , protect , restrictTo('user') , createReview )
 router.use('/:tourId/reviews' , reviewRouter )
 
 
 // @Description     Get all tours
-// @Access          Public
-router.get( '/' , protect , getAllTours )
+// @Access          Access to everyone in the world
+router.get( '/' , getAllTours )
 
 
 // @Description     GET + demanded Tours
@@ -44,7 +42,12 @@ router.get('/tourStats' , getTourStats )
 
 // @Description     GET Montlhy Stats on tours 
 // @Access
-router.get('/monthlyPlan/:year' , getMonthlyPlan )
+router.get(
+  '/monthlyPlan/:year' , 
+  protect , 
+  restrictTo('adming' , 'lead-guide' , 'guide') , 
+  getMonthlyPlan 
+)
 
 
 // @Description     Get 1 tour

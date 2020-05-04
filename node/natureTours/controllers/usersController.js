@@ -1,7 +1,9 @@
 const UserModel = require('../models/user');
+// Error Handler
 const AppError = require('../utils/ErrorHandler');
-const filterObj = require('../utils/tools.js')
+// Tools
 const factory = require('./factory');
+const filterObj = require('../utils/tools.js')
 
 // @Route           / 
 // @Description     Get all tours
@@ -25,6 +27,13 @@ exports.deleteUser = factory.deleteOne( UserModel );
 
 
 // __________________________________OWN PROFILE USER ROUTING __________________________________
+
+// Middleware required ***1
+exports.getMe = ( req, res , next ) => {
+  // EndPoint     User logged in
+  req.params.id = req.user.id ;
+  next();
+}
 // @Route           /updateMe
 // @Description     Patch => Update user account data
 // @Access          Private

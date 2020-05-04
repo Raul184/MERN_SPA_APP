@@ -1,5 +1,4 @@
 const TourModel = require('../models/tour');
-const ApiFeatures = require('./Api/ApiFeatures');
 const AppError = require('../utils/ErrorHandler');
 const factory = require('./factory');
 

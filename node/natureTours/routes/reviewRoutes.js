@@ -18,6 +18,8 @@ const {
   restrictTo
 } = authController;
 
+router.use( protect );
+
 
 // @Description     Get all reviews
 // @Access          Public
@@ -29,17 +31,17 @@ router.get( '/:id' , getAReview )
 
 // @Description     Create 1 review
 // @Access          Private
-router.post( '/' , protect , restrictTo('user') , createReview )
+router.post( '/' , restrictTo('user') , createReview )
 
 
 // @Description     Delete 1 review
 // @Access          Private
-router.delete( '/:id' , protect , deleteReview )
+router.delete( '/:id' , deleteReview )
 
 
 // @Description     Update 1 review
 // @Access          Private
-router.patch( '/:id' , protect , updateReview )
+router.patch( '/:id' , restrictTo( 'user' , 'admin' ) , updateReview )
 
 
 

@@ -5,10 +5,10 @@ const router= express.Router();
 const usersController = require('../controllers/usersController');
 const authController = require('../controllers/authController');
 
-const { getAllUsers , getUser , updateUser , deleteUser , updateMe , deleteMe } = usersController;
-const { signup , logIn , forgotPassword , resetPassword , protect , updatePassword } = authController;
+const { getAllUsers , getUser , updateUser , deleteUser , getMe , updateMe , deleteMe } = usersController;
+const { signup , logIn , forgotPassword , resetPassword , protect , restrictTo , updatePassword } = authController;
 
-
+// ______________________________ AUTH => Public ______________________________________
 // SignUP Users
 router.post( '/signup' , signup )
 
@@ -21,25 +21,25 @@ router.post('/forgotPassword' , forgotPassword )
 // Reset Password
 router.patch('/resetPassword/:token' , resetPassword )
 
+
+// Middleware applied by Sequence
+// ALL Routes Below are Protected 
+router.use(protect); 
+
 router.patch(
-  '/updateMyPassword' , 
-  protect , 
+  '/updateMyPassword' ,  
   updatePassword 
 )
 
-router.patch(
-  '/updateMe' , 
-  protect , 
-  updateMe
-)
+// ______________________________ USER'S PROFILE own Updates on current session ______________________________________
+// ***1
+router.get( '/me' ,  getMe , getUser )
+router.patch( '/updateMe' , updateMe )
+router.delete( '/deleteMe' , deleteMe )
 
-router.delete(
-  '/deleteMe' ,
-  protect ,
-  deleteMe
-)
+// ______________________________ REST for Admin-Only______________________________________
 
-// REST
+router.use( restrictTo( 'admin' ))
 router.get('/' , getAllUsers);
 router.get('/:id' , getUser);
 router.patch('/:id' , updateUser);
