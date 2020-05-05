@@ -96,4 +96,4 @@ app.all( '*' , (req , res , next) => {
 // Global Errors Handler Middleware
 app.use( globalErrorHandler )
 
-app.listen(PORT , () => console.log(`Server running at port: ${PORT}`))
+app.listen(PORT , () => console.log(`Server running at port: ${PORT}`)) 

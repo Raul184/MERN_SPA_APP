@@ -25,7 +25,9 @@ exports.getAllOnes = Model => async ( req , res ) => {
     .limitFields()
     .paginate();
 
-    const doc = await features.query;
+    // To study Indexes performance on MongoDB
+    // const doc = await features.query.explain();
+    const doc = await features.query
  
     return res.status(200).json({
       status: 'success' ,
