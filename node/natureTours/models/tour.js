@@ -132,10 +132,10 @@ const tour = new mongoose.Schema({
 );
 
 // Indexed DB for speed purposes => Ordered small -> Bigger
-// tour.index({ price: 1 })
 tour.index({ price: 1 , ratingsAverage: -1 })
-
 tour.index({ slug: 1 })
+// Geolocalization
+tour.index({ startLocation: '2dsphere'})
 
 // Virtual Field
 tour.virtual('durationWeeks').get(

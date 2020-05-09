@@ -117,3 +117,32 @@ exports.getMonthlyPlan = async ( req, res ) => {
     return res.status(404).json({ msg: error.message })
   }
 }
+
+exports.getToursWithinRatio = async ( req , res , next ) => {
+  const { distance , latlng , unit } = req.params;
+  const [ latitude , longitude ] = latlng.split(',')
+  
+  try {
+    if(!latitude || !longitude) return next( 
+      new AppError('Please provide us with your current location ,thanks!')
+    )
+    
+    const radius = 
+      unit === 'mi' ? distance / 3963.2 : distance / 6378.1 ;
+
+    const tours = await TourModel.find({ 
+      startLocation: { $geoWithin: { $centerSphere: [[ longitude , latitude ] ,radius ] }}
+    });
+  
+    return res.status(200).json({
+      status: 'success' ,
+      results: tours.length ,
+      data: {
+        tours
+      }
+    })
+  } 
+  catch (error) {
+    return res.status(404).json({ msg: error.message })
+  }
+} 

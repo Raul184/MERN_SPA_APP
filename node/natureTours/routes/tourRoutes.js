@@ -15,7 +15,8 @@ const {
   deleteTour , 
   addTour ,
   getTourStats ,
-  getMonthlyPlan
+  getMonthlyPlan ,
+  getToursWithinRatio
 } = tourController;
 const { protect , restrictTo } = authController;
 
@@ -39,6 +40,9 @@ router.get( '/top-5-cheap' , getTop , getAllTours )
 // @Access          Public
 router.get('/tourStats' , getTourStats )
 
+
+// @Description     Tours within a distance-ratio from user
+router.get( '/tours-within/:distance/center/:latlng/unit/:unit' , getToursWithinRatio )
 
 // @Description     GET Montlhy Stats on tours 
 // @Access
