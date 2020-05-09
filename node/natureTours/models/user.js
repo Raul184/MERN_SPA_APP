@@ -76,6 +76,7 @@ users.pre('save' , async function(next){
   next();
 })
 
+// Forget about Deactivated Users
 users.pre(/^find/ , function(next){
   // this ==> query Obj
   this.find({ active: { $ne: false } })

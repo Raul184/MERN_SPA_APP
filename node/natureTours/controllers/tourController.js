@@ -15,16 +15,15 @@ exports.getTop = async (req , res , next) => {
 exports.getAllTours = factory.getAllOnes( TourModel );
 
 
-exports.getATour = async (req , res) => {
+exports.getATour = async (req , res , next) => {
   try {
     const tour = await TourModel.findById(req.params.id).populate('reviews');
-    if(tour){
-      return res.status(200).json({
-        data: tour
-      })
-    }else{
-      return next( new AppError(`Sorry, we couldn't find any associated tour` , 404))
+    if(!tour){
+      return next( new AppError(`Sorry, we couldn't find any associated tour` , 404)) 
     }
+    return res.status(200).json({
+      data: tour
+    })
   } 
   catch (error) {
     return res.status(500).json({ msg: error.message })
