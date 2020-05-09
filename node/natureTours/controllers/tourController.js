@@ -146,3 +146,44 @@ exports.getToursWithinRatio = async ( req , res , next ) => {
     return res.status(404).json({ msg: error.message })
   }
 } 
+
+exports.getDistancesForTours = async ( req , res , next ) => {
+  const { latlng , unit } = req.params;
+  const [ latitude , longitude ] = latlng.split(',')
+  
+  try {
+    if(!latitude || !longitude) return next( 
+      new AppError('Please provide us with your current location ,thanks!')
+    )
+    const multiplier = unit === 'mi' ? 0.000621371 : 0.001;
+    const distances = await TourModel.aggregate([
+      { // always 1st stage
+        $geoNear: {
+          near: {
+            type: 'Point' ,
+            coordinates: [ longitude * 1 , latitude * 1 ]
+          },
+          distanceField: 'distance' ,
+          distanceMultiplier: multiplier
+        },
+      },
+      {
+        // 2nd stage -->Project ( choose just the Needed fields)
+        $project: {
+          distance: 1 ,
+          name:  1
+        }
+      }
+    ])
+
+    return res.status(200).json({
+      status: 'success' ,
+      data: {
+        distances
+      }
+    })
+  } 
+  catch (error) {
+    return res.status(404).json({ msg: error.message })
+  }   
+}

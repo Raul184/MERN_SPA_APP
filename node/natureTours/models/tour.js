@@ -191,10 +191,10 @@ tour.post( /^find/ , function(docs , next){
 
 
 // Mongoose AGREGATION Middleware ==================================
-tour.pre( 'aggregate' , function( next ){
-  this.pipeline().unshift({ $match: { secretTours: { $ne: true } } })
-  next();
-})
+// tour.pre( 'aggregate' , function( next ){
+//   this.pipeline().unshift({ $match: { secretTours: { $ne: true } } })
+//   next();
+// })
 
 const TourModel = mongoose.model( 'Tours' , tour );
 

@@ -16,7 +16,8 @@ const {
   addTour ,
   getTourStats ,
   getMonthlyPlan ,
-  getToursWithinRatio
+  getToursWithinRatio ,
+  getDistancesForTours
 } = tourController;
 const { protect , restrictTo } = authController;
 
@@ -43,6 +44,10 @@ router.get('/tourStats' , getTourStats )
 
 // @Description     Tours within a distance-ratio from user
 router.get( '/tours-within/:distance/center/:latlng/unit/:unit' , getToursWithinRatio )
+
+// @Description     All Tours distance from user location
+router.get( '/distances/:latlng/unit/:unit' , getDistancesForTours )
+
 
 // @Description     GET Montlhy Stats on tours 
 // @Access
