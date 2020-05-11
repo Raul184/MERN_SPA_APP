@@ -1,8 +1,10 @@
 //express
+const path = require( 'path' );
 const express = require('express');
 const mongoose = require('mongoose');
 const morgan = require('morgan');
 const dotenv = require('dotenv');
+dotenv.config({ path: './config.env'});
 // Security 
 const rateLimit = require('express-rate-limit');
 const helmet= require('helmet');
@@ -13,15 +15,20 @@ const hpp = require('hpp');
 const tourRouter = require('./routes/tourRoutes.js');
 const userRouter = require('./routes/userRoutes.js');
 const reviewRouter = require('./routes/reviewRoutes.js');
-
-// To work With Node Environmnet Vars => process.env.NODE_ENV
-dotenv.config({ path: './config.env'});
-const app = express();
+// Errors 
 const AppError = require('./utils/ErrorHandler');
 const globalErrorHandler = require('./controllers/errorController');
+// Server
+const app = express();
+app.set( 'view engine' , 'pug');
+app.set( 'views' , path.join( __dirname , 'views'))
 
-// GLOBAL Middlewares =====================
 
+const PORT = process.env.PORT || 5000; 
+// 
+// GLOBAL Middlewares  
+//==========================================
+app.use( express.static(path.join( __dirname , 'public') ))
 // 4 
 app.use(helmet())
 
@@ -33,20 +40,20 @@ if(process.env.NODE_ENV === 'development'){
 const limiter = rateLimit({
   max: 100 ,
   windowMs: 60 * 60 * 1000 ,
-  message: 'Too many requests from this Ip, please try again after'
+  message: 'Too many requests incoming, please try again after'
 })
 app.use( '/api' , limiter ) 
 
-// 3 req/res => {}
+// 3 req/res => {} data limit
 app.use(express.json({ limit: '10kb' }));
 
-// 4 Data Sanitazitation vs NOSQL query injections
+// 5 Data Sanitazitation vs NOSQL query injections
 app.use(mongoSanitize());
 
-// 5 Data Sanitazitation vs XSS (Cross-site scripting attack)
+// 6 Data Sanitazitation vs XSS (Cross-site scripting attack)
 app.use(xss());
 
-// 6 Parameter Pollutions
+// 7 Parameter Pollutions
 app.use(hpp({ 
   whitelist: [
     'duration',
@@ -59,7 +66,9 @@ app.use(hpp({
 }));
 
 
-// DB  ==========================================
+// 
+//DB Connection  
+//==========================================
 mongoose.connect( process.env.MONGO_URI , {
   useNewUrlParser: true ,
   useUnifiedTopology: true ,
@@ -69,31 +78,31 @@ mongoose.connect( process.env.MONGO_URI , {
   () => console.log('DB plugged')
 )
 
-// PORT
-const PORT = process.env.PORT || 5000; 
-
-// root
+// 
+//ROUTES  
+//==========================================
 app.get('/' , (req , res) => {
-  res.status(200)
-     .send({
-       msg: 'Server running..'
-     })
+  res.status(200).render('base')
 });
 
-
-// ROUTES  ==========================================
 app.use('/api/v1/tours' , tourRouter );
 app.use('/api/v1/users' , userRouter );
 app.use('/api/v1/reviews' , reviewRouter );
-
-// Invalid 
+// Invalid Routes => Response
 app.all( '*' , (req , res , next) => {
     next( new AppError(`Can't find ${req.originalUrl} here!` , 404));
   } 
 )
 
-
+// 
 // Global Errors Handler Middleware
+//==========================================
 app.use( globalErrorHandler )
 
+
+
+
+
+
+// init
 app.listen(PORT , () => console.log(`Server running at port: ${PORT}`)) 
