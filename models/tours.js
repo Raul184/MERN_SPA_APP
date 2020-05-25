@@ -7,7 +7,7 @@ const tourSchema = new mongoose.Schema({
     unique: true ,
     trim: true
   } ,
-  durations: {
+  duration: {
     type: Number ,
     required: [ true , 'How long does it take?' ]
   },
@@ -51,7 +51,19 @@ const tourSchema = new mongoose.Schema({
     select: false
   },
   startDates: [ Date ],
+
+}, // Schema Options => Virtual Prop.
+{
+  toJSON: { virtuals: true } ,
+  toObject: { virtuals: true }
+}
+)
+// Virtual Property 
+tourSchema.virtual( 'durationWeeks' ).get( function() {
+  return this.duration / 7
 })
+
+
 
 // PARAMS. Middleware
 // router.param('id' , ( req , res , next , paramVal ) => {
