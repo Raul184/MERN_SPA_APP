@@ -29,6 +29,9 @@ app.use( '/api/v1/tours' , toursRouter )
 app.use( '/api/v1/users' , usersRouter )
 app.use( '/api/v1/reviews' , reviewsRouter )
 
+app.all( '*' , (req, res ) => res.status(404).json({ 
+  msg: "Can find url on this server" 
+}))
 
 
 const port = process.env.PORT || 3500; 
