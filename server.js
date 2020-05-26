@@ -2,6 +2,9 @@ const express = require('express');
 const morgan = require('morgan');
 const dotenv = require('dotenv');
 const db = require('./confg/db');
+// Errors
+const GlobalErrorsHandler = require('./GlobalErrorsHandler/ErrorsHandler');
+const AppErrors = require('./utils/AppErrors');
 // Router
 const indexRoute = require('./routes/index');
 const toursRouter = require('./routes/tour');
@@ -29,10 +32,12 @@ app.use( '/api/v1/tours' , toursRouter )
 app.use( '/api/v1/users' , usersRouter )
 app.use( '/api/v1/reviews' , reviewsRouter )
 
-app.all( '*' , (req, res ) => res.status(404).json({ 
-  msg: "Can find url on this server" 
-}))
+app.all( '*' , (req, res , next ) => {
+  next( new AppErrors ('Unknown url in this server' , 404 ))
+})
 
+// Global Error Handler Middleware
+app.use( GlobalErrorsHandler )
 
 const port = process.env.PORT || 3500; 
 app.listen( port , () => console.log(process.env.PORT));
