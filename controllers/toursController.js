@@ -124,7 +124,8 @@ exports.updateATour = async ( req , res , next) => {
       req.body ,
       {
         new: true ,
-        runValidators: true
+        runValidators: true ,
+        context: 'query'
       }) 
     
     return res.status(200).json({

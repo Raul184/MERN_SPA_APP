@@ -7,7 +7,11 @@ const tourSchema = new mongoose.Schema({
     type: String ,
     required: [ true , 'Please provide a name' ] ,
     unique: true ,
-    trim: true
+    trim: true ,
+    validate: {
+      validator: function (v) { return v.length <= 40 },
+      message: props => `${props.value} is too long , less than 40 chars. please`
+    }
   } ,
   slug: String ,
   duration: {
@@ -20,11 +24,17 @@ const tourSchema = new mongoose.Schema({
   },
   difficulty: {
     type: String ,
-    required: [ true , 'Please provide level of difficulty for our customers' ]
+    required: [ true , 'Please provide level of difficulty for our customers' ] ,
+    enum: {
+      values: [ 'easy' , 'medium' , 'difficult' ] ,
+      message: 'Please , only easy / medium or difficult allowed , xD'
+    }
   },
   ratingsAverage: {
     type: Number ,
     default: 4.5 ,
+    min: [ 1 , 'Rating must be above 1' ] ,
+    max: [ 5 , 'Maximum rate is 5' ]
   },
   ratingsQuantity: {
     type: Number ,
@@ -34,7 +44,13 @@ const tourSchema = new mongoose.Schema({
     type: Number ,
     required: [ true , 'Please provide a price' ]
   },
-  priceDiscount: Number ,
+  priceDiscount: {
+    type: Number ,
+    validate: {
+      validator: function( val ) { return val < this.price } ,
+      message: 'Input a discount lower than the current price for the tour'
+    }
+  },
   summary: {
     type: String ,
     trim: true
@@ -59,31 +75,37 @@ const tourSchema = new mongoose.Schema({
     default: false 
   }
 }, 
-{ // Schema Options => Virtual Prop
+{ // 1* Virtual var
   toJSON: { virtuals: true } ,
   toObject: { virtuals: true }
-}
-)
-// Virtual Property 
+})
+  // 2* Virtual var 
 tourSchema.virtual( 'durationWeeks' ).get( function() {
   return this.duration / 7
 })
 
+
 // // DOCUMENT Middleware ( Before / After  => event )
 tourSchema.pre( 'save' , function( next ) {
   this.slug = slugify( this.name , { lower: true })
-  next();
-})
-
-
-// QUERY Middleware ( Before any Query  => executed )
-tourSchema.pre( /^find/ , function(next){
-  this.find({ secretTour: { $ne: true } })
   next()
 })
 
 
-const TourModel = mongoose.model('tours' , tourSchema );
+// QUERY Middleware ( Before any Query  => executed )
+tourSchema.pre( /^find/ , function( next ){
+  this.find({ secretTour: { $ne: true } })
+  next()
+})
 
+// AGGREGATION Middleware
+tourSchema.pre( 'aggregate' , function( next ) {
+  this.pipeline().unshift({ $match: { secretTour: { $ne: true } }})
+  next()
+})
+
+
+
+const TourModel = mongoose.model('tours' , tourSchema );
 
 module.exports = TourModel;
