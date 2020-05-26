@@ -1,4 +1,6 @@
 const mongoose = require('mongoose');
+const slugify = require('slugify');
+
 
 const tourSchema = new mongoose.Schema({
   name: {
@@ -7,6 +9,7 @@ const tourSchema = new mongoose.Schema({
     unique: true ,
     trim: true
   } ,
+  slug: String ,
   duration: {
     type: Number ,
     required: [ true , 'How long does it take?' ]
@@ -50,10 +53,13 @@ const tourSchema = new mongoose.Schema({
     default: Date.now() ,
     select: false
   },
-  startDates: [ Date ],
-
-}, // Schema Options => Virtual Prop.
-{
+  startDates: [ Date ] ,
+  secretTour: {
+    type: Boolean ,
+    default: false 
+  }
+}, 
+{ // Schema Options => Virtual Prop
   toJSON: { virtuals: true } ,
   toObject: { virtuals: true }
 }
@@ -63,15 +69,21 @@ tourSchema.virtual( 'durationWeeks' ).get( function() {
   return this.duration / 7
 })
 
+// // DOCUMENT Middleware ( Before / After  => event )
+tourSchema.pre( 'save' , function( next ) {
+  this.slug = slugify( this.name , { lower: true })
+  next();
+})
 
 
-// PARAMS. Middleware
-// router.param('id' , ( req , res , next , paramVal ) => {
-//   console.log(`Tour id is: ${paramVal}`);
-//   next();
-// })
+// QUERY Middleware ( Before any Query  => executed )
+tourSchema.pre( /^find/ , function(next){
+  this.find({ secretTour: { $ne: true } })
+  next()
+})
 
 
+const TourModel = mongoose.model('tours' , tourSchema );
 
-const TourModel = mongoose.model('Tour' , tourSchema );
+
 module.exports = TourModel;

@@ -23,7 +23,8 @@
     "concurrently": "^5.2.0",
     "dotenv": "^8.2.0",
     "express": "^4.17.1",
-    "mongoose": "^5.9.15"
+    "mongoose": "^5.9.15",
+    "slugify": "^1.4.0"
   },
   "devDependencies": {
     "morgan": "^1.10.0",
