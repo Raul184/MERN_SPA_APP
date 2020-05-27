@@ -3,8 +3,8 @@ const morgan = require('morgan');
 const dotenv = require('dotenv');
 const db = require('./confg/db');
 // Errors
-const GlobalErrorsHandler = require('./GlobalErrorsHandler/ErrorsHandler');
 const AppErrors = require('./utils/AppErrors');
+const globalErrorsHandler = require('./GlobalErrorsHandler/ErrorsHandler');
 // Router
 const indexRoute = require('./routes/index');
 const toursRouter = require('./routes/tour');
@@ -37,7 +37,7 @@ app.all( '*' , (req, res , next ) => {
 })
 
 // Global Error Handler Middleware
-app.use( GlobalErrorsHandler )
+app.use( globalErrorsHandler )
 
 const port = process.env.PORT || 3500; 
 app.listen( port , () => console.log(process.env.PORT));
