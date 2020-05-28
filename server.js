@@ -36,8 +36,8 @@ app.use( '/api/v1/tours' , toursRouter )
 app.use( '/api/v1/users' , usersRouter )
 app.use( '/api/v1/reviews' , reviewsRouter )
 
-app.all( '*' , (req, res , next ) => {
-  next( new AppErrors ('Unknown url in this server' , 404 ))
+app.all( '*' , ( req , res , next ) => {
+  next( new AppErrors ('Sorry pal , this address is off the hook' , 404 ))
 })
 
 // Global Error Handler Middleware
@@ -47,7 +47,7 @@ app.use( globalErrorsHandler )
 const port = process.env.PORT || 3500; 
 app.listen( port , () => console.log( process.env.PORT , process.env.NODE_ENV ));
 
-
+// Listener
 process.on('unhandledRejection', err => {
   console.log('UNHANDLED REJECTION! 💥 Shutting down...');
   console.log(err.name, err.message);
