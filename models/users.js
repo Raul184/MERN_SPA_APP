@@ -1,4 +1,33 @@
-// UserSchema.path('email').validate(function (email) {
-//   var emailRegex = /^([\w-\.]+@([\w-]+\.)+[\w-]{2,4})?$/;
-//   return emailRegex.test(email.text); // Assuming email has a text attribute
-// }, 'The e-mail field cannot be empty.')
+const mongoose = require('mongoose');
+const validator = require('validator');
+
+const userSchema = new mongoose.Schema({
+  name: {
+    type: String ,
+    required: [ true , 'Please provide your name' ]
+  },
+  email: {
+    type: String ,
+    unique: true ,
+    lowercase: true , 
+    validate: [validator.isEmail , 'Please provide a valid email']
+  },
+  photo: String ,
+  password: {
+    type: String ,
+    required: [ true , 'Please provide a valid password' ] ,
+    minlength: 8
+  },
+  passwordConfirm: {
+    type: String ,
+    required: [ true , 'Please confirm your password' ]
+  }
+})
+
+
+
+
+
+const UserModel = mongoose.model( 'User' , userSchema );
+
+module.exports = UserModel
