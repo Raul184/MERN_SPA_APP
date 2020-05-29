@@ -1,5 +1,6 @@
 const mongoose = require('mongoose');
 const validator = require('validator');
+const bcrypt = require('bcryptjs');
 
 const userSchema = new mongoose.Schema({
   name: {
@@ -20,12 +21,26 @@ const userSchema = new mongoose.Schema({
   },
   passwordConfirm: {
     type: String ,
-    required: [ true , 'Please confirm your password' ]
+    required: [ true , 'Please confirm your password' ] ,
+    validate: {
+      validator: function(el){ // On create / save an User
+        return el === this.password
+      },
+      message: 'Passwords must be the same'
+    }
   }
 })
 
 
+// DOC Middleware
+userSchema.pre( 'save' , async function( next){
+  if(!this.isModified('password')) return next();
 
+  this.password = await bcrypt.hash( this.password , 12 )
+  // Once validation is met , no need to persist it in DB
+  this.passwordConfirm = undefined;
+  next()
+})
 
 
 const UserModel = mongoose.model( 'User' , userSchema );

@@ -11,11 +11,11 @@ const {
   delete1User ,
   get1User
 } = usersController
-const { signup } = authController;
+const { signup , login } = authController;
 
 
 router.post( '/signup' , signup )
-
+router.post( '/login' , login )
 //  ADMIN 
 router.get('/', getAllUsers );
 router.post('/', add1User );
