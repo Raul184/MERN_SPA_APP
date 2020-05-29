@@ -17,7 +17,8 @@ const userSchema = new mongoose.Schema({
   password: {
     type: String ,
     required: [ true , 'Please provide a valid password' ] ,
-    minlength: 8
+    minlength: 8 ,
+    select: false
   },
   passwordConfirm: {
     type: String ,
@@ -40,7 +41,15 @@ userSchema.pre( 'save' , async function( next){
   // Once validation is met , no need to persist it in DB
   this.passwordConfirm = undefined;
   next()
-})
+});
+
+// Instant Methods
+userSchema.methods.correctPass = async function( candidatePass , userPass ){
+  return await bcrypt.compare( candidatePass , userPass )
+};
+
+
+
 
 
 const UserModel = mongoose.model( 'User' , userSchema );
