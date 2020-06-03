@@ -19,6 +19,8 @@ const handleValidationErrorDB = err => {
   const message = `Invalid input data. ${errors.join('. ')}`;
   return new AppError(message, 400);
 };
+const handleTokenError = err => new AppError('Invalid token , please login again' , 401)
+
 
 const sendErrorDev = (err, res) => {
   res.status(err.statusCode).json({
@@ -65,7 +67,7 @@ module.exports = (err, req, res, next) => {
     if(err instanceof mongoose.Error.CastError){
       error = handleCastErrorDB(error);
    }
-    // if (error.name === 'CastError') error = handleCastErrorDB(error);
+    if (error.name === 'TokenExpiredError') error = handleTokenError(error);
     if (err.code === 11000) error = handleDuplicateFieldsDB(error);
     if (err.name === 'ValidationError')
       error = handleValidationErrorDB(error);

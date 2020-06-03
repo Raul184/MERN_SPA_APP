@@ -1,6 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const toursController = require('./../controllers/toursController')
+const authController = require('./../controllers/authController')
 const {
   getAllTours ,
   getATour ,
@@ -10,8 +11,8 @@ const {
   top5 ,
   getTourStats ,
   getMonthlyToursAccounting
-} = toursController ;
-
+} = toursController 
+const { protect } = authController
 
 // BUSINESS
 // Top 5 
@@ -23,7 +24,7 @@ router.get( '/monthly-plan/:year' , getMonthlyToursAccounting )
 
 
 // LOGISTIC
-router.get( '/' , getAllTours ); 
+router.get( '/' , protect , getAllTours ); 
 router.post( '/' ,  addATour )
 
 router.get( '/:id' , getATour )

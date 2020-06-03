@@ -1,3 +1,4 @@
+const { promisify } = require('util')
 const jwt = require('jsonwebtoken');
 // const bcrypt = require('bcryptjs')
 const UserModel = require('./../models/users');
@@ -72,3 +73,43 @@ exports.login = async ( req ,res , next ) => {
 }
 
 
+exports.protect = async ( req , res , next ) => {
+  let token;
+  try {
+    // Get token
+    if(req.headers.authorization && req.headers.authorization.startsWith('Bearer')){
+      token = req.headers.authorization.split(' ')[1]
+    }
+
+    if(!token) {
+      return next( new AppErrors(
+        `Please don't forget to login to your account , thanks` , 401
+      ))
+    }
+    // Verify token
+    const decoded = await promisify(jwt.verify)( token , process.env.JWT_SECRET )
+    
+    // User exists ?
+    const currentU = await UserModel.findById( decoded.id )
+    
+    if(!currentU) return next( new AppErrors(`User does not longer exists` , 401 ))
+
+    // User changed pass after JWT was issued ?
+    if(currentU.changedPassAt( decoded.iat )) {
+      return next(
+        new AppErrors( 'User recently changed password , please login again' , 401)
+      )
+    }
+    // Pass current logged in user forward
+    req.user = currentU 
+    
+    // Grant Access
+    next();
+  } 
+  catch (error) {
+    return res.status(404).json({
+      status: 'failed' ,
+      msg: error
+    })  
+  }
+}
