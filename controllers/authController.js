@@ -102,8 +102,24 @@ exports.protect = async ( req , res , next ) => {
     }
     // Pass current logged in user forward
     req.user = currentU 
-    
+
     // Grant Access
+    next();
+  } 
+  catch (error) {
+    return res.status(404).json({
+      status: 'failed' ,
+      msg: error
+    })  
+  }
+}
+
+
+exports.restrictTo = ( ...args ) => async ( req, res, next ) => {
+  try {
+    if(!args.includes(req.user.role)) return next(
+      new AppErrors(`Sorry , need authorization for this operation` , 403)
+    )
     next();
   } 
   catch (error) {

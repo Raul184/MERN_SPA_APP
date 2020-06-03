@@ -12,7 +12,7 @@ const {
   getTourStats ,
   getMonthlyToursAccounting
 } = toursController 
-const { protect } = authController
+const { protect , restrictTo } = authController
 
 // BUSINESS
 // Top 5 
@@ -29,7 +29,7 @@ router.post( '/' ,  addATour )
 
 router.get( '/:id' , getATour )
 router.patch( '/:id' , updateATour )
-router.delete( '/:id' , deleteATour )
+router.delete( '/:id' , protect , restrictTo('admin' , 'lead-guide') , deleteATour )
 
 
 
