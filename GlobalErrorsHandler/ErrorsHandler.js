@@ -1,3 +1,4 @@
+const mongoose = require('mongoose');
 const AppError = require('./../utils/AppErrors');
 
 const handleCastErrorDB = err => {
@@ -29,6 +30,7 @@ const sendErrorDev = (err, res) => {
 };
 
 const sendErrorProd = (err, res) => {
+  console.log('running');
   // Operational, trusted error: send message to client
   if (err.isOperational) {
     res.status(err.statusCode).json({
@@ -59,14 +61,13 @@ module.exports = (err, req, res, next) => {
     sendErrorDev(err, res);
   } 
   else if (process.env.NODE_ENV === 'production') {
-    let error = { ...err };
-    error.message = err.message
-    error.code = err.code
-    console.log('PRODUCTION' , error)
-    
-    if (error.name === 'CastError') error = handleCastErrorDB(error);
-    if (error.code === 11000) error = handleDuplicateFieldsDB(error);
-    if (error.name === 'ValidationError')
+    let error;
+    if(err instanceof mongoose.Error.CastError){
+      error = handleCastErrorDB(error);
+   }
+    // if (error.name === 'CastError') error = handleCastErrorDB(error);
+    if (err.code === 11000) error = handleDuplicateFieldsDB(error);
+    if (err.name === 'ValidationError')
       error = handleValidationErrorDB(error);
 
     sendErrorProd(error, res);
