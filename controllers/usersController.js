@@ -8,7 +8,8 @@ const filterObj = ( obj , ...args ) => {
   })
   return nueObj;
 }
-// From Own User's profile
+
+// From Own User's Account
 exports.updateMe = async(req, res, next) => {
   try {
     const data = filterObj(req.body , 'name' , 'email')
@@ -35,6 +36,23 @@ exports.updateMe = async(req, res, next) => {
     })  
   } 
  }
+
+exports.deleteMe = async(req, res, next) => {
+  try {
+    await UserModel.findByIdAndUpdate(req.user.id , { active: false })
+
+    return res.status(204).json({
+      status: 'success', 
+      data: null
+    })
+  } 
+  catch (error) {
+    return res.status(500).json({
+      message: 'Sorry ,try again later please'
+    })  
+  }
+}
+
 
 
 // Get ALL Users

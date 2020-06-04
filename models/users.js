@@ -39,11 +39,18 @@ const userSchema = new mongoose.Schema({
   },
   passwordChangeAt: Date ,
   tokenForPasswordReset: String ,
-  tokenForPasswordResetExpires: Date
+  tokenForPasswordResetExpires: Date,
+  //delete user?
+  active: {
+    type: Boolean ,
+    default: true,
+    select: false
+  }
 })
 
 
 // DOC Middleware
+// 1 Encrypt pass
 userSchema.pre( 'save' , async function( next){
   if(!this.isModified('password')) return next();
 
@@ -52,7 +59,7 @@ userSchema.pre( 'save' , async function( next){
   this.passwordConfirm = undefined;
   next()
 });
-
+// 2 Check for pass modified
 userSchema.pre( 'save' , function(next){
   // do nothing if
   if(!this.isModified('password') || this.isNew) return next();
@@ -60,6 +67,13 @@ userSchema.pre( 'save' , function(next){
   this.passwordChangeAt = Date.now() - 1000 
   next()
 })
+// QUERY Middleware
+// 'deleted users'
+userSchema.pre(/^find/ , function(next){
+  this.find({ active: {$ne:false} })
+  next()
+})
+
 // INSTANT METHODS within model
 //  1.Check if password is correct
 userSchema.methods.correctPass = async function( candidatePass , userPass ){
