@@ -18,7 +18,7 @@ router.post( '/signup' , signup )
 router.post( '/login' , login )
 
 router.post( '/forgotPass' , forgotPass )
-router.post( '/resetPass' , resetPass )
+router.patch( '/resetPass/:token' , resetPass )
 
 //  ADMIN 
 router.get('/', getAllUsers );

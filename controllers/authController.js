@@ -3,12 +3,14 @@ const jwt = require('jsonwebtoken');
 // const bcrypt = require('bcryptjs')
 const UserModel = require('./../models/users');
 const AppErrors = require('./../utils/AppErrors');
+const sendEmail = require('./../utils/email');
 
 const generateToken = id => jwt.sign(
   { id } , 
   process.env.JWT_SECRET ,
   { expiresIn: process.env.JWT_SECRET_EXPIRES }
 )
+
 exports.signup = async ( req , res , next ) => {
   try {
     const newUser = await UserModel.create({
@@ -132,22 +134,44 @@ exports.restrictTo = ( ...args ) => async ( req, res, next ) => {
 
 
 exports.forgotPass = async ( req , res , next) => {
+  let user;
   try {
     // Get user
-    const user = await UserModel.findOne({ email: req.body.email })
+    user = await UserModel.findOne({ email: req.body.email })
     if(!user){
       return next( new AppErrors('User not found' , 404 ))
     }
     // Generate token
     const resetToken = user.createTokenForPassReset();
-    await user.save();
+    await user.save({validateBeforeSave: false});
     
     // Send it to user's email
-    return res.status(200)
+    const resetURL = `${req.protocol}://${req.get('host')}/api/v1/users/resetPass/${resetToken}`
+    const message = `Forgot your password? Please follow the next link: ${resetURL}\nIf you didn't forget your password , please ignore this email`
 
+    try {
+      await sendEmail({
+        email: user.email ,
+        subject: 'Reset Password' ,
+        message
+      })
+  
+      return res.status(200).json({
+        status: 'success' ,
+        message: 'Token sent by email'
+      })  
+    } 
+    catch (error) {
+      user.tokenForPasswordReset= undefined ,
+      user.tokenForPasswordResetExpires= undefined
+      await user.save({validateBeforeSave: false});
+    }
   } 
   catch (error) {
-    
+    return res.status(500).json({
+      status: 'failed' ,
+      msg: error
+    })  
   }
 }
 
