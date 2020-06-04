@@ -129,3 +129,29 @@ exports.restrictTo = ( ...args ) => async ( req, res, next ) => {
     })  
   }
 }
+
+
+exports.forgotPass = async ( req , res , next) => {
+  try {
+    // Get user
+    const user = await UserModel.findOne({ email: req.body.email })
+    if(!user){
+      return next( new AppErrors('User not found' , 404 ))
+    }
+    // Generate token
+    const resetToken = user.createTokenForPassReset();
+    await user.save();
+    
+    // Send it to user's email
+    return res.status(200)
+
+  } 
+  catch (error) {
+    
+  }
+}
+
+
+exports.resetPass = ( req, res , next) => {
+
+}

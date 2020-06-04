@@ -1,3 +1,4 @@
+const crypto = require('crypto');
 const mongoose = require('mongoose');
 const validator = require('validator');
 const bcrypt = require('bcryptjs');
@@ -11,6 +12,7 @@ const userSchema = new mongoose.Schema({
     type: String ,
     unique: true ,
     lowercase: true , 
+    required: true ,
     validate: [validator.isEmail , 'Please provide a valid email']
   },
   photo: String ,
@@ -35,7 +37,9 @@ const userSchema = new mongoose.Schema({
       message: 'Passwords must be the same'
     }
   },
-  passwordChangeAt: Date
+  passwordChangeAt: Date ,
+  tokenForPasswordReset: String ,
+  tokenForPasswordResetExpires: Date
 })
 
 
@@ -50,17 +54,33 @@ userSchema.pre( 'save' , async function( next){
 });
 
 // INSTANT METHODS within model
-//  Check if password is correct
+//  1.Check if password is correct
 userSchema.methods.correctPass = async function( candidatePass , userPass ){
   return await bcrypt.compare( candidatePass , userPass )
 };
 
-// Check modifiedPass against JWT issued at 
+// 2.Check modifiedPass against JWT issued at 
 userSchema.methods.changedPassAt = function( JwtIssuedAt ){
   if(this.passwordChangeAt){
     return JwtIssuedAt < parseInt( this.passwordChangeAt.getTime() / 1000 )
   }
   return false 
+}
+
+// 3.Generate a token on PasswordReset
+userSchema.methods.createTokenForPassReset = function(){
+  //1
+  const resetToken = crypto.randomBytes(32).toString('hex')
+  this.tokenForPasswordReset = crypto
+  .createHash('sha256')
+  .update(resetToken)
+  .digest('hex');
+  
+  console.log({resetToken} , this.tokenForPasswordReset);
+  
+  //2
+  this.tokenForPasswordResetExpires = Date.now() + 10 * 60 * 1000
+  return resetToken;
 }
 
 
