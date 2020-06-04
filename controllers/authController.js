@@ -245,6 +245,4 @@ exports.updatePass = async(req , res , next) => {
       message: error.message
     })  
   }
-
-
 }

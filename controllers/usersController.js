@@ -1,6 +1,42 @@
 const UserModel = require('./../models/users');
 const AppErrors = require('./../utils/AppErrors');
 
+const filterObj = ( obj , ...args ) => {
+  const nueObj = {}
+  Object.keys(obj).forEach(el => {
+    if(args.includes(el)) nueObj[el] = obj[el]
+  })
+  return nueObj;
+}
+// From Own User's profile
+exports.updateMe = async(req, res, next) => {
+  try {
+    const data = filterObj(req.body , 'name' , 'email')
+    console.log(data);
+    const updatedUser = await UserModel.findByIdAndUpdate(
+      req.user.id ,
+      data,
+      {
+        new: true ,
+        runValidators: true
+      }
+    )
+    return res.status(200).json({
+      status: 'success' ,
+      data: {
+        user: updatedUser
+      }
+    })
+  } 
+  catch (error) {
+    return res.status(500).json({
+      status: 'failed' ,
+      message: error.message
+    })  
+  } 
+ }
+
+
 // Get ALL Users
 exports.getAllUsers = async (req, res, next) => {
   try {
