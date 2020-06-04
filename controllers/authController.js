@@ -1,4 +1,5 @@
 const { promisify } = require('util')
+const crypto = require('crypto');
 const jwt = require('jsonwebtoken');
 // const bcrypt = require('bcryptjs')
 const UserModel = require('./../models/users');
@@ -51,20 +52,16 @@ exports.login = async ( req ,res , next ) => {
     }
     // Find
     const user = await UserModel.findOne({ email }).select('+password')
-
     if( !user || !await user.correctPass( password , user.password )) {
       return next( 
         new AppErrors( 'Incorrect email or password' , 401 )
       )
     } 
-    
     const token = generateToken( user._id )
-
     return res.status(200).json({
       status: 'success' ,
       token
     })
-  
   } 
   catch (error) {
     return res.status(404).json({
@@ -176,6 +173,78 @@ exports.forgotPass = async ( req , res , next) => {
 }
 
 
-exports.resetPass = ( req, res , next) => {
+exports.resetPass = async ( req, res , next) => {
+  try {
+    // Get user based on token provided
+    const hashedToken = crypto
+    .createHash('sha256')
+    .update(req.params.token)
+    .digest('hex');
+
+    const user = await UserModel.findOne({
+      tokenForPasswordReset: hashedToken ,
+      // Token has not expired ? 
+      tokenForPasswordResetExpires: {$gt: Date.now()}
+    })
+
+    if(!user) return next(new AppErrors('Token expired' , 400))
+    
+    // Update password 
+    user.password = req.body.password
+    user.passwordConfirm = req.body.passwordConfirm
+
+    user.tokenForPasswordReset = undefined 
+    user.tokenForPasswordResetExpires = undefined
+    await user.save()
+
+    // & changedPasswordAt => middleware ln
+    // LogIn process
+    const token = generateToken( user._id )
+    return res.status(200).json({
+      status: 'success' ,
+      token
+    })
+  } 
+  catch (error) {
+    return res.status(500).json({
+      status: 'failed' ,
+      msg: error
+    })  
+  }
+}
+
+
+exports.updatePass = async(req , res , next) => {
+  try {
+    // Get user
+    const user = await UserModel.findById(req.user.id)
+    .select('+password')
+
+    // Check currentPass vs storagedPass
+    if(!await user.correctPass( req.body.passwordCurrent , user.password)){
+      return next( new AppErrors('Sorry , that is not your current password') , 401 )
+    }
+    // ok?
+    user.password = req.body.password
+    user.passwordConfirm = req.body.passwordConfirm
+    await user.save();
+
+    // login
+    const token = generateToken( user._id )
+    return res.status(200).json({
+      status: 'success' ,
+      token ,
+      data: {
+        user
+      }
+    })
+  } 
+  catch (error) {
+    return res.status(500).json({
+      status: 'failed' ,
+      message: error.message
+    })  
+  }
+
 
 }

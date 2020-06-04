@@ -31,7 +31,7 @@ const userSchema = new mongoose.Schema({
     type: String ,
     required: [ true , 'Please confirm your password' ] ,
     validate: {
-      validator: function(el){ // On create / save an User
+      validator: function(el){ // On create/save User
         return el === this.password
       },
       message: 'Passwords must be the same'
@@ -53,6 +53,13 @@ userSchema.pre( 'save' , async function( next){
   next()
 });
 
+userSchema.pre( 'save' , function(next){
+  // do nothing if
+  if(!this.isModified('password') || this.isNew) return next();
+
+  this.passwordChangeAt = Date.now() - 1000 
+  next()
+})
 // INSTANT METHODS within model
 //  1.Check if password is correct
 userSchema.methods.correctPass = async function( candidatePass , userPass ){

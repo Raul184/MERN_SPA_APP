@@ -11,7 +11,7 @@ const {
   delete1User ,
   get1User
 } = usersController
-const { signup , login , forgotPass , resetPass } = authController;
+const { signup , login , forgotPass , resetPass , updatePass , protect } = authController;
 
 
 router.post( '/signup' , signup )
@@ -20,6 +20,8 @@ router.post( '/login' , login )
 router.post( '/forgotPass' , forgotPass )
 router.patch( '/resetPass/:token' , resetPass )
 
+// User logged in
+router.patch( '/updateMyPass' , protect , updatePass )
 //  ADMIN 
 router.get('/', getAllUsers );
 router.post('/', add1User );
