@@ -49,7 +49,7 @@ app.use(hpp({
     'ratingsQuantity',
     'ratingsAverage',
     'maxGroupSize',
-    'difficulty'
+    'difficulty',
   ]
 }))
 app.use( express.static(`${__dirname}/public`)) // Serve Static Files
@@ -66,9 +66,9 @@ app.all( '*' , ( req , res , next ) => {
 // Global Error Handler Middleware
 app.use( globalErrorsHandler )
 
-
 const port = process.env.PORT || 3500; 
 app.listen( port , () => console.log( process.env.PORT , process.env.NODE_ENV ));
+
 
 // Listener
 process.on('unhandledRejection', err => {

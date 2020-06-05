@@ -16,7 +16,6 @@ const handleDuplicateFieldsDB = (err) => {
 };
 const handleValidationErrorDB = (err) => {
   const errors = Object.values(err.errors).map((el) => el.message);
- 
   const message = `Invalid input data. ${errors.join('. ')}`;
   return new AppError(message, 400);
 };
@@ -65,14 +64,11 @@ module.exports = (err, req, res, next) => {
     sendErrorDev(err, res);
   } 
   else if (process.env.NODE_ENV === 'production') {
-    let error = { ...err };
-    // console.log(error);
- 
+    let error = { ...err }; 
     if (err instanceof mongoose.Error.CastError) {
       error = handleCastErrorDB(error);
       console.log(error);
     }
- 
     if (error.code === 11000) error = handleDuplicateFieldsDB(error);
     if (err instanceof mongoose.Error.ValidationError) {
       error = handleValidationErrorDB(error);
