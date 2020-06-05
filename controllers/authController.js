@@ -1,16 +1,22 @@
 const { promisify } = require('util')
 const crypto = require('crypto');
 const jwt = require('jsonwebtoken');
-// const bcrypt = require('bcryptjs')
-const UserModel = require('./../models/users');
-const AppErrors = require('./../utils/AppErrors');
-const sendEmail = require('./../utils/email');
+const UserModel = require('../models/users');
+const AppErrors = require('../utils/AppErrors');
+const sendEmail = require('../utils/email');
 
 const generateToken = id => jwt.sign(
   { id } , 
   process.env.JWT_SECRET ,
   { expiresIn: process.env.JWT_SECRET_EXPIRES }
 )
+
+const cookieOptions =  {
+  expires: new Date(
+    Date.now() + process.env.JWT_EXPIRES_COOKIE * 60 * 60
+  ),
+  httpOnly: true 
+}
 
 exports.signup = async ( req , res , next ) => {
   try {
@@ -20,11 +26,11 @@ exports.signup = async ( req , res , next ) => {
       password: req.body.password ,
       passwordConfirm: req.body.passwordConfirm
     })  
-
-    console.log(process.env.JWT_SECRET  , process.env.JWT_SECRET_EXPIRES);
-
     const token = generateToken( newUser._id ) 
+    if(process.env.NODE_ENV=== 'production') cookieOptions.secure = true; 
+    res.cookie('jwt' , token , cookieOptions)
     
+    newUser.password = undefined
     return res.status(200).json({
       status: 'success' ,
       token ,
@@ -58,9 +64,17 @@ exports.login = async ( req ,res , next ) => {
       )
     } 
     const token = generateToken( user._id )
+
+    if(process.env.NODE_ENV=== 'production') cookieOptions.secure = true; 
+    res.cookie('jwt' , token , cookieOptions)
+    
+    user.password = undefined
     return res.status(200).json({
       status: 'success' ,
-      token
+      token ,
+      data: {
+        user
+      }
     })
   } 
   catch (error) {
@@ -79,7 +93,6 @@ exports.protect = async ( req , res , next ) => {
     if(req.headers.authorization && req.headers.authorization.startsWith('Bearer')){
       token = req.headers.authorization.split(' ')[1]
     }
-
     if(!token) {
       return next( new AppErrors(
         `Please don't forget to login to your account , thanks` , 401
@@ -87,12 +100,9 @@ exports.protect = async ( req , res , next ) => {
     }
     // Verify token
     const decoded = await promisify(jwt.verify)( token , process.env.JWT_SECRET )
-    
     // User exists ?
     const currentU = await UserModel.findById( decoded.id )
-    
     if(!currentU) return next( new AppErrors(`User does not longer exists` , 401 ))
-
     // User changed pass after JWT was issued ?
     if(currentU.changedPassAt( decoded.iat )) {
       return next(
@@ -101,7 +111,6 @@ exports.protect = async ( req , res , next ) => {
     }
     // Pass current logged in user forward
     req.user = currentU 
-
     // Grant Access
     next();
   } 
@@ -180,19 +189,16 @@ exports.resetPass = async ( req, res , next) => {
     .createHash('sha256')
     .update(req.params.token)
     .digest('hex');
-
     const user = await UserModel.findOne({
       tokenForPasswordReset: hashedToken ,
       // Token has not expired ? 
       tokenForPasswordResetExpires: {$gt: Date.now()}
     })
-
     if(!user) return next(new AppErrors('Token expired' , 400))
-    
+
     // Update password 
     user.password = req.body.password
     user.passwordConfirm = req.body.passwordConfirm
-
     user.tokenForPasswordReset = undefined 
     user.tokenForPasswordResetExpires = undefined
     await user.save()
@@ -200,6 +206,9 @@ exports.resetPass = async ( req, res , next) => {
     // & changedPasswordAt => middleware ln
     // LogIn process
     const token = generateToken( user._id )
+    if(process.env.NODE_ENV=== 'production') cookieOptions.secure = true; 
+    res.cookie('jwt' , token , cookieOptions)
+
     return res.status(200).json({
       status: 'success' ,
       token
@@ -228,9 +237,11 @@ exports.updatePass = async(req , res , next) => {
     user.password = req.body.password
     user.passwordConfirm = req.body.passwordConfirm
     await user.save();
-
     // login
     const token = generateToken( user._id )
+    if(process.env.NODE_ENV=== 'production') cookieOptions.secure = true; 
+    res.cookie('jwt' , token , cookieOptions)
+
     return res.status(200).json({
       status: 'success' ,
       token ,
