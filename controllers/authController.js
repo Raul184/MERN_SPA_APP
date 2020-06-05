@@ -19,7 +19,12 @@ const cookieOptions =  {
 }
 
 exports.signup = async ( req , res , next ) => {
-  try {
+  const { name , email , password } = req.body;
+  try { // Mongo Error -> humanized
+    let user = await UserModel.findOne({email})
+    if(user) return next(
+      new AppErrors('Sorry , user already registered under that email' , 400)
+    )
     const newUser = await UserModel.create({
       name: req.body.name ,
       email: req.body.email ,
@@ -95,7 +100,7 @@ exports.protect = async ( req , res , next ) => {
     }
     if(!token) {
       return next( new AppErrors(
-        `Please don't forget to login to your account , thanks` , 401
+        `Please log into your account , thanks` , 401
       ))
     }
     // Verify token
