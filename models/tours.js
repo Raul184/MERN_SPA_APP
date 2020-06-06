@@ -73,7 +73,37 @@ const tourSchema = new mongoose.Schema({
   secretTour: {
     type: Boolean ,
     default: false 
-  }
+  },
+  startLocation: {
+    // GeoJSON
+    type: {
+      type: String,
+      default: 'Point',
+      enum: ['Point']
+    }, // lat | long
+    coordinates: [Number],
+    address: String,
+    description: String
+  },
+  locations:[
+    {
+      type: {
+        type: String ,
+        default: 'Point',
+        enum: ['Point']
+      }, // lat | long
+      coordinates: [Number],
+      address: String,
+      description: String ,
+      day: Number
+    }
+  ], // By reference
+  guides: [
+    {
+      type: mongoose.Schema.ObjectId,
+      ref: 'User'
+    }
+  ],
 }, 
 { // 1* Virtual var
   toJSON: { virtuals: true } ,
