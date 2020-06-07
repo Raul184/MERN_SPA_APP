@@ -1,13 +1,15 @@
 const express = require('express');
 const router = express.Router();
-
+const { 
+  getAllReviews , 
+  createReview
+} = require('../controllers/reviewsController');
 
 // GET all tours
-router.get('/', function(req, res, next) {
-  return res.status(200).json({
-    status: 'success' 
-  })
-});
+router.get('/', getAllReviews );
+
+router.post('/addReview', createReview )
+
 
 
 module.exports = router;
