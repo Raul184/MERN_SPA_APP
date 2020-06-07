@@ -1,20 +1,5 @@
-const express = require('express');
-const path = require('path');
-const morgan = require('morgan');
+const mongoose = require('mongoose');
 const dotenv = require('dotenv');
-const rateLimit = require('express-rate-limit');
-const helmet = require('helmet');
-const mongoSanitize = require('express-mongo-sanitize');
-const xss= require('xss-clean');
-const hpp = require('hpp');
-const db = require('./confg/db');
-// Errors
-const AppErrors = require('./utils/AppErrors');
-const globalErrorsHandler = require('./GlobalErrorsHandler/ErrorsHandler');
-// Router
-const toursRouter = require('./routes/tour');
-const usersRouter = require('./routes/user');
-const reviewsRouter = require('./routes/review');
 
 process.on('uncaughtException', err => {
   console.log('UNCAUGHT EXCEPTION! 💥 Shutting down...');
@@ -22,55 +7,27 @@ process.on('uncaughtException', err => {
   process.exit(1);
 });
 
-dotenv.config({path: path.join(__dirname, '.env')})
+dotenv.config({ path: './config.env' });
+const app = require('./app');
 
-// Backend ON
-const app = express()
-db();
+const DB = process.env.DATABASE.replace(
+  '<PASSWORD>',
+  process.env.DATABASE_PASSWORD
+);
 
-// Middlewares 
-app.use(helmet())
-if(process.env.NODE_ENV === 'development'){
-  app.use( morgan('dev') )
-}
-const limiter = rateLimit({ 
-  max: 100 , 
-  windowMs: 60 * 60 * 1000 , 
-  message: 'Too many requests from this ip , please try again later'
-})
-app.use('/api' , limiter)
-app.use( express.json({ limit: '10kb'}) )       // req.body
-app.use( mongoSanitize()) // no 
-app.use(xss()) // clean malicious html injection
-app.use(hpp({
-  whitelist:[
-    'duration',
-    'price',
-    'ratingsQuantity',
-    'ratingsAverage',
-    'maxGroupSize',
-    'difficulty',
-  ]
-}))
-app.use( express.static(`${__dirname}/public`)) // Serve Static Files
+mongoose
+  .connect(DB, {
+    useNewUrlParser: true,
+    useCreateIndex: true,
+    useFindAndModify: false
+  })
+  .then(() => console.log('DB connection successful!'));
 
-// Routes
-app.use( '/api/v1/tours' , toursRouter )
-app.use( '/api/v1/users' , usersRouter )
-app.use( '/api/v1/reviews' , reviewsRouter )
+const port = process.env.PORT || 3000;
+const server = app.listen(port, () => {
+  console.log(`App running on port ${port}...`);
+});
 
-app.all( '*' , ( req , res , next ) => {
-  next( new AppErrors ('Sorry pal , this address is off the hook' , 404 ))
-})
-
-// Global Error Handler Middleware
-app.use( globalErrorsHandler )
-
-const port = process.env.PORT || 3500; 
-app.listen( port , () => console.log( process.env.PORT , process.env.NODE_ENV ));
-
-
-// Listener
 process.on('unhandledRejection', err => {
   console.log('UNHANDLED REJECTION! 💥 Shutting down...');
   console.log(err.name, err.message);
