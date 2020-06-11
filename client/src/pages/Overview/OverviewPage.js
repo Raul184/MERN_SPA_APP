@@ -9,8 +9,8 @@ const OverviewPage = () => {
   }
   , [])
   return (
-    <section class="overview">
-      <div class="card-container">
+    <section className="overview">
+      <div className="card-container">
           <h1>OVERVIEW PAGE</h1>
       </div>
     </section>  
