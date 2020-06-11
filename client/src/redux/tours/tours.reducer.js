@@ -1,5 +1,5 @@
 import {
-  GET_TOURS_STARTS, GET_TOURS_SUCCESS, GET_TOURS_FAILED
+  FETCH_TOURS_STARTS, FETCH_TOURS_SUCCESS, FETCH_TOURS_FAILED
 } from './types'
 
 const INITIAL_STATE = {
@@ -12,18 +12,18 @@ const INITIAL_STATE = {
 const userReducer = (state = INITIAL_STATE, action) => {
   const { type , payload } = action
   switch (type) {
-    case GET_TOURS_STARTS:
+    case FETCH_TOURS_STARTS:
       return {
         ...state,
         loading: true
       }
-    case GET_TOURS_SUCCESS:
+    case FETCH_TOURS_SUCCESS:
       return{
         ...state,
         loading: false,
-        tours: payload
+        tours: payload.data
       }
-    case GET_TOURS_FAILED:
+    case FETCH_TOURS_FAILED:
       return{
         ...state,
         loading: false,

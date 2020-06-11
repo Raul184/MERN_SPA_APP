@@ -1,21 +1,23 @@
 import{
-  GET_TOURS_STARTS, GET_TOURS_SUCCESS, GET_TOURS_FAILED
+  FETCH_TOURS_STARTS, FETCH_TOURS_SUCCESS, FETCH_TOURS_FAILED
 } from './types'
 
 
 
-export const getToursStart = () => {
+export const fetchToursStart = () => {
   return {
-    type: GET_TOURS_STARTS 
+    type: FETCH_TOURS_STARTS
   }
 }
-export const getToursSuccess = () => {
+export const fetchToursSuccess = data => {
   return {
-    type: GET_TOURS_SUCCESS 
+    type: FETCH_TOURS_SUCCESS,
+    payload: data
   }
 }
-export const getToursFailed = () => {
+export const fetchToursFailed = err => {
   return {
-    type: GET_TOURS_FAILED 
+    type: FETCH_TOURS_FAILED,
+    payload: err
   }
 }
