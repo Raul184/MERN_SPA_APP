@@ -1,12 +1,17 @@
 import React , {useEffect} from 'react'
+import {connect} from 'react-redux'
+import {fetchStart} from '../../redux/tours/tours.action'
+import Loading from '../../components/onLoading/OnLoading'
 
-const Tour = () => {
+
+const Tour = ({tour,onLoading,fetchStart}) => {
   useEffect(() => {
     console.log('Rendered');
+    fetchStart(false)
   }
-  , [])
+  , [fetchStart])
   return (
-    <>
+    onLoading ? <Loading /> :<>
       <div className="section-header">
         <div className="header__hero">
           <div className="header__hero-overlay">
@@ -87,4 +92,14 @@ const Tour = () => {
   )
 }
 
-export default Tour;
+
+const mapStateToProps = state => {
+  return {
+    tour: state.toursDb.tour,
+    onLoading: state.toursDb.loading
+  }
+}
+export default connect(
+  mapStateToProps,
+  {fetchStart}
+)(Tour);

@@ -31,12 +31,12 @@ export function* fetch1DataAsync(id) {
   try {
     const data = yield axios.get(`/api/v1/tours/${id}`) 
     yield put(
-      fetchSuccess(all=false, data)
+      fetchSuccess(false, data)
     );
   } 
   catch (error) {
     yield put(
-      fetchFailed(all=false , error.message)
+      fetchFailed(false , error.message)
     )
   }
 }

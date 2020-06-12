@@ -3,7 +3,7 @@ import './overview.style.scss'
 import Card from '../../components/card/Card'
 import {connect} from 'react-redux'
 import {fetchStart} from '../../redux/tours/tours.action'
-import OnLoading from '../../components/onLoading/OnLoading'
+import Loading from '../../components/onLoading/OnLoading'
 
 const OverviewPage = ({tours,onLoading,fetchStart}) => {
   useEffect(() => {
@@ -12,7 +12,7 @@ const OverviewPage = ({tours,onLoading,fetchStart}) => {
   , [fetchStart])
 
   return (
-    onLoading ? <OnLoading /> 
+    onLoading ? <Loading /> 
     :
     <section className="overview">
       <div className="card-container">
