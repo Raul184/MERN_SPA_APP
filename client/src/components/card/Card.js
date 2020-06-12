@@ -18,7 +18,7 @@ const Card = ({tour:{
   ratingsAverage,
   slug
 }}) => {
-  const format= startDates[0].toLocaleString('en-us',{month:'long' ,year:'numeric'})
+  const format= new Date(startDates[0]).toLocaleString('en-us',{month:'long' ,year:'numeric'})
   console.log(format);
   return (
     <div className="card">
@@ -30,10 +30,10 @@ const Card = ({tour:{
             src={require(`../../../public/img/tours/${imageCover}`)} 
             alt={name}
           />
-          <h3 className="heading-tertirary">
-            <span>{name}</span>
-          </h3>
         </div>
+        <h3 className="heading-tertirary">
+          <span>{name}</span>
+        </h3>
       </div>
       <div className="card__details">
         <h4 className="card__sub-heading">
@@ -68,7 +68,7 @@ const Card = ({tour:{
       <div className="card__footer">
         <p>
           <span className='card__footer-value'>
-            {`$ ${price} `}
+            {`$ ${price}`}
           </span>
           <span className='card__footer-text'>/ person</span>
         </p>
