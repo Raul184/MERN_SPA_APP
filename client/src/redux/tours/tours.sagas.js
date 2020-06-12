@@ -27,9 +27,10 @@ export function* fetchStart() {
 
 
 // GET 1 TOUR
-export function* fetch1DataAsync(id) {
+export function* fetch1DataAsync(action) {
   try {
-    const data = yield axios.get(`/api/v1/tours/${id}`) 
+    console.log(action);
+    const data = yield axios.get(`/api/v1/tours/${action.payload}`) 
     yield put(
       fetchSuccess(false, data)
     );

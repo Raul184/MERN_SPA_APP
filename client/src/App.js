@@ -11,7 +11,7 @@ function App() {
       <Header />
       <Switch>
         <Route exact path='/' component={OverviewPage} />
-        <Route path='/:id' component={TourPage} />
+        <Route path='/tours/:id' component={TourPage} />
         <Redirect to="/" />
       </Switch>
       <Footer />

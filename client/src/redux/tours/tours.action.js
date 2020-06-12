@@ -9,9 +9,10 @@ import{
 
 
 
-export const fetchStart = (all=true) => {
+export const fetchStart = (all=true, payload) => {
   return {
-    type: all ? FETCH_TOURS_STARTS : FETCH_TOUR_STARTS
+    type: all ? FETCH_TOURS_STARTS : FETCH_TOUR_STARTS,
+    payload
   }
 }
 export const fetchSuccess = (all=true ,data) => {

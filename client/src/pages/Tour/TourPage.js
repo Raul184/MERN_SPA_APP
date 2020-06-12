@@ -4,10 +4,11 @@ import {fetchStart} from '../../redux/tours/tours.action'
 import Loading from '../../components/onLoading/OnLoading'
 
 
-const Tour = ({tour,onLoading,fetchStart}) => {
+const Tour = ({tour,onLoading,fetchStart, match}) => {
+  console.log('TOURPAGE' , match);
   useEffect(() => {
     console.log('Rendered');
-    fetchStart(false)
+    fetchStart(false , match.params.id)
   }
   , [fetchStart])
   return (
