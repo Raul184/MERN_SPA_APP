@@ -2,16 +2,15 @@ import React , { useEffect } from 'react'
 import './overview.style.scss'
 import Card from '../../components/card/Card'
 import {connect} from 'react-redux'
-import {fetchToursStart} from '../../redux/tours/tours.action'
+import {fetchStart} from '../../redux/tours/tours.action'
 import OnLoading from '../../components/onLoading/OnLoading'
 
-const OverviewPage = ({tours,onLoading,fetchToursStart}) => {
+const OverviewPage = ({tours,onLoading,fetchStart}) => {
   useEffect(() => {
-    fetchToursStart()
+    fetchStart()
   }
-  , [fetchToursStart])
+  , [fetchStart])
 
-  console.log('TOURS', tours);
   return (
     onLoading ? <OnLoading /> 
     :
@@ -35,5 +34,5 @@ const mapStateToProps = state => {
 
 export default connect(
   mapStateToProps ,
-  {fetchToursStart}
+  {fetchStart}
 )(OverviewPage);

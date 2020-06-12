@@ -3,11 +3,7 @@ import './card.style.scss'
 import {Link} from 'react-router-dom'
 import Icons from './icons.svg'
 
-const Card = ({tour:{
-  imageCover,
-  name,
-  duration,
-  difficulty,
+const Card = ({tour:{imageCover,name,duration,difficulty,
   summary,
   startLocation,
   startDates,
@@ -18,8 +14,9 @@ const Card = ({tour:{
   ratingsAverage,
   slug
 }}) => {
-  const format= new Date(startDates[0]).toLocaleString('en-us',{month:'long' ,year:'numeric'})
-  console.log(format);
+  const format= new Date(
+    startDates[0]).toLocaleString('en-us',{month:'long' ,year:'numeric'}
+  )
   return (
     <div className="card">
       <div className="card__header">
