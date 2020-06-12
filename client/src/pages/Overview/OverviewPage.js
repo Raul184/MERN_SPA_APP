@@ -1,6 +1,6 @@
 import React , { useEffect } from 'react'
 import './overview.style.scss'
-// import Card from '../../card/Card'
+import Card from '../../components/card/Card'
 import {connect} from 'react-redux'
 import {fetchToursStart} from '../../redux/tours/tours.action'
 import OnLoading from '../../components/onLoading/OnLoading'
@@ -10,12 +10,17 @@ const OverviewPage = ({tours,onLoading,fetchToursStart}) => {
     fetchToursStart()
   }
   , [fetchToursStart])
+
+  console.log('TOURS', tours);
   return (
     onLoading ? <OnLoading /> 
     :
     <section className="overview">
       <div className="card-container">
-          <h1>OVERVIEW PAGE</h1>
+      { tours !== null && onLoading === false && tours.data.map(
+          el => <Card key={el._id} tour={el} />
+        )
+      }
       </div>
     </section>  
   )
