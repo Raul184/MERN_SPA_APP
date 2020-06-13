@@ -36,7 +36,7 @@ const userReducer = (state = INITIAL_STATE, action) => {
       return {
         ...state,
         loading: false,
-        tours: payload.data
+        tours: payload
       }
     case FETCH_TOUR_SUCCESS:
       return {

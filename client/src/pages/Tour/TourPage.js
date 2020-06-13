@@ -5,10 +5,8 @@ import Loading from '../../components/onLoading/OnLoading'
 
 
 const Tour = ({tour,onLoading,fetchStart, match}) => {
-  console.log('TOURPAGE' , match);
   useEffect(() => {
-    console.log('Rendered');
-    fetchStart(false , match.params.id)
+    // fetchStart(false )
   }
   , [fetchStart , match])
   return (
@@ -96,7 +94,7 @@ const Tour = ({tour,onLoading,fetchStart, match}) => {
 
 const mapStateToProps = state => {
   return {
-    tour: state.toursDb.tour,
+    tour: state.toursDb.tours['the-forest-hiker'],
     onLoading: state.toursDb.loading
   }
 }

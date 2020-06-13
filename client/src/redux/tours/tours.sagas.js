@@ -10,12 +10,13 @@ const axios = require('axios');
 // GET ALL TOURS
 export function* fetchDataAsync() {
   try {
-    const data = yield axios.get('/api/v1/tours') 
+    let data = yield axios.get('/api/v1/tours') 
+    data = convertCollectionsSnapshotToMap(data.data.data)
     yield put(
       fetchSuccess(all, data)
     );
-    const test = convertCollectionsSnapshotToMap(data.data.data);
-    console.log("TEST!!", test);
+    // const test = ;
+    // console.log("TEST!!", Object.entries(test).map(el => el[1]))
   } 
   catch (error) {
     yield put(
