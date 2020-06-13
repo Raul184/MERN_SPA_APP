@@ -4,6 +4,7 @@ import {
   fetchSuccess , 
   fetchFailed 
 } from './tours.action'
+import {convertCollectionsSnapshotToMap} from '../../utils/utils'
 const axios = require('axios');
 
 // GET ALL TOURS
@@ -13,6 +14,8 @@ export function* fetchDataAsync() {
     yield put(
       fetchSuccess(all, data)
     );
+    const test = convertCollectionsSnapshotToMap(data.data.data);
+    console.log("TEST!!", test);
   } 
   catch (error) {
     yield put(

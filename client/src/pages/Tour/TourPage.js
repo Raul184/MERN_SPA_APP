@@ -10,7 +10,7 @@ const Tour = ({tour,onLoading,fetchStart, match}) => {
     console.log('Rendered');
     fetchStart(false , match.params.id)
   }
-  , [fetchStart])
+  , [fetchStart , match])
   return (
     onLoading ? <Loading /> :<>
       <div className="section-header">
