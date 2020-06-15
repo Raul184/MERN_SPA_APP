@@ -3,9 +3,11 @@ import {connect} from 'react-redux'
 import {grab1Tour,grabLoading} from '../../redux/tours/tours.selectors'
 import {fetchStart} from '../../redux/tours/tours.action'
 import Loading from '../../components/onLoading/OnLoading'
-import CardIcons from '../../components/cardIcons/cardIcons'
 import Icons from '../../assets/icons.svg'
-
+import CardIcons from '../../components/cardIcons/cardIcons'
+import CardGuides from '../../components/cardGuides/CardGuides'
+import CardPics from '../../components/cardPics/CardPics'
+import CardReviews from '../../components/cardReviews/CardReviews'
 
 const Tour = ({tour,onLoading}) => {
   const{
@@ -14,11 +16,17 @@ const Tour = ({tour,onLoading}) => {
     duration,
     startLocation,
     startDates,
+    difficulty,
     maxGroupSize,
-    ratingsAverage} = tour
+    ratingsAverage,
+    description,
+    guides,
+    images,
+    reviews} = tour
   const format= new Date(startDates[0]).toLocaleString(
     'en-us',{month:'long' ,year:'numeric'}
   )
+  const parapraphs = description.split('\n');
   return (
     onLoading ? <Loading /> :<>
       <div className="section-header">
@@ -61,33 +69,29 @@ const Tour = ({tour,onLoading}) => {
           </div>
           <div className="overview-box__group">
             <h2 className="heading-secondary ma-bt-lg">Your tour guides</h2>
-            
+            {guides.map(el => <CardGuides el={el} />)}
           </div>
         </div>
-      <div className="description-box">
-        <h2 className="heading-secondary ma-bt-lg">TEST</h2>
-        <p className="description__text"></p>
-        <p className="description__text"></p>
+        <div className="description-box">
+          <h2 className="heading-secondary ma-bt-lg">
+            {`About ${name} tour`}
+          </h2>
+          {parapraphs.map(el =>
+            <p className="description__text">{el}</p>
+          )}
+        </div>
       </div>
       <div className="section-pictures">
-        <div className="picture-box">
-          <img src="" alt="" className="picture-box__img picture-box__img--1"/>
-        </div>
+        {images.map(
+          (el,i) => <CardPics el={el} i={i}/>
+        )}
       </div>
       <div className="section-map">
         <div id="marker"></div>
       </div>
       <div className="section-reviews">
         <div className="reviews">
-          <div className="reviews__card">
-            <div className="reviews__avatar"></div>
-            <p className="reviews"></p>
-            <div className="reviews__rating">
-              <svg className="reviews__star reviews__start--active">
-                use(xlink:href='/img/icons.svg#icon-star')
-              </svg>
-            </div>
-          </div>
+          {reviews.map(el => <CardReviews el={el} />)}
         </div>
       </div>
       <div className="section-cta">
