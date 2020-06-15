@@ -1,14 +1,12 @@
-import React , {useEffect} from 'react'
+import React from 'react'
 import {connect} from 'react-redux'
+import {grab1Tour,grabLoading} from '../../redux/tours/tours.selectors'
 import {fetchStart} from '../../redux/tours/tours.action'
 import Loading from '../../components/onLoading/OnLoading'
 
 
-const Tour = ({tour,onLoading,fetchStart, match}) => {
-  useEffect(() => {
-    // fetchStart(false )
-  }
-  , [fetchStart , match])
+const Tour = ({onLoading,match}) => {
+  console.log('URL', match.params.tourId);
   return (
     onLoading ? <Loading /> :<>
       <div className="section-header">
@@ -92,12 +90,10 @@ const Tour = ({tour,onLoading,fetchStart, match}) => {
 }
 
 
-const mapStateToProps = state => {
-  return {
-    tour: state.toursDb.tours['the-forest-hiker'],
-    onLoading: state.toursDb.loading
-  }
-}
+const mapStateToProps = (state , ownProps) => ({
+  tour: grab1Tour(ownProps.match.params.tourId)(state),
+  onLoading: grabLoading(state)
+})
 export default connect(
   mapStateToProps,
   {fetchStart}

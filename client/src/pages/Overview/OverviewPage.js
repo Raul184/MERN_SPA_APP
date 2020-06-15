@@ -2,6 +2,8 @@ import React , { useEffect } from 'react'
 import './overview.style.scss'
 import Card from '../../components/card/Card'
 import {connect} from 'react-redux'
+import {createStructuredSelector} from 'reselect'
+import {grabTours,grabLoading} from '../../redux/tours/tours.selectors'
 import {fetchStart} from '../../redux/tours/tours.action'
 import Loading from '../../components/onLoading/OnLoading'
 
@@ -25,12 +27,10 @@ const OverviewPage = ({tours,onLoading,fetchStart}) => {
   )
 }
 
-const mapStateToProps = state => {
-  return {
-    tours: state.toursDb.tours,
-    onLoading: state.toursDb.loading
-  }
-}
+const mapStateToProps = createStructuredSelector({
+    tours: grabTours,
+    onLoading: grabLoading
+})
 
 export default connect(
   mapStateToProps ,

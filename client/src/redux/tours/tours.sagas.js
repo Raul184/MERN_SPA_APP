@@ -15,8 +15,6 @@ export function* fetchDataAsync() {
     yield put(
       fetchSuccess(all, data)
     );
-    // const test = ;
-    // console.log("TEST!!", Object.entries(test).map(el => el[1]))
   } 
   catch (error) {
     yield put(
