@@ -3,50 +3,67 @@ import {connect} from 'react-redux'
 import {grab1Tour,grabLoading} from '../../redux/tours/tours.selectors'
 import {fetchStart} from '../../redux/tours/tours.action'
 import Loading from '../../components/onLoading/OnLoading'
+import CardIcons from '../../components/cardIcons/cardIcons'
+import Icons from '../../assets/icons.svg'
 
 
-const Tour = ({onLoading,match}) => {
-  console.log('URL', match.params.tourId);
+const Tour = ({tour,onLoading}) => {
+  const{
+    imageCover,
+    name,
+    duration,
+    startLocation,
+    startDates,
+    maxGroupSize,
+    ratingsAverage} = tour
+  const format= new Date(startDates[0]).toLocaleString(
+    'en-us',{month:'long' ,year:'numeric'}
+  )
   return (
     onLoading ? <Loading /> :<>
       <div className="section-header">
         <div className="header__hero">
-          <div className="header__hero-overlay">
-            <img src="" alt="" className="header__hero-img"/>
-          </div>
+          <div className="header__hero-overlay">&nbsp;</div>
+          <img 
+              className="header__hero-img"
+              src={`img/tours/${imageCover}`} 
+              alt={`${name}`} 
+            />
         </div>
         <div className="heading-box">
           <h1 className="heading-primary">
-            <span>SINGLE Page TOUR</span>
+            <span>{`${name}`}</span>
           </h1>
           <div className="heading-box__group">
             <div className="heading-box__detail">
-              <svg className="heading-box__icon"></svg>
-              <span className="heading-box__text">10 days</span>
+              <svg className="heading-box__icon">
+                <use xlinkHref={`${Icons}#icon-clock`} />
+              </svg>
+              <span className="heading-box__text">{`${duration} days`}</span>
             </div>
             <div className="heading-box__detail">
-              <svg className="heading-box__icon"></svg>
-              <span className="heading-box__text">Las Vegas, USA</span>
+              <svg className="heading-box__icon">
+                <use xlinkHref={`${Icons}#icon-map-pin`} />
+              </svg>
+              <span className="heading-box__text">{`${startLocation.description}`}</span>
             </div>
           </div>
         </div>
       </div>
       <div className="section-description">
         <div className="overview-box">
-        </div>
-      </div>
-      <div className="overview-box">
-        <div className="overview-box__group">
-          <h2 className="heading-secondary ma-bt-lg">Quick facts</h2>
-          <div className="overview-box__detail">
-            <svg className="overview-box__icon">
-            {/* use(xlink:href='/img/icons.svg#icon-calendar') */}
-            </svg>
-            <span className="overview-box__label">Next date</span>
-            <span className="overview-box__text">August 2021</span>
+          <div className="overview-box__group">
+            <h2 className="heading-secondary ma-bt-lg">Quick facts</h2>
+            <CardIcons  label='Next date' text={format} icon='calendar'/>
+            <CardIcons  label='Difficulty' text={difficulty} icon='trending-up'/>
+            <CardIcons  label='Participants' text={maxGroupSize} icon='user'/>
+            <CardIcons  label='Ratings' text={ratingsAverage} icon='start'/>
+          </div>
+          <div className="overview-box__group">
+            <h2 className="heading-secondary ma-bt-lg">Your tour guides</h2>
+            
           </div>
         </div>
-      </div>
       <div className="description-box">
         <h2 className="heading-secondary ma-bt-lg">TEST</h2>
         <p className="description__text"></p>

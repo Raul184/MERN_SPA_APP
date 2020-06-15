@@ -1,7 +1,7 @@
 import React from 'react'
 import './card.style.scss'
 import {Link} from 'react-router-dom'
-import Icons from './icons.svg'
+import Icons from '../../assets/icons.svg'
 
 const Card = ({tour:{imageCover,name,duration,difficulty,
   summary,
