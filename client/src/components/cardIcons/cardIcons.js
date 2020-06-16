@@ -1,5 +1,6 @@
 import React from 'react'
 import Icons from '../../assets/icons.svg'
+
 const CardIcons = (label,text,icon) => <div className="overview-box__detail">
   <svg className="overview-box__icon">
     <use xlinkHref={`${Icons}#icon-${icon}`} />
