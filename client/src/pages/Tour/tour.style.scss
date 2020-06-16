@@ -227,13 +227,13 @@
   width: 100%;
 }
 
-// .marker {
-//   background-image: url('../../../public/img/pin.png');
-//   background-size: cover;
-//   width: 32px;
-//   height: 40px;
-//   cursor: pointer;
-// }
+.marker {
+  background-image: url('../../assets/pin.png');
+  background-size: cover;
+  width: 32px;
+  height: 40px;
+  cursor: pointer;
+}
 
 .mapboxgl-popup {
   max-width: 25rem;

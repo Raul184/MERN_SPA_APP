@@ -2,13 +2,11 @@ import React from 'react'
 import './tour.style.scss'
 import {connect} from 'react-redux'
 import {grab1Tour,grabLoading} from '../../redux/tours/tours.selectors'
-import {fetchStart} from '../../redux/tours/tours.action'
 import Loading from '../../components/onLoading/OnLoading'
 import Icons from '../../assets/icons.svg'
-import CardIcons from '../../components/cardIcons/CardIcons'
 import CardGuides from '../../components/cardGuides/CardGuides'
 import CardPics from '../../components/cardPics/CardPics'
-import CardReviews from '../../components/cardReviews/CardReviews'
+// import CardReviews from '../../components/cardReviews/CardReviews'
 import Logo from '../../assets/logo-white.png'
 
 const Tour = ({tour,onLoading}) => {
@@ -62,8 +60,8 @@ const Tour = ({tour,onLoading}) => {
       <div className="section-description">
         <div className="overview-box">
           <div>
-            <div className="overview-box__group">
               <h2 className="heading-secondary ma-bt-lg">Quick facts</h2>
+            <div className="overview-box__group">
               <div className="overview-box__detail">
                 <svg className="overview-box__icon">
                   <use xlinkHref={`${Icons}#icon-calendar`} />
@@ -156,5 +154,5 @@ const mapStateToProps = (state , ownProps) => ({
 })
 export default connect(
   mapStateToProps,
-  {fetchStart}
+  null
 )(Tour);
