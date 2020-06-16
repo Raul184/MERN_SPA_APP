@@ -28,7 +28,7 @@ const Tour = ({tour,onLoading}) => {
   const parapraphs = description.split('\n');
   return (
     onLoading ? <Loading /> :<>
-      <div className="section-header">
+      <section className="section-header">
         <div className="header__hero">
           <div className="header__hero-overlay">&nbsp;</div>
           <img 
@@ -56,8 +56,8 @@ const Tour = ({tour,onLoading}) => {
             </div>
           </div>
         </div>
-      </div>
-      <div className="section-description">
+      </section>
+      <section className="section-description">
         <div className="overview-box">
           <div>
               <h2 className="heading-secondary ma-bt-lg">Quick facts</h2>
@@ -107,21 +107,21 @@ const Tour = ({tour,onLoading}) => {
             <p key={i} className="description__text">{el}</p>
           )}
         </div>
-      </div>
-      <div className="section-pictures">
+      </section>
+      <section className="section-pictures">
         {images.map(
           (el,i) => <CardPics key={i} el={el} i={i}/>
         )}
-      </div>
-      <div className="section-map">
+      </section>
+      <section className="section-map">
         <div id="marker"></div>
-      </div>
+      </section>
       {/* <div className="section-reviews">
         <div className="reviews">
           {reviews.map(el => <CardReviews el={el} />)}
         </div>
       </div> */}
-      <div className="section-cta">
+      <section className="section-cta">
         <div className="cta">
           <div className="cta__img cta__img--logo">
             <img src={Logo} alt="Tour"/>  
@@ -142,7 +142,7 @@ const Tour = ({tour,onLoading}) => {
             <button className="btn btn--green span-all-rows">Book tour now</button>
           </div>  
         </div>
-      </div>
+      </section>
     </>
   )
 }
