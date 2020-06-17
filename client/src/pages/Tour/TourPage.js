@@ -3,12 +3,12 @@ import './tour.style.scss'
 import {connect} from 'react-redux'
 import {grab1Tour,grabLoading} from '../../redux/tours/tours.selectors'
 import Loading from '../../components/onLoading/OnLoading'
-import Icons from '../../assets/icons.svg'
 import CardGuides from '../../components/cardGuides/CardGuides'
 import CardPics from '../../components/cardPics/CardPics'
+import Map from '../../components/mapbox/Mapbox'
 // import CardReviews from '../../components/cardReviews/CardReviews'
+import Icons from '../../assets/icons.svg'
 import Logo from '../../assets/logo-white.png'
-
 const Tour = ({tour,onLoading}) => {
   const{
     imageCover,
@@ -116,6 +116,7 @@ const Tour = ({tour,onLoading}) => {
       </section>
       <section className="section-map">
         <div id="map" data-locations={`${JSON.stringify(locations)}`}></div>
+        <Map/>
       </section>
       {/* <div className="section-reviews">
         <div className="reviews">
