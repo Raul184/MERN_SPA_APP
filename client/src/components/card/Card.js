@@ -24,7 +24,7 @@ const Card = ({tour:{imageCover,name,duration,difficulty,
           <div className="card__picture-overlay"></div>
           <img 
             className="card__picture-img" 
-            src={require(`../../../public/img/tours/${imageCover}`)} 
+            src={require(`../../assets/imgs/tours/${imageCover}`)} 
             alt={name}
           />
         </div>

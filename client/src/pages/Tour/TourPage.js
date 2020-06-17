@@ -20,6 +20,7 @@ const Tour = ({tour,onLoading}) => {
     maxGroupSize,
     ratingsAverage,
     description,
+    locations,
     guides,
     images} = tour
   const format= new Date(startDates[0]).toLocaleString(
@@ -33,7 +34,7 @@ const Tour = ({tour,onLoading}) => {
           <div className="header__hero-overlay">&nbsp;</div>
           <img 
               className="header__hero-img"
-              src={require(`../../../public/img/tours/${imageCover}`)} 
+              src={require(`../../assets/imgs/tours/${imageCover}`)} 
               alt={`${name}`} 
             />
         </div>
@@ -114,7 +115,7 @@ const Tour = ({tour,onLoading}) => {
         )}
       </section>
       <section className="section-map">
-        <div id="marker"></div>
+        <div id="map" data-locations={`${JSON.stringify(locations)}`}></div>
       </section>
       {/* <div className="section-reviews">
         <div className="reviews">
@@ -128,13 +129,13 @@ const Tour = ({tour,onLoading}) => {
           </div>
           <img
             className="cta__img cta__img--1"
-            src={require(`../../../public/img/tours/${images[1]}`)} 
-            alt="Tour picture"
+            src={require(`../../assets/imgs/tours/${images[1]}`)} 
+            alt="Tour"
           />
           <img
             className="cta__img   cta__img--2" 
-            src={require(`../../../public/img/tours/${images[2]}`)} 
-            alt="Tour picture"
+            src={require(`../../assets/imgs/tours/${images[2]}`)} 
+            alt="Tour"
           />
           <div className="cta__content">
             <h2 className="heading-secondary">What are you waiting for?</h2>

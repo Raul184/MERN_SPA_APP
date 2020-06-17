@@ -20,7 +20,7 @@ const OverviewPage = ({tours,onLoading,fetchStart}) => {
       <div className="card-container">
       { tours !== null && onLoading === false && Object.entries(tours)
       .map(el => el[1])
-      .map(el => <Card key={el._id} tour={el} />)
+      .map(x => <Card key={x._id} tour={x} />)
       }
       </div>
     </section>  
