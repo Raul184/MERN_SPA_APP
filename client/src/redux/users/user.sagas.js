@@ -7,10 +7,9 @@ import {
 const axios = require('axios');
 
 // LOGIN USER
-export function* loginAsync() {
+export function* loginAsync(user) {
   try {
-    let data = yield axios.get('/api/v1/tours') 
-    data = convertCollectionsSnapshotToMap(data.data.data)
+    let data = yield axios.post('/api/v1/users/login', user) 
     yield put(
       fetchSuccess(all, data)
     );
@@ -28,10 +27,9 @@ export function* fetchUserStart() {
 
 
 // SIGN UP USER
-export function* fetch1DataAsync(action) {
+export function* signUpAsync(user) {
   try {
-    console.log(action);
-    const data = yield axios.get(`/api/v1/tours/${action.payload}`) 
+    const data = yield axios.post(`/api/v1/user/signup`, user) 
     yield put(
       fetchSuccess(false, data)
     );
@@ -43,14 +41,14 @@ export function* fetch1DataAsync(action) {
   }
 }
 // Listener
-export function* fetch1Start() {
-  yield takeLatest( SIGN_UP_USER_STARTS ,fetch1DataAsync )
+export function* fetchSignUserStart() {
+  yield takeLatest( SIGN_UP_USER_STARTS ,signUpAsync )
 }
 
 
-export function* toursSagas(){
+export function* userSagas(){
   yield all([ 
     call(fetchUserStart),
-    call(signUserStart)
+    call(fetchSignUserStart)
   ])
 }
