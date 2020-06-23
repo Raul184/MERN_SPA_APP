@@ -13,6 +13,8 @@ const Login = ({onLoading,loginStart}) => {
   const handleLogin = e => {
     e.preventDefault()
     loginStart(true, {email, password})
+    setEmail('')
+    setPassword('')
   }
 
   return onLoading ? <Loading /> : (

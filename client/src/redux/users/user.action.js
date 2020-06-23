@@ -10,7 +10,6 @@ import{
 
 
 export const loginStart = (all=true, objData) => {
-  console.log('ACTION', objData);
   return {
     type: all ? LOGIN_USER_STARTS : SIGN_UP_USER_STARTS,
     payload: objData
