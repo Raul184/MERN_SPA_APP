@@ -7,11 +7,11 @@ import {
 const axios = require('axios');
 
 // LOGIN USER
-export function* loginAsync(user) {
+export function* loginAsync({payload}) {
   try {
-    let data = yield axios.post('/api/v1/users/login', user) 
+    const data = yield axios.post('/api/v1/users/login', payload) 
     yield put(
-      fetchSuccess(all, data)
+      fetchSuccess(all, data.data)
     );
   } 
   catch (error) {

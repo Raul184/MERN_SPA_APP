@@ -31,7 +31,6 @@ export function* fetchStart() {
 // GET 1 TOUR
 export function* fetch1DataAsync(action) {
   try {
-    console.log(action);
     const data = yield axios.get(`/api/v1/tours/${action.payload}`) 
     yield put(
       fetchSuccess(false, data)

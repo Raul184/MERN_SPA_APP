@@ -1,17 +1,32 @@
-import React from 'react'
+import React, {useState} from 'react'
 import './login.style.scss'
+import {connect} from 'react-redux'
+import {createStructuredSelector} from 'reselect'
+import {grabUser,grabLoading} from '../../redux/users/user.selectors'
+import {loginStart} from '../../redux/users/user.action'
+import Loading from '../../components/onLoading/OnLoading'
 
-const Login = () => {
-  return (
+const Login = ({onLoading,loginStart}) => {
+  const [email, setEmail] = useState('')
+  const [password, setPassword] = useState('')
+
+  const handleLogin = e => {
+    e.preventDefault()
+    loginStart(true, {email, password})
+  }
+
+  return onLoading ? <Loading /> : (
     <main className="main">
       <div className="login-form">
         <h2 className="heading-secondary ma-bt-lg">Login</h2>
-        <form className="form form--login">
+        <form className="form form--login" onSubmit={handleLogin}>
           <div className="form__group">
             <label htmlFor="email" className="form__label">Email address</label>
               <input 
                 type="email" 
-                id="email" 
+                id="email"
+                value={email}
+                onChange={e => setEmail(e.target.value)} 
                 className="form__input" 
                 placeholder='you@example.com' 
                 required
@@ -22,14 +37,16 @@ const Login = () => {
               <input 
                 type="password" 
                 id="password" 
+                value={password}
+                onChange={e => setPassword(e.target.value)}
                 className="form__input"
                 placeholder='••••••••'
-                minlength='8'
+                minLength='8'
                 required
               />    
           </div>
           <div className="form__group">
-            <button className="btn btn--green">Login</button>
+            <button type='submit' className="btn btn--green">Login</button>
           </div>
         </form>
       </div>
@@ -37,4 +54,12 @@ const Login = () => {
   )
 }
 
-export default Login;
+const mapStateToProps = createStructuredSelector({
+  user: grabUser,
+  onLoading: grabLoading
+})
+
+export default connect(
+  mapStateToProps,
+  {loginStart}
+)(Login);
