@@ -5,7 +5,7 @@ const Login = () => {
   return (
     <main className="main">
       <div className="login-form">
-        <h2 className="heading-secondary ma-bt-lg">Log into your account</h2>
+        <h2 className="heading-secondary ma-bt-lg">Login</h2>
         <form className="form form--login">
           <div className="form__group">
             <label htmlFor="email" className="form__label">Email address</label>
