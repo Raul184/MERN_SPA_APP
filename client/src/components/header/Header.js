@@ -13,8 +13,8 @@ const Header = () => {
         <img src={Logo} alt="Natours logo"/>
       </div>
       <nav className="nav nav--user">
-        <button className="nav__el">Log in</button>
-        <button className="nav__el">Sign up</button>
+        <Link to='/login' className="nav__el">Log in</Link>
+        <Link to='/signup' className="nav__el">Sign up</Link>
       </nav>
     </header>
   )
