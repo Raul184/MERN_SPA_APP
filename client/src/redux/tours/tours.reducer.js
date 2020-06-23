@@ -15,7 +15,7 @@ const INITIAL_STATE = {
 };
 
 
-const userReducer = (state = INITIAL_STATE, action) => {
+const toursReducer = (state = INITIAL_STATE, action) => {
   const { type , payload } = action
   switch (type) {
     case FETCH_TOURS_STARTS:
@@ -56,4 +56,4 @@ const userReducer = (state = INITIAL_STATE, action) => {
   }
 };
 
-export default userReducer;
+export default toursReducer;
