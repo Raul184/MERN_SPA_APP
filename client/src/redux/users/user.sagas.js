@@ -27,11 +27,12 @@ export function* fetchUserStart() {
 
 
 // SIGN UP USER
-export function* signUpAsync(user) {
+export function* signUpAsync({payload}) {
+  console.log(payload);
   try {
-    const data = yield axios.post(`/api/v1/user/signup`, user) 
+    const data = yield axios.post(`/api/v1/users/signup`, payload) 
     yield put(
-      fetchSuccess(false, data)
+      fetchSuccess(false, data.data)
     );
   } 
   catch (error) {

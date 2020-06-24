@@ -6,7 +6,7 @@ import Logo from '../../assets/logo-white.png'
 import {connect} from 'react-redux'
 import {createStructuredSelector} from 'reselect'
 import {grabUser} from '../../redux/users/user.selectors'
-const Header = ({user}) => {
+const Header = ({userDb}) => {
   const handleLogout = () => {
     Cookies.remove('__session')
     window.location.reload(); 
@@ -21,7 +21,7 @@ const Header = ({user}) => {
         <img src={Logo} alt="Natours logo"/>
       </div>
       <nav className="nav nav--user">
-        {user ? <>
+        {userDb ? <>
           <Link 
             className="nav__el nav__el--logout"
             to='/logout' 
@@ -30,13 +30,15 @@ const Header = ({user}) => {
              Log out
           </Link>
           <Link to='/me' className="nav__el">
-            <img 
-              className="nav__user-img"
-              src={require(`../../assets/users/${user.data.user.photo}`)} 
-              alt={`${user.data.user.name}`} 
+            {
+              userDb.data.user.photo && <img className="nav__user-img"
+              src={require(`../../assets/users/${userDb.data.user.photo}`)} 
+              alt={`${userDb.data.user.name}`} 
             />
-            <span>{`${user.data.user.name.split(' ')[0]}`}</span>
-          </Link></>
+            }
+            <span>{`${userDb.data.user.name}`}</span>
+          </Link>
+          </>
           :
           <>  
             <Link to='/login' className="nav__el">Log in</Link>
@@ -49,7 +51,7 @@ const Header = ({user}) => {
 }
 
 const mapStateToProps = createStructuredSelector({
-  user: grabUser
+  userDb: grabUser
 })
 export default connect(
   mapStateToProps,
