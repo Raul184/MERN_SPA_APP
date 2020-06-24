@@ -5,8 +5,7 @@ import {createStructuredSelector} from 'reselect'
 import {grabUser,grabLoading} from '../../redux/users/user.selectors'
 import {loginStart} from '../../redux/users/user.action'
 import Loading from '../../components/onLoading/OnLoading'
-
-const Login = ({onLoading,loginStart}) => {
+const Login = ({onLoading,loginStart,history}) => {
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
 
@@ -15,6 +14,7 @@ const Login = ({onLoading,loginStart}) => {
     loginStart(true, {email, password})
     setEmail('')
     setPassword('')
+    history.push('/me')
   }
 
   return onLoading ? <Loading /> : (

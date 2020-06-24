@@ -1,8 +1,7 @@
 import React ,{useState} from 'react'
 import {connect} from 'react-redux'
 import {loginStart} from '../../redux/users/user.action'
-import {Redirect} from 'react-router-dom'
-const Signup = ({loginStart}) => {
+const Signup = ({loginStart,history}) => {
   const [name, setName] = useState('')
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
@@ -19,7 +18,7 @@ const Signup = ({loginStart}) => {
     setEmail('')
     setPassword('')
     setConfirm('') 
-    return <Redirect to='/'/>
+    history.push('/me')
   }
 
   return (
