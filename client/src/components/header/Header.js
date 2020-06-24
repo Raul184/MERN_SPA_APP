@@ -1,11 +1,17 @@
 import React from 'react'
 import './header.style.scss'
-import {Link} from 'react-router-dom'
+import {Link, Redirect} from 'react-router-dom'
+import Cookies from 'js-cookie'
 import Logo from '../../assets/logo-white.png'
 import {connect} from 'react-redux'
 import {createStructuredSelector} from 'reselect'
 import {grabUser} from '../../redux/users/user.selectors'
 const Header = ({user}) => {
+  const handleLogout = () => {
+    Cookies.remove('__session')
+    window.location.reload(); 
+    return <Redirect to='/'/>
+  }
   return (
     <header className="header">
       <nav className="nav nav--tours">
@@ -16,7 +22,11 @@ const Header = ({user}) => {
       </div>
       <nav className="nav nav--user">
         {user ? <>
-          <Link to='/logout' className="nav__el nav__el--logout">
+          <Link 
+            className="nav__el nav__el--logout"
+            to='/logout' 
+            onClick={handleLogout} 
+          >
              Log out
           </Link>
           <Link to='/me' className="nav__el">
