@@ -1,14 +1,15 @@
 import React from 'react';
 import './meProfile.style.scss';
-import { createStructuredSelector } from 'reselect';
 import { connect } from 'react-redux';
+import { createStructuredSelector } from 'reselect';
 import { grabProfile, grabLoading } from '../../redux/users/user.selectors';
 import AdminNav from '../../components/adminNav/adminNav'
 import ProfileNav from '../../components/profileNav/ProfileNav'
 import ProfileForm from '../../components/profileForm/ProfileForm'
 import PasswordForm from '../../components/passwordForm/PasswordForm'
+import Spinner from '../../components/spinner/Spinner'
 const MeProfile = ({ profile, loading }) => loading ? 
-  <div>LOADING...</div> : 
+  <Spinner /> : 
   <div className="main">
   <div className="user-view">
     <nav className="user-view__menu">
