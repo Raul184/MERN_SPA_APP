@@ -1,12 +1,18 @@
-import React from 'react'
+import React,{useState} from 'react'
 
 const PasswordForm = () =>  {
-  const handleSubmit = () => {
+  const [passwordCurrent, setPasswordCurrent] = useState('')
+  const [password, setPassword] = useState('')
+  const [passwordConfirm, setPasswordConfirm] = useState('')
+  const handleSubmit = e => {
+    e.preventDefault();
     console.log('SUBMIT');
   }
-  return <form className="form form-user-password"
+  return (
+  <form 
+    className="form form-user-password"
     onSubmit={handleSubmit}
-    >
+  >
     <div className="form__group">
       <label className="form__label" htmlFor="password-current">
         Current password
@@ -16,6 +22,8 @@ const PasswordForm = () =>  {
         id="password-current"
         type="password"
         placeholder="••••••••"
+        value={passwordCurrent}
+        onChange={e => setPasswordCurrent(e.target.value)}
         required
         minLength="8"
       />
@@ -29,6 +37,8 @@ const PasswordForm = () =>  {
         id="password"
         type="password"
         placeholder="••••••••"
+        value={password}
+        onChange={e => setPassword(e.target.value)}
         required
         minLength="8"
       />
@@ -42,6 +52,8 @@ const PasswordForm = () =>  {
         id="password-confirm"
         type="password"
         placeholder="••••••••"
+        value={passwordConfirm}
+        onChange={e => setPasswordConfirm(e.target.value)}
         required
         minLength="8"
       />
@@ -55,6 +67,6 @@ const PasswordForm = () =>  {
       </button>
     </div>
   </form>
-}
+)}
 
 export default PasswordForm;
