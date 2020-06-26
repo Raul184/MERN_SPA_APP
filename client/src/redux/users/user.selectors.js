@@ -19,9 +19,3 @@ export const grabLoading = createSelector(
   [getUser],
   all => all.loading
 )
-
-// Grab user profile pg
-export const grabProfile = createSelector(
-  [getUser],
-  all => all.profile
-)

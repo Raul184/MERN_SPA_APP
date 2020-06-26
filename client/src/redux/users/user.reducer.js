@@ -4,17 +4,13 @@ import {
   LOGIN_USER_FAILED,
   SIGN_UP_USER_STARTS,
   SIGN_UP_USER_SUCCESS,
-  SIGN_UP_USER_FAILED,
-  FETCH_USER_PROFILE_SUCCESS,
-  FETCH_USER_PROFILE_FAILED,
-  FETCH_USER_PROFILE_STARTS
+  SIGN_UP_USER_FAILED
 } from './types'
 
 const INITIAL_STATE = {
   user: null,
   loading: false, 
-  error: null,
-  profile: null
+  error: null
 };
 
 
@@ -23,12 +19,10 @@ const userReducer = (state = INITIAL_STATE, action) => {
   switch (type) {
     case LOGIN_USER_STARTS:
     case SIGN_UP_USER_STARTS:
-    case FETCH_USER_PROFILE_STARTS:
       return {
         ...state,
         loading: true,
-        error: null,
-        profile:null
+        error: null
       }
     case LOGIN_USER_SUCCESS:
     case SIGN_UP_USER_SUCCESS:
@@ -37,20 +31,12 @@ const userReducer = (state = INITIAL_STATE, action) => {
         loading: false,
         user: payload
       }
-    case FETCH_USER_PROFILE_SUCCESS:
-      return{
-        ...state,
-        loading:false,
-        profile: payload
-      }
     case LOGIN_USER_FAILED:
     case SIGN_UP_USER_FAILED:
-    case FETCH_USER_PROFILE_FAILED:
       return{
         ...state,
         loading: false,
-        error: payload,
-        profile: null
+        error: payload
       }
     default:
       return state;
