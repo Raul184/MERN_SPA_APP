@@ -11,7 +11,7 @@ const {
   getToursWithin,
   getDistances
 } = require('./../controllers/tourController');
-const { restrictTo, protect } = require('./../controllers/authController');
+const { restrictTo, protect} = require('./../controllers/authController');
 const reviewRouter = require('./../routes/reviewRoutes');
 const router = express.Router();
 

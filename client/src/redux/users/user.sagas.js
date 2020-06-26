@@ -1,8 +1,14 @@
 import { takeLatest , call , put , all } from 'redux-saga/effects'
-import { LOGIN_USER_STARTS , SIGN_UP_USER_STARTS} from './types'
 import { 
-  fetchSuccess , 
-  fetchFailed 
+  LOGIN_USER_STARTS , 
+  SIGN_UP_USER_STARTS,
+  FETCH_USER_PROFILE_STARTS
+} from './types'
+import { 
+  fetchSuccess, 
+  fetchFailed,
+  fetchUserProfileSuccess,
+  fetchUserProfileFailed
 } from './user.action'
 const axios = require('axios');
 
@@ -20,12 +26,9 @@ export function* loginAsync({payload}) {
     )
   }
 }
-// Listener
 export function* fetchUserStart() {
   yield takeLatest( LOGIN_USER_STARTS ,loginAsync )
 }
-
-
 // SIGN UP USER
 export function* signUpAsync({payload}) {
   console.log(payload);
@@ -41,15 +44,31 @@ export function* signUpAsync({payload}) {
     )
   }
 }
-// Listener
 export function* fetchSignUserStart() {
   yield takeLatest( SIGN_UP_USER_STARTS ,signUpAsync )
 }
-
+// Get User profile data
+export function* getProfileData(){
+  try {
+    const data = yield axios.get('127.0.0.1:4000/api/v1/users/me') 
+    yield put(
+      fetchUserProfileSuccess(data)
+    ); 
+  } 
+  catch (error) {
+    yield put(
+      fetchUserProfileFailed(error.message)
+    )
+  }
+}
+export function* fetchProfileUserStart() {
+  yield takeLatest(FETCH_USER_PROFILE_STARTS, getProfileData)
+}
 
 export function* userSagas(){
   yield all([ 
     call(fetchUserStart),
-    call(fetchSignUserStart)
+    call(fetchSignUserStart),
+    call(fetchProfileUserStart)
   ])
 }
