@@ -1,21 +1,18 @@
 import React from "react";
 import { Route, Redirect } from "react-router-dom";
-
-const PrivateRoute = ({ render: Component, ...rest }) => {
-  
+import PropTypes from 'prop-types'
+import {useSelector} from 'react-redux'
+const PrivateRoute = ({auth, component: Component, ...rest}) => {
+  const isAuthenticated = useSelector(state => state.user.auth)
   return (
-    <Route
-      {...rest}
-      render={props => {
-        if ('cookie') {
-          return <Component {...props} />;
-        } 
-        else {
-          return <Redirect to="/login" />;
-        }
-      }}
-    />
+      <Route {...rest} render={props => (
+          isAuthenticated ?
+              <Component {...props} />
+          : <Redirect to="/signin" />
+      )} />
   );
 };
-
+PrivateRoute.propTypes = {
+  component: PropTypes.object, 
+}
 export default PrivateRoute;

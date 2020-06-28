@@ -17,7 +17,7 @@ function App() {
         <Route exact path='/login' component={Login} />
         <Route exact path='/signup' component={Signup} />
         <Route path='/tours/:tourId' component={TourPage} />
-        <Route exact path='/me' component={MeProfile} />
+        <PrivateRoute exact path='/me' component={MeProfile} />
         <Redirect to="/" />
       </Switch>
       <Footer />

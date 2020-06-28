@@ -11,6 +11,7 @@ import {
 
 const INITIAL_STATE = {
   user: null,
+  isAuth: false,
   loading: false, 
   error: null
 };
@@ -31,7 +32,8 @@ const userReducer = (state = INITIAL_STATE, action) => {
         ...state,
         loading: false,
         error: null,
-        user:null
+        user:null,
+        isAuth: false
       }
     case LOGIN_USER_SUCCESS:
     case SIGN_UP_USER_SUCCESS:
@@ -39,14 +41,16 @@ const userReducer = (state = INITIAL_STATE, action) => {
       return {
         ...state,
         loading: false,
-        user: payload
+        user: payload,
+        isAuth: true,
       }
     case LOGIN_USER_FAILED:
     case SIGN_UP_USER_FAILED:
       return{
         ...state,
         loading: false,
-        error: payload
+        error: payload,
+        isAuth: false,
       }
     default:
       return state;

@@ -16,8 +16,8 @@ const {
   restrictTo,
   resetPassword,
   updatePassword,
-  isLoggedIn,
-  logout
+  logout,
+  protect
 } = require('./../controllers/authController');
 
 const router = express.Router();
@@ -29,11 +29,11 @@ router.post('/forgotPassword', forgotPassword);
 router.patch('/resetPassword/:token', resetPassword);
 
 // Routes to be protected
-
-router.patch('/updateMyPassword',isLoggedIn, updatePassword);
-router.get('/me', isLoggedIn,getMe);
-router.patch('/updateMe', isLoggedIn,updateMe);
-router.delete('/deleteMe', isLoggedIn,deleteMe);
+router.use(protect);
+router.patch('/updateMyPassword', updatePassword);
+router.get('/me', getMe , getUser);
+router.patch('/updateMe', updateMe);
+router.delete('/deleteMe', deleteMe);
 
 router.use(restrictTo('admin'));
 
