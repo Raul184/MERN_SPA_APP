@@ -8,7 +8,6 @@ import {store}  from './redux/store';
 import {persistor}  from './redux/store';
 import App from './App';
 import * as ServiceWorker from './serviceWorker';
-
 // const MyAppWithStore = () => (
 //   <PersistGate persistor={persistor}>
 //     <App />

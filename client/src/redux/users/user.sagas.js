@@ -1,11 +1,14 @@
 import { takeLatest , call , put , all } from 'redux-saga/effects'
 import { 
   LOGIN_USER_STARTS , 
-  SIGN_UP_USER_STARTS
+  SIGN_UP_USER_STARTS,
+  LOGOUT_USER_START
 } from './types'
 import { 
   fetchSuccess, 
-  fetchFailed
+  fetchFailed,
+  logoutSuccess,
+  logoutFailed
 } from './user.action'
 const axios = require('axios');
 
@@ -26,6 +29,25 @@ export function* loginAsync({payload}) {
 export function* fetchUserStart() {
   yield takeLatest( LOGIN_USER_STARTS ,loginAsync )
 }
+
+// LOGIN OUT USER
+export function* logOutAsync(){
+  try {
+    const res = yield axios.get('/api/v1/users/logout')
+    yield put(
+      logoutSuccess(res)
+    )   
+  } 
+  catch (err) {
+    yield put( 
+      logoutFailed(err.response.data.message)
+    );  
+  }
+}
+export function* logoutUserStart(){
+  yield takeLatest( LOGOUT_USER_START, logOutAsync)
+}
+
 // SIGN UP USER
 export function* signUpAsync({payload}) {
   console.log(payload);
@@ -48,6 +70,7 @@ export function* fetchSignUserStart() {
 export function* userSagas(){
   yield all([ 
     call(fetchUserStart),
-    call(fetchSignUserStart)
+    call(fetchSignUserStart),
+    call(logoutUserStart)
   ])
 }

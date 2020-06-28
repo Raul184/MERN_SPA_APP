@@ -4,7 +4,9 @@ import {
   LOGIN_USER_FAILED,
   SIGN_UP_USER_STARTS,
   SIGN_UP_USER_SUCCESS,
-  SIGN_UP_USER_FAILED
+  SIGN_UP_USER_FAILED,
+  LOGOUT_USER_FAILED,
+  LOGOUT_USER_SUCCESS
 } from './types'
 
 const INITIAL_STATE = {
@@ -24,8 +26,16 @@ const userReducer = (state = INITIAL_STATE, action) => {
         loading: true,
         error: null
       }
+    case LOGOUT_USER_SUCCESS:
+      return {
+        ...state,
+        loading: false,
+        error: null,
+        user:null
+      }
     case LOGIN_USER_SUCCESS:
     case SIGN_UP_USER_SUCCESS:
+    case LOGOUT_USER_FAILED:
       return {
         ...state,
         loading: false,
