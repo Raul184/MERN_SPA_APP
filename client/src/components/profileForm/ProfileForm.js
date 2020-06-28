@@ -47,11 +47,11 @@ const ProfileForm = ({profile}) => {
         />
       </div>
       <div className="form__group form__photo-upload">
-        <img
+        { profile.photo && <img
           className="form__user-photo"
           src={require(`../../assets/users/${profile.photo}`)}
           alt="User"
-        />
+        />}
         <label htmlFor="photo">Choose new photo</label>
         <input
           className="form__upload"

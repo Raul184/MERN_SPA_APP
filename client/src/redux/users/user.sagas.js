@@ -50,7 +50,6 @@ export function* logoutUserStart(){
 
 // SIGN UP USER
 export function* signUpAsync({payload}) {
-  console.log(payload);
   try {
     const data = yield axios.post(`/api/v1/users/signup`, payload) 
     yield put(

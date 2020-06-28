@@ -14,7 +14,7 @@ const Login = ({onLoading,loginStart,history}) => {
     loginStart(true, {email, password})
     setEmail('')
     setPassword('')
-    history.push('/me')
+    history.push('/')
   }
 
   return onLoading ? <Loading /> : (

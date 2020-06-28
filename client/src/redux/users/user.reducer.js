@@ -49,8 +49,7 @@ const userReducer = (state = INITIAL_STATE, action) => {
       return{
         ...state,
         loading: false,
-        error: payload,
-        isAuth: false,
+        error: payload
       }
     default:
       return state;

@@ -8,17 +8,18 @@ const Signup = ({loginStart,history}) => {
   const [passwordConfirm, setConfirm] = useState('')  
 
   const handleSubmit = e => {
-    console.log('running');
     e.preventDefault()
     if(password !== passwordConfirm){
       return alert(`Sorry, passwords don't match`)
     }
+    console.log('running');
+    console.log(name,email, password,passwordConfirm);
     loginStart(false, {name,email, password,passwordConfirm})
     setName('')
     setEmail('')
     setPassword('')
     setConfirm('') 
-    history.push('/me')
+    history.push('/')
   }
 
   return (
