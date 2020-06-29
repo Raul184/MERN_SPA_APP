@@ -6,14 +6,17 @@ import {
   SIGN_UP_USER_SUCCESS,
   SIGN_UP_USER_FAILED,
   LOGOUT_USER_FAILED,
-  LOGOUT_USER_SUCCESS
+  LOGOUT_USER_SUCCESS,
+  UPLOAD_USER_PROFILE_SUCCESS,
+  UPLOAD_USER_PROFILE_FAILED
 } from './types'
 
 const INITIAL_STATE = {
   user: null,
   isAuth: false,
   loading: false, 
-  error: null
+  error: null,
+  profile: null
 };
 
 
@@ -43,9 +46,18 @@ const userReducer = (state = INITIAL_STATE, action) => {
         loading: false,
         user: payload,
         isAuth: true,
+        profile: payload
+      }
+    case UPLOAD_USER_PROFILE_SUCCESS:
+      return {
+        ...state,
+        loading: false,
+        isAuth:true,
+        profile:payload
       }
     case LOGIN_USER_FAILED:
     case SIGN_UP_USER_FAILED:
+    case UPLOAD_USER_PROFILE_FAILED:
       return{
         ...state,
         loading: false,

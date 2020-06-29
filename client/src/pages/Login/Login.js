@@ -14,7 +14,7 @@ const Login = ({onLoading,loginStart,history}) => {
     loginStart(true, {email, password})
     setEmail('')
     setPassword('')
-    setTimeout(() => history.push('/me'), 1000)
+    setTimeout(() => history.push('/me'), 1500)
   }
 
   return onLoading ? <Loading /> : (

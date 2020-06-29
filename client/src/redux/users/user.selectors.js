@@ -14,13 +14,14 @@ export const grabUserSignUp = createSelector(
   all => all.user.data
 )
 
-export const grabProfile = createSelector(
-  [getUser],
-  all => (all.user ? all.user.data.user : null)
-)
-
 // Grab loading
 export const grabLoading = createSelector(
   [getUser],
   all => all.loading
+)
+
+// Grab profile
+export const grabProfile = createSelector(
+  [getUser],
+  all => all.profile
 )

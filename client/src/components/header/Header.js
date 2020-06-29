@@ -29,12 +29,12 @@ const Header = ({userDb,logoutStart,history}) => {
            Log out
         </Link>
         <Link to='/me' className="nav__el">
-          {userDb.data !== undefined && <>
-            {userDb.data.user.photo && <img className="nav__user-img"
-              src={require(`../../assets/users/${userDb.data.user.photo}`)} 
-              alt={`${userDb.data.user.name}`} 
-            />}
-            <span>{`${userDb.data.user.name}`}</span>
+          {userDb!== undefined && <>
+            <img className="nav__user-img"
+              src={require(`../../assets/users/${userDb.photo}`)} 
+              alt={`${userDb.name}`} 
+            />
+            <span>{userDb !== undefined &&`${userDb.name}`}</span>
             </>
           }
         </Link>

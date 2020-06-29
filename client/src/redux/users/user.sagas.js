@@ -18,9 +18,10 @@ const axios = require('axios');
 // LOGIN USER
 export function* loginAsync({payload}) {
   try {
-    const data = yield axios.post('/api/v1/users/login', payload) 
+    const res = yield axios.post('/api/v1/users/login', payload) 
+    console.log(res.data.data.user)
     yield put(
-      fetchSuccess(all, data.data)
+      fetchSuccess(all, res.data.data.user)
     );
   } 
   catch (error) {

@@ -1,6 +1,8 @@
 import React,{useEffect,useState} from 'react'
+import {connect} from 'react-redux'
+import {updateStart} from '../../redux/users/user.action'
 
-const ProfileForm = ({profile}) => {
+const ProfileForm = ({profile,updateStart}) => {
   const [name, setName] = useState('')
   const [email, setEmail] = useState('')
   useEffect(() => {
@@ -12,6 +14,7 @@ const ProfileForm = ({profile}) => {
   const handleSubmit = e => {
     e.preventDefault();
     console.log('SUBMIT');
+    updateStart({name,email})
   }
   return (
     <form 
@@ -69,4 +72,8 @@ const ProfileForm = ({profile}) => {
     </form>
   )
 }
-export default ProfileForm;
+
+export default connect(
+  null,
+  {updateStart}
+)(ProfileForm);
