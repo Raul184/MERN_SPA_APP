@@ -1,6 +1,8 @@
 import React,{useEffect,useState} from 'react'
 import {connect} from 'react-redux'
 import {updateStart} from '../../redux/users/user.action'
+import { grabLoading,grabProfile} from '../../redux/users/user.selectors';
+import { createStructuredSelector } from 'reselect';
 
 const ProfileForm = ({profile,updateStart}) => {
   const [name, setName] = useState('')
@@ -72,8 +74,12 @@ const ProfileForm = ({profile,updateStart}) => {
     </form>
   )
 }
+const mapStateToProps = createStructuredSelector({
+  profile: grabProfile,
+  loading: grabLoading
+});
 
 export default connect(
-  null,
+  mapStateToProps,
   {updateStart}
 )(ProfileForm);

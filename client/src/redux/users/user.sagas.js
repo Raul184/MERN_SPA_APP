@@ -19,7 +19,6 @@ const axios = require('axios');
 export function* loginAsync({payload}) {
   try {
     const res = yield axios.post('/api/v1/users/login', payload) 
-    console.log(res.data.data.user)
     yield put(
       fetchSuccess(all, res.data.data.user)
     );

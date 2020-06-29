@@ -5,7 +5,7 @@ import Logo from '../../assets/logo-white.png'
 import {connect} from 'react-redux'
 import {logoutStart} from '../../redux/users/user.action'
 import {createStructuredSelector} from 'reselect'
-import {grabUser} from '../../redux/users/user.selectors'
+import {grabProfile} from '../../redux/users/user.selectors'
 const Header = ({userDb,logoutStart,history}) => {
   const handleLogout = e => {
     e.preventDefault()
@@ -56,7 +56,7 @@ const Header = ({userDb,logoutStart,history}) => {
 }
 
 const mapStateToProps = createStructuredSelector({
-  userDb: grabUser
+  userDb: grabProfile
 })
 export default withRouter(
   connect(

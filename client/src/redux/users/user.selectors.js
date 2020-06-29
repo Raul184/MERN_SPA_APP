@@ -11,7 +11,7 @@ export const grabUser = createSelector(
 // Grab user on SignUp
 export const grabUserSignUp = createSelector(
   [getUser],
-  all => all.user.data
+  all => all.user
 )
 
 // Grab loading

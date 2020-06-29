@@ -8,7 +8,8 @@ import {
   LOGOUT_USER_FAILED,
   LOGOUT_USER_SUCCESS,
   UPLOAD_USER_PROFILE_SUCCESS,
-  UPLOAD_USER_PROFILE_FAILED
+  UPLOAD_USER_PROFILE_FAILED,
+  UPLOAD_USER_PROFILE_STARTS
 } from './types'
 
 const INITIAL_STATE = {
@@ -25,6 +26,7 @@ const userReducer = (state = INITIAL_STATE, action) => {
   switch (type) {
     case LOGIN_USER_STARTS:
     case SIGN_UP_USER_STARTS:
+    case UPLOAD_USER_PROFILE_STARTS:
       return {
         ...state,
         loading: true,
@@ -36,6 +38,7 @@ const userReducer = (state = INITIAL_STATE, action) => {
         loading: false,
         error: null,
         user:null,
+        profile: null,
         isAuth: false
       }
     case LOGIN_USER_SUCCESS:

@@ -60,7 +60,7 @@ export const updateStart = payload => {
 export const updateSuccess = userUpdated => {
   return {
     type: UPLOAD_USER_PROFILE_SUCCESS,
-    payload: userUpdated
+    payload: userUpdated.data.data.user
   }
 }
 export const updateFailed = error => {
