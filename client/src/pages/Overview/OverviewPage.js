@@ -1,17 +1,19 @@
 import React , { useEffect } from 'react'
 import './overview.style.scss'
-import Card from '../../components/card/Card'
-import {connect} from 'react-redux'
-import {createStructuredSelector} from 'reselect'
+import {useSelector,useDispatch} from 'react-redux'
 import {grabTours,grabLoading} from '../../redux/tours/tours.selectors'
-import {fetchStart} from '../../redux/tours/tours.action'
+import Card from '../../components/card/Card'
 import Loading from '../../components/onLoading/OnLoading'
 
-const OverviewPage = ({tours,onLoading,fetchStart}) => {
+const OverviewPage = () => {
+  const tours = useSelector(grabTours)
+  const onLoading = useSelector(grabLoading)
+  const dispatch = useDispatch()
   useEffect(() => {
-    fetchStart()
+    dispatch({type: 'FETCH_TOURS_STARTS'})
   }
-  , [fetchStart])
+  , 
+  [dispatch])
 
   return (
     onLoading ? <Loading /> 
@@ -26,13 +28,4 @@ const OverviewPage = ({tours,onLoading,fetchStart}) => {
     </section>  
   )
 }
-
-const mapStateToProps = createStructuredSelector({
-    tours: grabTours,
-    onLoading: grabLoading
-})
-
-export default connect(
-  mapStateToProps ,
-  {fetchStart}
-)(OverviewPage);
+export default OverviewPage;
