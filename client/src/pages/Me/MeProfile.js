@@ -14,7 +14,7 @@ const MeProfile = ({loading,profile}) => loading ?
   <div className="user-view">
     <nav className="user-view__menu">
       <ProfileNav/>
-      {/* {!loading && profile !== undefined && profile.role === 'admin' && <AdminNav/>} */}
+      {!loading && profile !== undefined && profile.role === 'admin' && <AdminNav/>}
     </nav>
     <div className="user-view__content">
       <div className="user-view__form-container">

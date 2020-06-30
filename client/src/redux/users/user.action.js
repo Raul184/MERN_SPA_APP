@@ -10,7 +10,10 @@ import{
   LOGOUT_USER_START,
   UPLOAD_USER_PROFILE_STARTS,
   UPLOAD_USER_PROFILE_SUCCESS,
-  UPLOAD_USER_PROFILE_FAILED
+  UPLOAD_USER_PROFILE_FAILED,
+  UPDATE_USER_PASSWORD_STARTS,
+  UPDATE_USER_PASSWORD_SUCCESS,
+  UPDATE_USER_PASSWORD_FAILED
 } from './types'
 
 
@@ -51,9 +54,9 @@ export const logoutFailed = payload => {
     payload
   }
 }
-export const updateStart = payload => {
+export const updateStart = (password=false, payload) => {
   return {
-    type: UPLOAD_USER_PROFILE_STARTS,
+    type: password ? UPDATE_USER_PASSWORD_STARTS:UPLOAD_USER_PROFILE_STARTS,
     payload
   }
 }
@@ -63,9 +66,16 @@ export const updateSuccess = userUpdated => {
     payload: userUpdated.data.data.user
   }
 }
-export const updateFailed = error => {
+export const updateFailed = (password=false, error) => {
   return {
-    type: UPLOAD_USER_PROFILE_FAILED,
+    type: password ? UPDATE_USER_PASSWORD_FAILED:UPLOAD_USER_PROFILE_FAILED,
     payload: error
+  }
+}
+
+export const updatePasswordSuccess = userUpdated => {
+  return {
+    type: UPDATE_USER_PASSWORD_SUCCESS,
+    payload: userUpdated
   }
 }

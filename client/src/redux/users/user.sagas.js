@@ -3,7 +3,8 @@ import {
   LOGIN_USER_STARTS , 
   SIGN_UP_USER_STARTS,
   LOGOUT_USER_START,
-  UPLOAD_USER_PROFILE_STARTS
+  UPLOAD_USER_PROFILE_STARTS,
+  UPDATE_USER_PASSWORD_STARTS
 } from './types'
 import { 
   fetchSuccess, 
@@ -11,7 +12,8 @@ import {
   logoutSuccess,
   logoutFailed,
   updateSuccess,
-  updateFailed
+  updateFailed,
+  updatePasswordSuccess
 } from './user.action'
 const axios = require('axios');
 
@@ -79,7 +81,7 @@ export function* updateAsync({payload}) {
   } 
   catch (error) {
     yield put(
-      updateFailed(error.message)
+      updateFailed(false, error.message)
     )
   }
 }
@@ -87,11 +89,34 @@ export function* updateUserStart() {
   yield takeLatest(UPLOAD_USER_PROFILE_STARTS ,updateAsync)
 }
 
+// UPDATE PASSWORD
+export function* updatePasswordAsync({payload}) {
+  const{passwordCurrent,password,passwordConfirm} = payload;
+  try {
+    const data = yield axios.patch(
+      `/api/v1/users/updateMyPassword`, 
+      {passwordCurrent,password,passwordConfirm}
+    ) 
+    yield put(
+      updatePasswordSuccess(data)
+    );
+  } 
+  catch (error) {
+    yield put(
+      updateFailed(true, error.message)
+    )
+  }
+}
+export function* updatePasswordStart() {
+  yield takeLatest(UPDATE_USER_PASSWORD_STARTS ,updatePasswordAsync)
+}
+
 export function* userSagas(){
   yield all([ 
     call(fetchUserStart),
     call(fetchSignUserStart),
     call(logoutUserStart),
-    call(updateUserStart)
+    call(updateUserStart),
+    call(updatePasswordStart)
   ])
 }

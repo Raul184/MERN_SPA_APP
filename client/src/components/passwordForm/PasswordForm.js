@@ -1,12 +1,16 @@
 import React,{useState} from 'react'
+import {withRouter} from 'react-router-dom'
+import {connect} from 'react-redux'
+import {updateStart} from '../../redux/users/user.action'
 
-const PasswordForm = () =>  {
+const PasswordForm = ({updateStart,history}) =>  {
   const [passwordCurrent, setPasswordCurrent] = useState('')
   const [password, setPassword] = useState('')
   const [passwordConfirm, setPasswordConfirm] = useState('')
   const handleSubmit = e => {
     e.preventDefault();
-    console.log('SUBMIT');
+    updateStart(true, {passwordCurrent, password, passwordConfirm})
+    // setTimeout(() => history.push('/'), 1300)
   }
   return (
   <form 
@@ -69,4 +73,7 @@ const PasswordForm = () =>  {
   </form>
 )}
 
-export default PasswordForm;
+export default withRouter(connect(
+  null,
+  {updateStart}
+)(PasswordForm)); 
