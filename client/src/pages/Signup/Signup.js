@@ -12,8 +12,6 @@ const Signup = ({loginStart,history}) => {
     if(password !== passwordConfirm){
       return alert(`Sorry, passwords don't match`)
     }
-    console.log('running');
-    console.log(name,email, password,passwordConfirm);
     loginStart(false, {name,email, password,passwordConfirm})
     setName('')
     setEmail('')

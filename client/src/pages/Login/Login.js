@@ -1,12 +1,13 @@
 import React, {useState} from 'react'
 import './login.style.scss'
+import {Redirect} from 'react-router-dom'
 import {connect} from 'react-redux'
 import {createStructuredSelector} from 'reselect'
-import {grabLoading, grabAuth} from '../../redux/users/user.selectors'
+import {grabLoading, grabError,grabAuth} from '../../redux/users/user.selectors'
 import {loginStart} from '../../redux/users/user.action'
 import Spinner from '../../components/spinner/Spinner'
 import Alert from '../../components/alert/Alert'
-const Login = ({onLoading,isAuth,loginStart,history}) => {
+const Login = ({onLoading,error,isAuth, loginStart,history}) => {
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const handleLogin = e => {
@@ -14,15 +15,10 @@ const Login = ({onLoading,isAuth,loginStart,history}) => {
     loginStart(true, {email, password})
     setEmail('')
     setPassword('')
-    isAuth ? setTimeout(
-      () => history.push('/me'), 1300)
-      :
-      setTimeout(
-        () => history.push('/login'), 1300
-      )
   }
-
-  return onLoading ? <Spinner /> : (
+  return onLoading ? <Spinner /> : 
+  !onLoading && isAuth ? <Redirect to='/me'/> :
+  (
     <main className="main">
       <div className="login-form">
         <h2 className="heading-secondary ma-bt-lg">Login</h2>
@@ -63,7 +59,8 @@ const Login = ({onLoading,isAuth,loginStart,history}) => {
 
 const mapStateToProps = createStructuredSelector({
   onLoading: grabLoading,
-  isAuth:grabAuth
+  error:grabError,
+  isAuth: grabAuth
 })
 
 export default connect(

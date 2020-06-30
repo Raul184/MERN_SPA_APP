@@ -30,10 +30,10 @@ const Header = ({userDb,logoutStart,history}) => {
         </Link>
         <Link to='/me' className="nav__el">
           {userDb!== undefined && <>
-            <img className="nav__user-img"
+            {userDb.photo !== '' && <img className="nav__user-img"
               src={require(`../../assets/users/${userDb.photo}`)} 
               alt={`${userDb.name}`} 
-            />
+            />}
             <span>{userDb !== undefined &&`${userDb.name}`}</span>
             </>
           }
