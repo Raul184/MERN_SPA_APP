@@ -2,22 +2,27 @@ import React, {useState} from 'react'
 import './login.style.scss'
 import {connect} from 'react-redux'
 import {createStructuredSelector} from 'reselect'
-import {grabLoading} from '../../redux/users/user.selectors'
+import {grabLoading, grabAuth} from '../../redux/users/user.selectors'
 import {loginStart} from '../../redux/users/user.action'
-import Loading from '../../components/onLoading/OnLoading'
-const Login = ({onLoading,loginStart,history}) => {
+import Spinner from '../../components/spinner/Spinner'
+import Alert from '../../components/alert/Alert'
+const Login = ({onLoading,isAuth,loginStart,history}) => {
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
-
   const handleLogin = e => {
     e.preventDefault()
     loginStart(true, {email, password})
     setEmail('')
     setPassword('')
-    setTimeout(() => history.push('/me'), 1300)
+    isAuth ? setTimeout(
+      () => history.push('/me'), 1300)
+      :
+      setTimeout(
+        () => history.push('/login'), 1300
+      )
   }
 
-  return onLoading ? <Loading /> : (
+  return onLoading ? <Spinner /> : (
     <main className="main">
       <div className="login-form">
         <h2 className="heading-secondary ma-bt-lg">Login</h2>
@@ -57,7 +62,8 @@ const Login = ({onLoading,loginStart,history}) => {
 }
 
 const mapStateToProps = createStructuredSelector({
-  onLoading: grabLoading
+  onLoading: grabLoading,
+  isAuth:grabAuth
 })
 
 export default connect(
