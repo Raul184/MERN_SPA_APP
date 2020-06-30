@@ -10,7 +10,7 @@ const PasswordForm = ({updateStart,history}) =>  {
   const handleSubmit = e => {
     e.preventDefault();
     updateStart(true, {passwordCurrent, password, passwordConfirm})
-    // setTimeout(() => history.push('/'), 1300)
+    setTimeout(() => history.push('/login'), 1300)
   }
   return (
   <form 

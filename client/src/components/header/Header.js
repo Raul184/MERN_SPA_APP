@@ -9,7 +9,7 @@ import {grabProfile} from '../../redux/users/user.selectors'
 const Header = ({userDb,logoutStart,history}) => {
   const handleLogout = e => {
     e.preventDefault()
-    history.push('/')
+    history.push('/login')
     logoutStart()
   }
   return userDb !== null ?

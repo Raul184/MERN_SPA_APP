@@ -2,7 +2,7 @@ import React, {useState} from 'react'
 import './login.style.scss'
 import {connect} from 'react-redux'
 import {createStructuredSelector} from 'reselect'
-import {grabUser,grabLoading} from '../../redux/users/user.selectors'
+import {grabLoading} from '../../redux/users/user.selectors'
 import {loginStart} from '../../redux/users/user.action'
 import Loading from '../../components/onLoading/OnLoading'
 const Login = ({onLoading,loginStart,history}) => {
@@ -57,7 +57,6 @@ const Login = ({onLoading,loginStart,history}) => {
 }
 
 const mapStateToProps = createStructuredSelector({
-  user: grabUser,
   onLoading: grabLoading
 })
 
