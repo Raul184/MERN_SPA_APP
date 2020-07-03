@@ -6,6 +6,7 @@ import Card from '../../components/card/Card'
 import Loading from '../../components/onLoading/OnLoading'
 
 const OverviewPage = () => {
+  console.log('Rendering OverviewPg');
   const tours = useSelector(grabTours)
   const onLoading = useSelector(grabLoading)
   const dispatch = useDispatch()
@@ -14,7 +15,6 @@ const OverviewPage = () => {
   }
   , 
   [dispatch])
-
   return (
     onLoading ? <Loading /> 
     :
@@ -28,4 +28,4 @@ const OverviewPage = () => {
     </section>  
   )
 }
-export default OverviewPage;
+export default React.memo(OverviewPage);

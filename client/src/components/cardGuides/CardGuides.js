@@ -8,4 +8,4 @@ const CardGuides = ({el: {photo,name,role}}) => <div className="overview-box__de
   <span className="overview-box__text">{`${name}`}</span>
 </div>
 
-export default CardGuides;
+export default React.memo(CardGuides);

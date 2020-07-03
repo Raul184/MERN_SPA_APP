@@ -76,4 +76,4 @@ const PasswordForm = ({updateStart,history}) =>  {
 export default withRouter(connect(
   null,
   {updateStart}
-)(PasswordForm)); 
+)(React.memo(PasswordForm))); 

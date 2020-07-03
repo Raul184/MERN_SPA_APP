@@ -8,4 +8,4 @@ const styles ={
   marginLeft: "50%",
   transform: "translateX(-25%)"
 }
-export default OnLoading;
+export default React.memo(OnLoading);

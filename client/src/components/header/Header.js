@@ -7,6 +7,7 @@ import {logoutStart} from '../../redux/users/user.action'
 import {createStructuredSelector} from 'reselect'
 import {grabProfile} from '../../redux/users/user.selectors'
 const Header = ({userDb,logoutStart}) => {
+  console.log('Rendering');
   const handleLogout = e => {
     e.preventDefault()
     logoutStart()
@@ -60,4 +61,4 @@ const mapStateToProps = createStructuredSelector({
 export default connect(
   mapStateToProps,
   {logoutStart}
-)(Header)
+)(React.memo(Header))

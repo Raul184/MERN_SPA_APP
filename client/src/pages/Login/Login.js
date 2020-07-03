@@ -8,6 +8,7 @@ import {loginStart} from '../../redux/users/user.action'
 import Spinner from '../../components/spinner/Spinner'
 import Alert from '../../components/alert/Alert'
 const Login = ({onLoading,error,isAuth, loginStart}) => {
+  console.log('Rendering LoginPg');
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const handleLogin = e => {

@@ -1,7 +1,7 @@
-import React , {lazy,Suspense} from 'react';
-import {Switch,Route} from "react-router-dom";
-import Header from './components/header/Header';
-import Footer from './components/footer/Footer';
+import React , {lazy,Suspense} from 'react'
+import {Switch,Route} from "react-router-dom"
+import Header from './components/header/Header'
+import Footer from './components/footer/Footer'
 import Loading from './components/onLoading/OnLoading'
 import PrivateRoute from './components/auth/PrivateRoutes'
 import ErrorBoundary from './components/error-boundary/Error-boundary'

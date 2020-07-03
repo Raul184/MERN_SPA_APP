@@ -82,4 +82,4 @@ const mapStateToProps = createStructuredSelector({
 export default connect(
   mapStateToProps,
   {updateStart}
-)(ProfileForm);
+)(React.memo(ProfileForm));

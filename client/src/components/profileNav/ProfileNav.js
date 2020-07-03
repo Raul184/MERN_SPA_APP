@@ -37,4 +37,4 @@ const ProfileNav = () => <ul className="side-nav">
   </li>
 </ul>
 
-export default ProfileNav;
+export default React.memo(ProfileNav);
