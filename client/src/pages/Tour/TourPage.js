@@ -2,11 +2,11 @@ import React from 'react'
 import './tour.style.scss'
 import {useSelector} from 'react-redux'
 import {grab1Tour} from '../../redux/tours/tours.selectors'
-import CardPics from '../../components/cardPics/CardPics'
-import TourPgHeader from '../../components/TourPgHeader'
 import Map from '../../components/mapbox/Mapbox'
+import TourPgHeader from '../../components/TourPgHeader'
 import TourPgDescription from '../../components/TourPgDescription'
 import TourPgFooter from '../../components/TourPgFooter'
+import TourPgImages from '../../components/TourPgImages'
 const Tour = ({match}) => {
   const tour = useSelector(grab1Tour(match.params.tourId))
   const{
@@ -43,11 +43,7 @@ const Tour = ({match}) => {
         guides={guides}
         parapraphs={parapraphs}
       />
-      <section className="section-pictures">
-        {images.map(
-          (el,i) => <CardPics key={i} el={el} i={i}/>
-        )}
-      </section>
+      <TourPgImages images={images} />
       <section className="section-map">
         <div id="map" data-locations={`${JSON.stringify(locations)}`}></div>
         <Map/>

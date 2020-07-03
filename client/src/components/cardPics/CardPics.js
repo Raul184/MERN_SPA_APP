@@ -1,5 +1,4 @@
 import React from 'react'
-
 const CardPics = ({i,el}) => <div className="picture-box">
   <img 
     className={`picture-box__img picture-box__img--${i + 1}`}
@@ -7,5 +6,4 @@ const CardPics = ({i,el}) => <div className="picture-box">
     alt='tour' 
   />
 </div>
-
 export default CardPics;
