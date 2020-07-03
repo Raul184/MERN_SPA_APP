@@ -1,15 +1,14 @@
 import React from 'react'
 import './header.style.scss'
-import {Link,withRouter} from 'react-router-dom'
+import {Link} from 'react-router-dom'
 import Logo from '../../assets/logo-white.png'
 import {connect} from 'react-redux'
 import {logoutStart} from '../../redux/users/user.action'
 import {createStructuredSelector} from 'reselect'
 import {grabProfile} from '../../redux/users/user.selectors'
-const Header = ({userDb,logoutStart,history}) => {
+const Header = ({userDb,logoutStart}) => {
   const handleLogout = e => {
     e.preventDefault()
-    history.push('/login')
     logoutStart()
   }
   return userDb !== null ?
@@ -23,7 +22,7 @@ const Header = ({userDb,logoutStart,history}) => {
       <nav className="nav nav--user">
         <Link 
           className="nav__el nav__el--logout"
-          to='/logout' 
+          to='#' 
           onClick={handleLogout} 
         >
            Log out
@@ -58,9 +57,7 @@ const Header = ({userDb,logoutStart,history}) => {
 const mapStateToProps = createStructuredSelector({
   userDb: grabProfile
 })
-export default withRouter(
-  connect(
-    mapStateToProps,
-    {logoutStart}
-  )(Header)
-) 
+export default connect(
+  mapStateToProps,
+  {logoutStart}
+)(Header)
