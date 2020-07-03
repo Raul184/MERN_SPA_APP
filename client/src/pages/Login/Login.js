@@ -7,7 +7,7 @@ import {grabLoading, grabError,grabAuth} from '../../redux/users/user.selectors'
 import {loginStart} from '../../redux/users/user.action'
 import Spinner from '../../components/spinner/Spinner'
 import Alert from '../../components/alert/Alert'
-const Login = ({onLoading,error,isAuth, loginStart,history}) => {
+const Login = ({onLoading,error,isAuth, loginStart}) => {
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const handleLogin = e => {
@@ -17,10 +17,11 @@ const Login = ({onLoading,error,isAuth, loginStart,history}) => {
     setPassword('')
   }
   return onLoading ? <Spinner /> : 
-  !onLoading && isAuth ? <Redirect to='/me'/> :
+  !onLoading && isAuth && !error ? <Redirect to='/me'/> :
   (
     <main className="main">
       <div className="login-form">
+        {error && <Alert type='error' msg='Invalid Credentials'/>}
         <h2 className="heading-secondary ma-bt-lg">Login</h2>
         <form className="form form--login" onSubmit={handleLogin}>
           <div className="form__group">

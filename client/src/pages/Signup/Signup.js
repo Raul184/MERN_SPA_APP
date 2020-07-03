@@ -1,7 +1,13 @@
 import React ,{useState} from 'react'
+import {Redirect} from 'react-router-dom'
 import {connect} from 'react-redux'
+import {createStructuredSelector} from 'reselect'
+import {grabLoading, grabError,grabAuth} from '../../redux/users/user.selectors'
 import {loginStart} from '../../redux/users/user.action'
-const Signup = ({loginStart,history}) => {
+import Spinner from '../../components/spinner/Spinner'
+import Alert from '../../components/alert/Alert'
+
+const Signup = ({onLoading,error,isAuth,loginStart}) => {
   const [name, setName] = useState('')
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
@@ -17,12 +23,12 @@ const Signup = ({loginStart,history}) => {
     setEmail('')
     setPassword('')
     setConfirm('') 
-    history.push('/')
   }
-
-  return (
+  return onLoading ? <Spinner /> : 
+  !onLoading && isAuth && !error ? <Redirect to='/me'/> :
     <main className="main">
       <div className="login-form">
+        {error && <Alert type='error' msg='Sorry, invalid credentials'/>}
         <h2 className="heading-secondary ma-bt-lg">Sign Up</h2>
         <form className="form form--login" onSubmit={handleSubmit}>
         <div className="form__group">
@@ -81,10 +87,15 @@ const Signup = ({loginStart,history}) => {
         </form>
       </div>
     </main>
-  )
+  
 }
+const mapStateToProps = createStructuredSelector({
+  onLoading: grabLoading,
+  error:grabError,
+  isAuth: grabAuth
+})
 
 export default connect(
-  null,
+  mapStateToProps,
   {loginStart}
 )(Signup);
