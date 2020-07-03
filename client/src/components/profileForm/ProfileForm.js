@@ -1,4 +1,5 @@
 import React,{useEffect,useState} from 'react'
+import './profileForm.styles.scss'
 import {connect} from 'react-redux'
 import {updateStart} from '../../redux/users/user.action'
 import { grabLoading,grabProfile} from '../../redux/users/user.selectors';
@@ -18,6 +19,8 @@ const ProfileForm = ({profile,updateStart}) => {
     updateStart(false, {name,email})
   }
   return (
+    <div className="user-view__form-container">
+      <h2 className="heading-secondary ma-bt-md">Your account settings</h2>
     <form 
       className="form form-user-data"
       onSubmit={e => handleSubmit(e)}
@@ -71,6 +74,7 @@ const ProfileForm = ({profile,updateStart}) => {
         </button>
       </div>
     </form>
+    </div>
   )
 }
 const mapStateToProps = createStructuredSelector({
@@ -81,4 +85,4 @@ const mapStateToProps = createStructuredSelector({
 export default connect(
   mapStateToProps,
   {updateStart}
-)(React.memo(ProfileForm));
+)(ProfileForm);

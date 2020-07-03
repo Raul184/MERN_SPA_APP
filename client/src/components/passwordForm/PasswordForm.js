@@ -1,4 +1,5 @@
 import React,{useState} from 'react'
+import './passwordForm.styles.scss'
 import {withRouter} from 'react-router-dom'
 import {connect} from 'react-redux'
 import {updateStart} from '../../redux/users/user.action'
@@ -13,6 +14,8 @@ const PasswordForm = ({updateStart,history}) =>  {
     setTimeout(() => history.push('/login'), 1300)
   }
   return (
+    <div className="user-view__form-container">
+      <h2 className="heading-secondary ma-bt-md">Password change</h2>
   <form 
     className="form form-user-password"
     onSubmit={handleSubmit}
@@ -71,6 +74,7 @@ const PasswordForm = ({updateStart,history}) =>  {
       </button>
     </div>
   </form>
+  </div>
 )}
 
 export default withRouter(connect(

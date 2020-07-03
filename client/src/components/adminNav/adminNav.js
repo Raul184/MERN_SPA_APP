@@ -7,33 +7,33 @@ const AdminNav = () => <div className="admin-nav">
     <li>
       <Link to="#">
         <svg>
-          <use xlinkHref={`${Icons}#icon-credit-card`}/>
+          <use xlinkHref={`${Icons}#icon-map`}/>
         </svg>
-        Billing
+        Manage Tours
       </Link>
     </li>
     <li>
       <Link to="#">
         <svg>
-          <use xlinkHref={`${Icons}#icon-credit-card`}/>
+          <use xlinkHref={`${Icons}#icon-users`}/>
         </svg>
-        Billing
+        Manage Users
       </Link>
     </li>
     <li>
       <Link to="#">
         <svg>
-          <use xlinkHref={`${Icons}#icon-credit-card`}/>
+          <use xlinkHref={`${Icons}#icon-star`}/>
         </svg>
-        Billing
+        Manage Reviews
       </Link>
     </li>
     <li>
       <Link to="#">
         <svg>
-          <use xlinkHref={`${Icons}#icon-credit-card`}/>
+          <use xlinkHref={`${Icons}#icon-briefcase`}/>
         </svg>
-        Billing
+        Manage Bookings
       </Link>
     </li>
   </ul>

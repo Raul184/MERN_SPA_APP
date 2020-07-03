@@ -17,15 +17,9 @@ const MeProfile = ({loading,profile}) => loading ?
       {!loading && profile !== undefined && profile.role === 'admin' && <AdminNav/>}
     </nav>
     <div className="user-view__content">
-      <div className="user-view__form-container">
-        <h2 className="heading-secondary ma-bt-md">Your account settings</h2>
-        <ProfileForm />
-      </div>
+      <ProfileForm />
       <div className="line">&nbsp;</div>
-      <div className="user-view__form-container">
-        <h2 className="heading-secondary ma-bt-md">Password change</h2>
-        <PasswordForm />
-      </div>
+      <PasswordForm />
     </div>
   </div>
 </div>
