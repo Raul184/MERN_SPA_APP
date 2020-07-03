@@ -1,8 +1,8 @@
 import React from 'react'
 import './tour.style.scss'
 import {useSelector} from 'react-redux'
-import {grab1Tour,grabLoading} from '../../redux/tours/tours.selectors'
-import Loading from '../../components/onLoading/OnLoading'
+import {grab1Tour} from '../../redux/tours/tours.selectors'
+// import Spinner from '../../components/spinner/Spinner'
 import CardGuides from '../../components/cardGuides/CardGuides'
 import CardPics from '../../components/cardPics/CardPics'
 import Map from '../../components/mapbox/Mapbox'
@@ -10,7 +10,7 @@ import Icons from '../../assets/icons.svg'
 import Logo from '../../assets/logo-white.png'
 const Tour = ({match}) => {
   const tour = useSelector(grab1Tour(match.params.tourId))
-  const onLoading = useSelector(state => grabLoading(state))
+  // const onLoading = useSelector(state => grabLoading(state))
   const{
     imageCover,
     name,
@@ -29,7 +29,7 @@ const Tour = ({match}) => {
   )
   const parapraphs = description.split('\n');
   return (
-    onLoading ? <Loading /> :<>
+    <>
       <section className="section-header">
         <div className="header__hero">
           <div className="header__hero-overlay">&nbsp;</div>
