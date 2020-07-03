@@ -38,4 +38,4 @@ const AdminNav = () => <div className="admin-nav">
     </li>
   </ul>
 </div>
-export default AdminNav;
+export default React.memo(AdminNav);

@@ -1,6 +1,6 @@
 import React , {lazy,Suspense} from 'react'
 import {Switch,Route} from "react-router-dom"
-import Header from './components/header/Header'
+import HeaderContainer from './components/headerContainer/HeaderContainer'
 import Footer from './components/footer/Footer'
 import Loading from './components/onLoading/OnLoading'
 import PrivateRoute from './components/auth/PrivateRoutes'
@@ -14,7 +14,7 @@ const MeProfile = lazy(() => import('./pages/Me/MeProfile'))
 function App() {
   return (
     <div className="App">
-      <Header />
+      <HeaderContainer />
       <Switch>
         <ErrorBoundary>
           <Suspense fallback={<Loading />}>

@@ -12,7 +12,7 @@ const Signup = ({onLoading,error,isAuth,loginStart}) => {
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [passwordConfirm, setConfirm] = useState('')  
-
+  
   const handleSubmit = e => {
     e.preventDefault()
     if(password !== passwordConfirm){

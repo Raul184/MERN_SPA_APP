@@ -3,7 +3,11 @@ import './card.style.scss'
 import {Link} from 'react-router-dom'
 import Icons from '../../assets/icons.svg'
 
-const Card = ({tour:{imageCover,name,duration,difficulty,
+const Card = ({tour:{
+  imageCover,
+  name,
+  duration,
+  difficulty,
   summary,
   startLocation,
   startDates,

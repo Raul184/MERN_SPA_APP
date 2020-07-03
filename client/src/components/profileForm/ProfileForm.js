@@ -15,7 +15,6 @@ const ProfileForm = ({profile,updateStart}) => {
 
   const handleSubmit = e => {
     e.preventDefault();
-    console.log('SUBMIT');
     updateStart(false, {name,email})
   }
   return (
