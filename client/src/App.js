@@ -21,7 +21,7 @@ function App() {
             <Route exact path='/' component={OverviewPage} />
             <Route exact path='/login' component={Login} />
             <Route exact path='/signup' component={Signup} />
-            <Route path='/tours/:tourId' component={TourPage} />
+            <Route exact path='/tours/:tourId' component={TourPage} />
             <PrivateRoute exact path='/me' component={MeProfile} />
           </Suspense>
         </ErrorBoundary>
