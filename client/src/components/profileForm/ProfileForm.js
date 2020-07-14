@@ -16,7 +16,12 @@ const ProfileForm = ({profile,updateStart}) => {
 
   const handleSubmit = e => {
     e.preventDefault();
-    updateStart(false, {name,email})
+    //multipart form data
+    const form = new FormData()
+    form.append('name', name)
+    form.append('email', email)
+    form.append('photo', document.getElementById('photo').files[0])
+    updateStart(false, form)
   }
   return (
     <div className="user-view__form-container">
