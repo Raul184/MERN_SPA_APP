@@ -37,12 +37,20 @@ module.exports = class Email {
     const htmlW = `<p>Hi ${this.firstName},</p>
       <p>Welcome to Freaking Tours, we're glad to have you</p> 🎉🙏
       <a href=${this.url} target='_blank'> Upload user photo</a>
-      <p>If you need any help with your booking, please don't hesitate to contact us!</p>`
+      <p>If you need any help with your booking, please don't hesitate to contact us!</p>
+    `;
+    const htmlF = `<p>Hi ${this.firstName}</p>
+      <p>Forgot your password? 
+      Submit a PATCH request with your new password and passwordConfirm to: ${this.url}.</p>
+      <a href=${this.url} target='_blank'> Reset your password</a>
+      <p> If you didn't request a new password , please ignore this email</p>
+    `;
+
     const mailOptions = {
       from: this.from,
       to: this.to,
       subject,
-      html: htmlW ,
+      html: this.x ? htmlW : htmlF ,
       text: htmlToText.fromString(htmlW)
     };
 
