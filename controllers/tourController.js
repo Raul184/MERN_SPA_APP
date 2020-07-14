@@ -1,21 +1,68 @@
+const multer = require('multer');
+const sharp = require('sharp');
 const Tour = require('./../models/tourModel');
 const catchAsync = require('./../utils/catchAsync');
 const factory = require('./handlerFactory');
 const AppError = require('./../utils/appError');
+// Images REST
+const multerStorage = multer.memoryStorage()
+const multerFilter = (req,file, cb) => {
+  if(file.mimetype.startsWith('image')){
+    cb(null, true)
+  }else{
+    cb(new AppError(
+      'Only images can be uploaded here mate, sorry',
+      400)
+    ,false)
+  }
+}
+const upload= multer({
+  storage: multerStorage,
+  fileFilter: multerFilter
+})
 
-exports.aliasTopTours = (req, res, next) => {
-  req.query.limit = '5';
-  req.query.sort = '-ratingsAverage,price';
-  req.query.fields = 'name,price,ratingsAverage,summary,difficulty';
+exports.uploadTourPics = upload.fields([
+  { name: 'imageCover', maxCount:1 },
+  { name: 'images', maxCount:3 }
+])
+
+exports.resizeTourPics = catchAsync( async (req,res,next) => {
+  if(!req.files.imageCover || !req.files.images) return next()
+
+  req.body.imageCover = `tour-${req.params.id}-${Date.now()}-cover.jpeg`
+  await sharp(req.files.imageCover[0].buffer)
+    .resize(2000,1333)
+    .toFormat('jpeg')
+    .jpeg({quality:90})
+    .toFile(`./client/src/assets/imgs/tours/${req.body.imageCover}`)
+  
+  req.body.images = []
+  await Promise.all(
+    req.files.images.map(async (el,I) => {
+      const filename = `tour-${req.params.id}-${Date.now()}-${I+1}.jpeg`
+      await sharp(el.buffer)
+        .resize(2000,1333)
+        .toFormat('jpeg')
+        .jpeg({quality:90})
+        .toFile(`./client/src/assets/imgs/tours/${filename}`)
+      req.body.images.push(filename)
+    })
+  )
   next();
-};
+})
 
 exports.getAllTours = factory.getAll(Tour);
 exports.getTour = factory.getOne(Tour, { path: 'reviews' });
 exports.createTour = factory.createOne(Tour);
 exports.updateTour = factory.updateOne(Tour);
 exports.deleteTour = factory.deleteOne(Tour);
-
+// STATS
+exports.aliasTopTours = (req, res, next) => {
+  req.query.limit = '5';
+  req.query.sort = '-ratingsAverage,price';
+  req.query.fields = 'name,price,ratingsAverage,summary,difficulty';
+  next();
+};
 exports.getTourStats = catchAsync(async (req, res, next) => {
   const stats = await Tour.aggregate([
     {
@@ -47,7 +94,6 @@ exports.getTourStats = catchAsync(async (req, res, next) => {
     }
   });
 });
-
 exports.getMonthlyPlan = catchAsync(async (req, res, next) => {
   const year = req.params.year * 1; // 2021
 
@@ -93,7 +139,6 @@ exports.getMonthlyPlan = catchAsync(async (req, res, next) => {
     }
   });
 });
-
 // /tours-within/:distance/center/:latlng/unit/:unit
 // /tours-within/233/center/34.111745,-118.113491/unit/mi
 exports.getToursWithin = catchAsync(async (req, res, next) => {
@@ -123,7 +168,6 @@ exports.getToursWithin = catchAsync(async (req, res, next) => {
     }
   });
 });
-
 exports.getDistances = catchAsync(async (req, res, next) => {
   const { latlng, unit } = req.params;
   const [lat, lng] = latlng.split(',');

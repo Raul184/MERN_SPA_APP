@@ -9,7 +9,9 @@ const {
   deleteTour,
   getMonthlyPlan,
   getToursWithin,
-  getDistances
+  getDistances,
+  uploadTourPics,
+  resizeTourPics
 } = require('./../controllers/tourController');
 const { restrictTo, protect} = require('./../controllers/authController');
 const reviewRouter = require('./../routes/reviewRoutes');
@@ -35,7 +37,9 @@ router.get('/distances/:latlng/unit/:unit', getDistances);
 router.get('/', getAllTours);
 router.get('/:id', getTour);
 router.post('/', protect, restrictTo('admin', 'lead-guide'), createTour);
-router.patch('/:id', protect, restrictTo('admin', 'lead-guide'), updateTour);
+router.patch(
+  '/:id', protect,restrictTo('admin','lead-guide'),uploadTourPics,resizeTourPics,updateTour
+);
 router.delete('/:id', protect, restrictTo('admin', 'lead-guide'), deleteTour);
 
 module.exports = router;
