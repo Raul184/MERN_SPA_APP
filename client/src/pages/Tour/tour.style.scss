@@ -370,6 +370,19 @@
   border-radius: 2rem;
   -webkit-box-shadow: 0 3rem 8rem 0.5rem rgba(0, 0, 0, 0.15);
   box-shadow: 0 3rem 8rem 0.5rem rgba(0, 0, 0, 0.15);
+
+  .StripeCheckout {
+    background-image: none!important;
+    background: none!important;
+    background-image: linear-gradient(to bottom right, rgba(125, 213, 111, 0.85), rgba(40, 180, 135, 0.85))!important;
+  }
+  .StripeCheckout > span {
+    background-image: none!important;
+    height: 40px!important;
+    line-height: 6px!important;
+    font-size: 16px!important;
+    padding: 20px!important;
+  }
 }
 .cta__img {
   height: 15rem;
@@ -431,3 +444,4 @@
   font-size: 1.9rem;
   font-weight: 400;
 }
+

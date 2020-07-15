@@ -1,6 +1,7 @@
 import React from 'react'
 import Logo from '../assets/logo-white.png'
-const TourPgFooter = ({images}) => {
+import StripeCheckoutButton from './stripeBtn/StripeBtn';
+const TourPgFooter = ({images,price}) => {
   return (
     <section className="section-cta">
       <div className="cta">
@@ -20,7 +21,8 @@ const TourPgFooter = ({images}) => {
         <div className="cta__content">
           <h2 className="heading-secondary">What are you waiting for?</h2>
           <p className="cta__text">1 adventure | Infinite Memories | Make it yours today!</p>
-          <button className="btn btn--green span-all-rows">Book tour now</button>
+          {/* <button className="btn btn--green span-all-rows"></button> */}
+          <StripeCheckoutButton price={price} />
         </div>  
       </div>
     </section>
