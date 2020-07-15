@@ -16,7 +16,7 @@ const globalErrorHandler = require('./controllers/errorController');
 const tourRouter = require('./routes/tourRoutes');
 const userRouter = require('./routes/userRoutes');
 const reviewRouter = require('./routes/reviewRoutes');
-
+const stripeRouter = require('./routes/stripe.js');
 // Start express app
 const app = express();
 
@@ -55,7 +55,10 @@ const limiter = rateLimit({
   message: 'Too many requests from this IP, please try again in an hour!'
 });
 app.use('/api', limiter);
-
+// Req => access as a json file
+app.use( bodyParser.json() );
+// urls strings properly formatted
+app.use( bodyParser.urlencoded({ extended: true }) )
 // Stripe webhook, BEFORE body-parser, because stripe needs the body as stream
 // app.post(
 //   '/webhook-checkout',
@@ -93,15 +96,23 @@ app.use(compression());
 // Test middleware
 app.use((req, res, next) => {
   req.requestTime = new Date().toISOString();
-  // console.log(req.cookies);
+  req.body
   next();
 });
-
+// // For ALL reqs ==> build.js
+// app.get( '*' , (req , res ) => res.sendFile(
+//   path.join( __dirname , 'client/build' , 'index.html')
+//   )
+// )
 // 3) ROUTES
 app.use('/api/v1/tours', tourRouter);
 app.use('/api/v1/users', userRouter);
 app.use('/api/v1/reviews', reviewRouter);
-
+app.use( '/payment' , stripeRouter);
+// PWA
+app.get( './client/src/serviceWorker.js' , ( req , res ) => {
+  res.sendFile( path.resolve( __dirname , 'client' , 'build' , 'service-worker.js' ))
+})
 app.all('*', (req, res, next) => {
   next(new AppError(`Can't find ${req.originalUrl} on this server!`, 404));
 });

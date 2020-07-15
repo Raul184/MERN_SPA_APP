@@ -1,7 +1,7 @@
 /node_modules
 /dev-data
 /.env
-
+client/.env
 /client/node_modules
 /client/gitignore
 /client/.pnp

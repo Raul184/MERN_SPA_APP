@@ -23,7 +23,6 @@ function App() {
             <Route exact path='/signup' component={Signup} />
             <Route exact path='/tours/:tourId' component={TourPage} />
             <PrivateRoute exact path='/me' component={MeProfile} />
-            <Route />
           </Suspense>
         </ErrorBoundary>
       </Switch>
