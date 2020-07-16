@@ -4,9 +4,17 @@ import axios from 'axios';
 
 const StripeCheckoutButton = ({ price }) => {
   const priceForStripe = price * 100;
-  const publishableKey = process.env.REACT_APP_STRIPE_SECRET_KEY_TEST;
+  const publishableKey = 'pk_test_qpk8XXIK4nkQNnyLqJ3RH5Mt009GgCH5Lr';
+
   const onToken = token => {
-    axios.post('/payment' ,{amount: priceForStripe ,token})
+    axios({
+      url: '/payment' ,
+      method: 'post' ,
+      data: {
+        amount: priceForStripe ,
+        token
+      }
+    })
     .then( 
       res => alert('Payment Succesful!')
     )

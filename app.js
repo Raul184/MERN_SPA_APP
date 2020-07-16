@@ -109,14 +109,10 @@ app.use('/api/v1/tours', tourRouter);
 app.use('/api/v1/users', userRouter);
 app.use('/api/v1/reviews', reviewRouter);
 app.use( '/payment' , stripeRouter);
-// PWA
-app.get( './client/src/serviceWorker.js' , ( req , res ) => {
-  res.sendFile( path.resolve( __dirname , 'client' , 'build' , 'service-worker.js' ))
-})
+
 app.all('*', (req, res, next) => {
   next(new AppError(`Can't find ${req.originalUrl} on this server!`, 404));
 });
-
 app.use(globalErrorHandler);
 
 module.exports = app;

@@ -1,21 +1,16 @@
+//Router
 const express = require('express');
-const router = express.Router()
+const router= express.Router();
+//controllers
+const stripeControllers = require('../controllers/stripe');
 
-router.post( '/' , ( req, res) => {
-  const body = {
-    source: req.body.token.id ,
-    amount: req.body.amount ,
-    currency: 'usd'
-  }
+const {
+  payStripe
+} = stripeControllers;
 
-  stripe.charges.create( 
-    body , 
-    (stripeErr , stripeRes) => {
-      stripeErr ? 
-      res.status(500).send({ error: stripeErr })
-      :
-      res.status(200).send({ success: stripeRes })
-    })
-})
+
+// Payments through Stripe
+router.post('/' , payStripe );
+
 
 module.exports = router;
