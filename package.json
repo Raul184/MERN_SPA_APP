@@ -13,8 +13,6 @@
   "author": "Raul M",
   "license": "ISC",
   "dependencies": {
-    "@stripe/react-stripe-js": "^1.1.2",
-    "@stripe/stripe-js": "^1.8.0",
     "axios": "^0.19.2",
     "bcryptjs": "^2.4.3",
     "compression": "^1.7.4",
@@ -38,6 +36,7 @@
     "react-stripe-checkout": "^2.6.3",
     "sharp": "^0.25.4",
     "slugify": "^1.4.2",
+    "stripe": "^8.75.0",
     "validator": "^10.11.0",
     "xss-clean": "^0.1.1"
   },

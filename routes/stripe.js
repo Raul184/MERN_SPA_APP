@@ -1,16 +1,13 @@
-//Router
 const express = require('express');
-const router= express.Router();
-//controllers
-const stripeControllers = require('../controllers/stripe');
+const { getCheckoutSession } = require('../controllers/stripeController');
+const { protect , restrictTo} = require('../controllers/authController');
 
-const {
-  payStripe
-} = stripeControllers;
+const router = express.Router()
 
+router.use(protect)
+router.get('/checkout-session/:tourID', getCheckoutSession )
 
-// Payments through Stripe
-router.post('/' , payStripe );
+router.use(restrictTo('admin'))
 
 
 module.exports = router;

@@ -7,7 +7,6 @@ import TourPgHeader from '../../components/TourPgHeader'
 import TourPgDescription from '../../components/TourPgDescription'
 import TourPgFooter from '../../components/TourPgFooter'
 import TourPgImages from '../../components/TourPgImages'
-import StripeCheckoutButton from '../../components/stripeBtn/StripeBtn'
 
 const Tour = ({match}) => {
   const tour = useSelector(grab1Tour(match.params.tourId))
@@ -56,7 +55,7 @@ const Tour = ({match}) => {
           {reviews.map(el => <CardReviews el={el} />)}
         </div>
       </div> */}
-      <TourPgFooter images={images} price={price}/>
+      <TourPgFooter images={images} price={price} match={match}/>
     </>
   )
 }

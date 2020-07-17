@@ -1,7 +1,7 @@
 import React from 'react'
 import Logo from '../assets/logo-white.png'
-import StripeCheckoutButton from './stripeBtn/StripeBtn';
-const TourPgFooter = ({images,price}) => {
+import PayStripe from './payWithStripe/PayStripe';
+const TourPgFooter = ({images, match}) => {
   return (
     <section className="section-cta">
       <div className="cta">
@@ -21,8 +21,7 @@ const TourPgFooter = ({images,price}) => {
         <div className="cta__content">
           <h2 className="heading-secondary">What are you waiting for?</h2>
           <p className="cta__text">1 adventure | Infinite Memories | Make it yours today!</p>
-          {/* <button className="btn btn--green span-all-rows"></button> */}
-          <StripeCheckoutButton price={price} />
+          <PayStripe match={match}/>
         </div>  
       </div>
     </section>
