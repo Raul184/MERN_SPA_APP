@@ -1,10 +1,10 @@
 const stripe = require('stripe')(process.env.STRIPE_SECRET_KEY);
 const Tour = require('../models/tourModel');
 // const User = require('../models/userModel');
-// const Booking = require('../models/bookingModel');
+const Booking = require('../models/bookingModel');
 const catchAsync = require('../utils/catchAsync');
 // const factory = require('./handlerFactory');
-// const AppError = require('./../utils/appError')
+// const AppError = require('../utils/appError')
 
 exports.getCheckoutSession = catchAsync(async (req, res, next) => {
   // 1) Get the currently booked tour
@@ -20,7 +20,7 @@ exports.getCheckoutSession = catchAsync(async (req, res, next) => {
         name: `${tour.name} Tour`,
         description: tour.summary,
         images: [
-          `${req.protocol}://${req.get('host')}/img/tours/${tour.imageCover}`
+          `${req.protocol}://${req.get('host')}../src/assets/imgs/tours/${tour.imageCover}`
         ],
         amount: tour.price * 100,
         currency: 'usd',
@@ -28,7 +28,7 @@ exports.getCheckoutSession = catchAsync(async (req, res, next) => {
       }
     ],
     mode:'payment',
-    success_url: `${req.protocol}://${req.get('host')}/`,
+    success_url: `${req.protocol}://localhost:3000/?tour=${tour._id}&user=${req.user.id}&price=${tour.price}`,
     cancel_url: `${req.protocol}://${req.get('host')}/tour/${tour.slug}`
   });
 
@@ -38,3 +38,14 @@ exports.getCheckoutSession = catchAsync(async (req, res, next) => {
     session
   });
 });
+
+exports.createBookingCheckout = catchAsync(async (req, res, next) => {
+  //temporary 
+  const {tour,price,user} = req.query
+  if(!tour && !user && !price) return next();
+
+  await Booking.create({tour,user,price})
+
+  next();
+  res.redirect(`http://localhost:3000`)
+})
