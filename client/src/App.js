@@ -10,6 +10,7 @@ const TourPage = lazy(() => import('./pages/Tour/TourPage'))
 const Login = lazy(() => import('./pages/Login/Login'))
 const Signup = lazy(() => import('./pages/Signup/Signup'))
 const MeProfile = lazy(() => import('./pages/Me/MeProfile'))
+const MyBookings = lazy(() => import('./pages/MyBookings/MyBookings'))
 
 function App() {
   return (
@@ -23,6 +24,7 @@ function App() {
             <Route exact path='/signup' component={Signup} />
             <Route exact path='/tours/:tourId' component={TourPage} />
             <PrivateRoute exact path='/me' component={MeProfile} />
+            <PrivateRoute exact path='/my-tours' component={MyBookings} />
           </Suspense>
         </ErrorBoundary>
       </Switch>
