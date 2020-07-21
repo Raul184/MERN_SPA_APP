@@ -12,7 +12,7 @@ const ProfileNav = () => <ul className="side-nav">
     </Link>
   </li>
   <li>
-    <Link to="#">
+    <Link to="/my-tours">
       <svg>
         <use xlinkHref={`${Icons}#icon-briefcase`}/>
       </svg>

@@ -6,7 +6,6 @@ import Card from '../../components/card/Card'
 import Loading from '../../components/onLoading/OnLoading'
 
 const OverviewPage = () => {
-  console.log('Rendering OverviewPg');
   const tours = useSelector(grabTours)
   const onLoading = useSelector(grabLoading)
   const dispatch = useDispatch()
