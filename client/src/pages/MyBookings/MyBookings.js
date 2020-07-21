@@ -10,6 +10,7 @@ const MyBookings = () => {
   const onLoading = useSelector(grabLoading)
   const dispatch = useDispatch()
   useEffect(() => {
+    dispatch({ type: 'GRAB_BOOKED_TOURS'})
   }
   , 
   [dispatch])
