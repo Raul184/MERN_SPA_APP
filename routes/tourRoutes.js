@@ -4,7 +4,6 @@ const {
   aliasTopTours,
   getAllTours,
   getTour,
-  getMyTours,
   updateTour,
   createTour,
   deleteTour,
@@ -15,8 +14,9 @@ const {
   resizeTourPics
 } = require('./../controllers/tourController');
 const { restrictTo, protect} = require('./../controllers/authController');
-const { createBookingCheckout } = require('../controllers/stripeController');
+// const { createBookingCheckout } = require('../controllers/stripeController');
 const reviewRouter = require('./../routes/reviewRoutes');
+
 const router = express.Router();
 
 router.use('/:tourId/reviews', reviewRouter);
@@ -32,11 +32,9 @@ router.get('/tours-within/:distance/center/:latlng/unit/:unit', getToursWithin);
 router.get('/distances/:latlng/unit/:unit', getDistances);
 
 // TOURS
-router.get('/', createBookingCheckout, getAllTours);
+router.get('/', getAllTours);
 router.get('/:id', getTour);
-// USER
-router.use(protect);
-router.get('/my-tours', getMyTours )
+
 // ADMINS
 router.use(restrictTo('admin', 'lead-guide'));
 router.post('/', createTour);

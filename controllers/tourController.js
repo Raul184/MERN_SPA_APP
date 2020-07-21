@@ -210,14 +210,3 @@ exports.getDistances = catchAsync(async (req, res, next) => {
     }
   });
 });
-
-exports.getMyTours = catchAsync(async (req,res,next) => {
-  const bookings = await BookingModel.find({ user: req.user.id })
-  const toursId = bookings.map(el => el.tour)
-
-  const tours = await Tour.find({ _id: { $in: toursId }})
-  return res.status(200).json({
-    status:'success',
-    tours
-  })
-})
