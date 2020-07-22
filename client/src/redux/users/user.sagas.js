@@ -57,7 +57,6 @@ export function* logoutUserStart(){
 export function* signUpAsync({payload}) {
   try {
     const data = yield axios.post(`/api/v1/users/signup`, payload) 
-    console.log(data.data.data.user);
     yield put(
       fetchSuccess(false, data.data.data.user)
     );

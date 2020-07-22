@@ -2,7 +2,6 @@ import React from 'react'
 import './error.styles.scss'
 
 export const Error = () => {
-  console.log('Rendering Error Page');
   return (
     <main className="main">
       <div className="error">
