@@ -29,13 +29,10 @@ const upload= multer({
   fileFilter: multerFilter
 })
 
-
-
 exports.getMe = (req, res, next) => {
   req.params.id = req.user.id;
   next();
 };
-
 exports.uploadUserPhoto = upload.single('photo');
 exports.resizeUserPhoto = catchAsync(async (req,res,next) => {
   if(!req.file) return next()
@@ -75,7 +72,6 @@ exports.updateMe = catchAsync(async (req, res, next) => {
     }
   });
 });
-
 exports.deleteMe = catchAsync(async (req, res, next) => {
   await User.findByIdAndUpdate(req.user.id, { active: false });
 
@@ -84,17 +80,14 @@ exports.deleteMe = catchAsync(async (req, res, next) => {
     data: null
   });
 });
-
 exports.createUser = (req, res) => {
   res.status(500).json({
     status: 'error',
     message: 'This route is not defined! Please use /signup instead'
   });
 };
-
 exports.getUser = factory.getOne(User);
 exports.getAllUsers = factory.getAll(User);
-
 // Do NOT update passwords with this!
 exports.updateUser = factory.updateOne(User);
 exports.deleteUser = factory.deleteOne(User);

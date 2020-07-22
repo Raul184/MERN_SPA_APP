@@ -1,8 +1,10 @@
 import { takeLatest , call , put , all } from 'redux-saga/effects'
-import { FETCH_TOURS_STARTS , FETCH_TOUR_STARTS} from './types'
+import { FETCH_TOURS_STARTS , GRAB_BOOKED_TOURS_START} from './types'
 import { 
   fetchSuccess , 
-  fetchFailed 
+  fetchFailed ,
+  grabBookedToursSuccess,
+  grabBookedToursFailed
 } from './tours.action'
 import {convertCollectionsSnapshotToMap} from '../../utils/utils'
 const axios = require('axios');
@@ -27,30 +29,50 @@ export function* fetchStart() {
   yield takeLatest( FETCH_TOURS_STARTS ,fetchDataAsync )
 }
 
-
-// GET 1 TOUR
-export function* fetch1DataAsync(action) {
+// GET BOOKED TOURS
+export function* fetchBookedAsync() {
   try {
-    const data = yield axios.get(`/api/v1/tours/${action.payload}`) 
+    let data = yield axios.get('/api/v1/bookings/my-bookings') 
     yield put(
-      fetchSuccess(false, data)
+      grabBookedToursSuccess(data.data.tours)
     );
   } 
   catch (error) {
     yield put(
-      fetchFailed(false , error.message)
+      grabBookedToursFailed(error.message)
     )
   }
 }
 // Listener
-export function* fetch1Start() {
-  yield takeLatest( FETCH_TOUR_STARTS ,fetch1DataAsync )
+export function* fetchBookedStart() {
+  yield takeLatest( GRAB_BOOKED_TOURS_START ,fetchBookedAsync )
 }
-
 
 export function* toursSagas(){
   yield all([ 
     call(fetchStart),
-    call(fetch1Start)
+    call(fetchBookedStart)
   ])
 }
+
+
+
+// GET 1 TOUR from API 
+// (to be implemented if tours amount required in future)
+// export function* fetch1DataAsync(action) {
+//   try {
+//     const data = yield axios.get(`/api/v1/tours/${action.payload}`) 
+//     yield put(
+//       fetchSuccess(false, data)
+//     );
+//   } 
+//   catch (error) {
+//     yield put(
+//       fetchFailed(false , error.message)
+//     )
+//   }
+// }
+// // Listener
+// export function* fetch1Start() {
+//   yield takeLatest( FETCH_TOUR_STARTS ,fetch1DataAsync )
+// }

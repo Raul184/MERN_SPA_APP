@@ -14,6 +14,12 @@ export const grab1Tour = urlParam => createSelector(
   toursCollection => toursCollection[urlParam]
 )
 
+// Grab booked tours
+export const grabBookedTours = createSelector(
+  [getTours],
+  allTours => allTours.bookedTours
+)
+
 // Grab loading
 const getLoading = state => state.toursDb
 export const grabLoading = createSelector(
