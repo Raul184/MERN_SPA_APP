@@ -1,16 +1,11 @@
-import{
-  FETCH_TOURS_STARTS, 
+import{ 
   FETCH_TOURS_SUCCESS, 
   FETCH_TOURS_FAILED,
-  FETCH_TOUR_STARTS,
   FETCH_TOUR_SUCCESS,
   FETCH_TOUR_FAILED,
-  GRAB_BOOKED_TOURS_START,
   GRAB_BOOKED_TOURS_SUCCESS,
   GRAB_BOOKED_TOURS_FAILED
 } from './types'
-
-
 
 
 export const fetchSuccess = (all=true ,data) => {
@@ -25,7 +20,6 @@ export const fetchFailed = (all=true, err) => {
     payload: err
   }
 }
-
 export const grabBookedToursSuccess = payload => {
   return {
     type: GRAB_BOOKED_TOURS_SUCCESS,
