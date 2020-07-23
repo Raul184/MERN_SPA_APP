@@ -40,6 +40,7 @@ app.use(helmet());
 // Development logging
 if (process.env.NODE_ENV === 'development') {
   app.use(morgan('dev'));
+  // require('dotenv').config()
 }
 
 // Limit requests from same API
@@ -91,7 +92,10 @@ if( process.env.NODE_ENV === 'production'){
   app.use( enforce.HTTPS({ trustProtoHeader: true }));
   app.use( express.static(path.join(__dirname , 'client/build')));
 }
-
+// PWA
+app.get( '/service-worker.js' , ( req , res ) => {
+  res.sendFile( path.resolve( __dirname , 'client' , 'build' , 'service-worker.js' ))
+})
 // 3) ROUTES
 app.use('/api/v1/tours', tourRouter);
 app.use('/api/v1/users', userRouter);
