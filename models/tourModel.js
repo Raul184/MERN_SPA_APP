@@ -157,10 +157,15 @@ tourSchema.pre(/^find/, function(next) {
   next();
 });
 
-tourSchema.post(/^find/, function(docs, next) {
-  console.log(`Query took ${Date.now() - this.start} milliseconds!`);
-  next();
-});
+const Tour = mongoose.model('Tour', tourSchema);
+
+module.exports = Tour;
+
+
+// tourSchema.post(/^find/, function(docs, next) {
+//   console.log(`Query took ${Date.now() - this.start} milliseconds!`);
+//   next();
+// });
 
 // AGGREGATION MIDDLEWARE
 // tourSchema.pre('aggregate', function(next) {
@@ -169,7 +174,3 @@ tourSchema.post(/^find/, function(docs, next) {
 //   console.log(this.pipeline());
 //   next();
 // });
-
-const Tour = mongoose.model('Tour', tourSchema);
-
-module.exports = Tour;

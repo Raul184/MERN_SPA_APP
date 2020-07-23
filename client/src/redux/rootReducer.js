@@ -7,7 +7,7 @@ import userReducer from './users/user.reducer'
 const persistConfig={
   key:'root',
   storage,
-  whitelist:['user']
+  whitelist:['user' , 'toursDb']
 }
 
 const rootReducer = combineReducers({

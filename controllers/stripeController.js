@@ -28,7 +28,7 @@ exports.getCheckoutSession = catchAsync(async (req, res, next) => {
       }
     ],
     mode:'payment',
-    success_url: `${req.protocol}://localhost:3000/?tour=${tour._id}&user=${req.user.id}&price=${tour.price}`,
+    success_url: `${req.protocol}://${req.get('host')}/?tour=${tour._id}&user=${req.user.id}&price=${tour.price}`,
     cancel_url: `${req.protocol}://${req.get('host')}/tour/${tour.slug}`
   });
 
@@ -47,7 +47,7 @@ exports.createBookingCheckout = catchAsync(async (req, res, next) => {
   // await Booking.create({tour,user,price})
 
   next();
-  res.redirect(`http://localhost:3000`)
+  res.redirect(`${req.protocol}://${req.get('host')}/`)
 })
 
 
@@ -56,7 +56,6 @@ exports.getMyTours = catchAsync(async (req,res,next) => {
   const bookings = await BookingModel.find({ user: req.user.id })
   const toursId = bookings.map(el => el.tour._id) 
   const tours = await Tour.find({ _id: { $in: toursId }})
-  
   return res.status(200).json({
     status:'success',
     tours
