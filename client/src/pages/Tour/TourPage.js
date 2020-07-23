@@ -1,6 +1,7 @@
 import React from 'react'
 import './tour.style.scss'
 import {useSelector} from 'react-redux'
+import memoize from 'lodash.memoize';
 import {grab1Tour} from '../../redux/tours/tours.selectors'
 import Map from '../../components/mapbox/Mapbox'
 import TourPgHeader from '../../components/TourPgHeader'
@@ -9,7 +10,7 @@ import TourPgFooter from '../../components/TourPgFooter'
 import TourPgImages from '../../components/TourPgImages'
 
 const Tour = ({match}) => {
-  const tour = useSelector(grab1Tour(match.params.tourId))
+  const tour = useSelector(memoize(grab1Tour(match.params.tourId)))
   const{
     imageCover,
     name,
