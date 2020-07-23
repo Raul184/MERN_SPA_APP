@@ -11,6 +11,7 @@ const cookieParser = require('cookie-parser');
 const bodyParser = require('body-parser');
 const compression = require('compression');
 const cors = require('cors');
+const enforce = require('express-sslify');
 
 const AppError = require('./utils/appError');
 const globalErrorHandler = require('./controllers/errorController');
@@ -23,9 +24,6 @@ const app = express();
 
 app.enable('trust proxy');
 
-app.set('view engine', 'pug');
-app.set('views', path.join(__dirname, 'views'));
-
 // 1) GLOBAL MIDDLEWARES
 // Implement CORS
 app.use(cors());
@@ -34,12 +32,7 @@ app.use(cors());
 // app.use(cors({
 //   origin: 'https://www.natours.com'
 // }))
-
 app.options('*', cors());
-// app.options('/api/v1/tours/:id', cors());
-
-// Serving static files
-app.use(express.static(path.join(__dirname, 'public')));
 
 // Set security HTTP headers
 app.use(helmet());
@@ -91,20 +84,14 @@ app.use(
     ]
   })
 );
+// On Hk Server
+if( process.env.NODE_ENV === 'production'){
+  // serving clientApp
+  app.use( compression() );
+  app.use( enforce.HTTPS({ trustProtoHeader: true }));
+  app.use( express.static(path.join(__dirname , 'client/build')));
+}
 
-app.use(compression());
-
-// Test middleware
-app.use((req, res, next) => {
-  req.requestTime = new Date().toISOString();
-  req.body
-  next();
-});
-// // For ALL reqs ==> build.js
-// app.get( '*' , (req , res ) => res.sendFile(
-//   path.join( __dirname , 'client/build' , 'index.html')
-//   )
-// )
 // 3) ROUTES
 app.use('/api/v1/tours', tourRouter);
 app.use('/api/v1/users', userRouter);
