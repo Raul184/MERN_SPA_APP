@@ -10,6 +10,7 @@ import TourPgFooter from '../../components/TourPgFooter'
 import TourPgImages from '../../components/TourPgImages'
 
 const Tour = ({match}) => {
+  console.log(match.params.tourId);
   const tour = useSelector(memoize(grab1Tour(match.params.tourId)))
   const{
     imageCover,
