@@ -23,16 +23,26 @@ const bookingRouter = require('./routes/stripe.js');
 const app = express();
 
 app.enable('trust proxy');
-if (process.env.NODE_ENV === 'development') {
-  app.use(morgan('dev'));
-}
 
 // 1) GLOBAL MIDDLEWARES
 // Implement CORS
 app.use(cors());
+// Access-Control-Allow-Origin *
+// api.natours.com, front-end natours.com
+// app.use(cors({
+//   origin: 'https://www.natours.com'
+// }))
 app.options('*', cors());
+
 // Set security HTTP headers
 app.use(helmet());
+
+// Development logging
+if (process.env.NODE_ENV === 'development') {
+  app.use(morgan('dev'));
+  // require('dotenv').config()
+}
+
 // Limit requests from same API
 const limiter = rateLimit({
   max: 100,
@@ -41,16 +51,27 @@ const limiter = rateLimit({
 });
 app.use('/api', limiter);
 // Req => access as a json file
-// app.use( bodyParser.json() );
-app.use(express.json({ limit: '10kb' }));
+app.use( bodyParser.json() );
 // urls strings properly formatted
 app.use( bodyParser.urlencoded({ extended: true }) )
+// Stripe webhook, BEFORE body-parser, because stripe needs the body as stream
+// app.post(
+//   '/webhook-checkout',
+//   bodyParser.raw({ type: 'application/json' }),
+//   bookingController.webhookCheckout
+// );
+
+// Body parser, reading data from body into req.body
+app.use(express.json({ limit: '10kb' }));
 app.use(express.urlencoded({ extended: true, limit: '10kb' }));
 app.use(cookieParser());
-// Data sanitization 
+
+// Data sanitization against NoSQL query injection
 app.use(mongoSanitize());
+
 // Data sanitization against XSS
 app.use(xss());
+
 // Prevent parameter pollution
 app.use(
   hpp({
@@ -66,12 +87,15 @@ app.use(
 );
 // On Hk Server
 if( process.env.NODE_ENV === 'production'){
+  // serving clientApp
   app.use( compression() );
   app.use( enforce.HTTPS({ trustProtoHeader: true }));
   app.use( express.static(path.join(__dirname , 'client/build')));
+  // ALL reqs ==> build.js
   app.get( '*' , function(req , res ){
-    res.sendFile( path.join( __dirname , 'client/build'))
+    res.sendFile( path.join( __dirname , 'client/build' , 'index.html'))
   })
+  
 }
 // PWA
 app.get( 
