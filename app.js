@@ -95,17 +95,23 @@ if( process.env.NODE_ENV === 'production'){
   app.get( '*' , function(req , res ){
     res.sendFile( path.join( __dirname , 'client/build' , 'index.html'))
   })
+  
 }
 // PWA
-app.get( '/service-worker.js' , ( req , res ) => {
-  res.sendFile( path.resolve( __dirname , 'client' , 'build' , 'service-worker.js' ))
-})
+app.get( 
+  './client/src/serviceWorker.js' , 
+  ( req , res ) => {
+    res.sendFile( 
+      path.resolve( __dirname , 'client' , 'build' , 'service-worker.js' )
+    )
+  }
+)
+
 // 3) ROUTES
 app.use('/api/v1/tours', tourRouter);
 app.use('/api/v1/users', userRouter);
 app.use('/api/v1/reviews', reviewRouter);
 app.use('/api/v1/bookings', bookingRouter);
-
 app.all('*', (req, res, next) => {
   next(new AppError(`Can't find ${req.originalUrl} on this server!`, 404));
 });

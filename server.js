@@ -21,16 +21,6 @@ mongoose.connect(
 )
 .then(() => console.log('DB connection successful!'));
 
-// PWA
-app.get( 
-  './client/src/serviceWorker.js' , 
-  ( req , res ) => {
-    res.sendFile( 
-      path.resolve( __dirname , 'client' , 'build' , 'service-worker.js' )
-    )
-  }
-)
-
 const port = process.env.PORT || 3000;
 const server = app.listen(port, () => {
   console.log(`App running on port ${port}...`);
