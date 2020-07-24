@@ -25,22 +25,14 @@ const app = express();
 app.enable('trust proxy');
 
 // 1) GLOBAL MIDDLEWARES
-// Implement CORS
-app.use(cors());
-// Access-Control-Allow-Origin *
-// api.natours.com, front-end natours.com
-// app.use(cors({
-//   origin: 'https://www.natours.com'
-// }))
-app.options('*', cors());
+
+// app.options('*', cors());
 
 // Set security HTTP headers
 app.use(helmet());
-
 // Development logging
 if (process.env.NODE_ENV === 'development') {
   app.use(morgan('dev'));
-  // require('dotenv').config()
 }
 
 // Limit requests from same API
@@ -50,17 +42,10 @@ const limiter = rateLimit({
   message: 'Too many requests from this IP, please try again in an hour!'
 });
 app.use('/api', limiter);
-// Req => access as a json file
+// Req as a json && urls strings properly formatted 
 app.use( bodyParser.json() );
-// urls strings properly formatted
 app.use( bodyParser.urlencoded({ extended: true }) )
-// Stripe webhook, BEFORE body-parser, because stripe needs the body as stream
-// app.post(
-//   '/webhook-checkout',
-//   bodyParser.raw({ type: 'application/json' }),
-//   bookingController.webhookCheckout
-// );
-
+app.use(cors());
 // Body parser, reading data from body into req.body
 app.use(express.json({ limit: '10kb' }));
 app.use(express.urlencoded({ extended: true, limit: '10kb' }));
@@ -95,7 +80,6 @@ if( process.env.NODE_ENV === 'production'){
   app.get( '*' , function(req , res ){
     res.sendFile( path.join( __dirname , 'client/build' , 'index.html'))
   })
-  
 }
 // PWA
 app.get( 
