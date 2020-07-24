@@ -7,11 +7,8 @@ const mongoSanitize = require('express-mongo-sanitize');
 const xss = require('xss-clean');
 const hpp = require('hpp');
 const cookieParser = require('cookie-parser');
-
-const bodyParser = require('body-parser');
 const compression = require('compression');
 const cors = require('cors');
-const enforce = require('express-sslify');
 
 const AppError = require('./utils/appError');
 const globalErrorHandler = require('./controllers/errorController');
@@ -19,15 +16,14 @@ const tourRouter = require('./routes/tourRoutes');
 const userRouter = require('./routes/userRoutes');
 const reviewRouter = require('./routes/reviewRoutes');
 const bookingRouter = require('./routes/stripe.js');
-// Start express app
-const app = express();
 
+const app = express();
 app.enable('trust proxy');
 
 // 1) GLOBAL MIDDLEWARES
-
-// app.options('*', cors());
-
+app.use(cors());
+app.options('*', cors());
+app.use( express.static(path.join(__dirname , 'client/build')));
 // Set security HTTP headers
 app.use(helmet());
 // Development logging
@@ -42,10 +38,13 @@ const limiter = rateLimit({
   message: 'Too many requests from this IP, please try again in an hour!'
 });
 app.use('/api', limiter);
-// Req as a json && urls strings properly formatted 
-app.use( bodyParser.json() );
-app.use( bodyParser.urlencoded({ extended: true }) )
-app.use(cors());
+// Stripe webhook, BEFORE body-parser, because stripe needs the body as stream
+// app.post(
+//   '/webhook-checkout',
+//   bodyParser.raw({ type: 'application/json' }),
+//   stripeController.webhookCheckout
+// );
+
 // Body parser, reading data from body into req.body
 app.use(express.json({ limit: '10kb' }));
 app.use(express.urlencoded({ extended: true, limit: '10kb' }));
@@ -70,26 +69,18 @@ app.use(
     ]
   })
 );
-// On Hk Server
-if( process.env.NODE_ENV === 'production'){
   // serving clientApp
   app.use( compression() );
-  app.use( enforce.HTTPS({ trustProtoHeader: true }));
-  app.use( express.static(path.join(__dirname , 'client/build')));
-  // ALL reqs ==> build.js
-  app.get( '*' , function(req , res ){
-    res.sendFile( path.join( __dirname , 'client/build' , 'index.html'))
-  })
-}
+
 // PWA
-app.get( 
-  './client/src/serviceWorker.js' , 
-  ( req , res ) => {
-    res.sendFile( 
-      path.resolve( __dirname , 'client' , 'build' , 'service-worker.js' )
-    )
-  }
-)
+// app.get( 
+//   './client/src/serviceWorker.js' , 
+//   ( req , res ) => {
+//     res.sendFile( 
+//       path.resolve( __dirname , 'client' , 'build' , 'service-worker.js' )
+//     )
+//   }
+// )
 
 // 3) ROUTES
 app.use('/api/v1/tours', tourRouter);
