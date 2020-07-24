@@ -2,13 +2,20 @@
   "name": "natours",
   "version": "1.0.0",
   "description": "Tours across Brazil",
-  "main": "app.js",
+  "engines": {
+    "node": ">=10.0.0",
+    "npm": "6.14.5"
+  },
+  "main": "server.js",
   "scripts": {
-    "start": "nodemon server.js",
+    "start": "node server.js",
     "client": "npm start --prefix client",
-    "dev": "concurrently \"npm run start\" \"npm run client\"",
+    "server": "nodemon server.js",
+    "build": "cd client && npm run build",
+    "dev": "concurrently \"npm run server\" \"npm run client\"",
     "start:prod": "NODE_ENV=production nodemon server.js",
-    "debug": "ndb server.js"
+    "debug": "ndb server.js",
+    "heroku-postbuild": "cd client && npm install && npm install --only=dev --no-shrinkwrap && npm run build"
   },
   "author": "Raul M",
   "license": "ISC",
@@ -44,8 +51,5 @@
   },
   "devDependencies": {
     "prettier": "^1.19.1"
-  },
-  "engines": {
-    "node": ">=10.0.0"
   }
 }
