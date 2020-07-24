@@ -8,7 +8,7 @@ const HeaderAuth = ({userDb,handleLogout}) => {
         <Link className="nav__el" to='/'>All tours</Link>
       </nav>
       <div className="header__logo">
-        <img src={Logo} alt="Natours logo"/>
+        <img src={Logo} alt="Freaking-tours logo"/>
       </div>
       <nav className="nav nav--user">
         <Link 

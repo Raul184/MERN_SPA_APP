@@ -8,7 +8,7 @@ const Header = () => {
         <Link className="nav__el" to='/'>All tours</Link>
       </nav>
       <div className="header__logo">
-        <img src={Logo} alt="Natours logo"/>
+        <img src={Logo} alt="Freaking-Tours logo"/>
       </div>
       <nav className="nav nav--user">
         <Link to='/login' className="nav__el">Log in</Link>

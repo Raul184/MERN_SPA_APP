@@ -1,9 +1,9 @@
 {
-  "name": "natours",
+  "name": "freaking-tours",
   "version": "1.0.0",
   "description": "Tours across Brazil",
   "engines": {
-    "node": ">=10.0.0",
+    "node": "14.2.0",
     "npm": "6.14.5"
   },
   "main": "server.js",

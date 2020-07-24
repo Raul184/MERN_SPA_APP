@@ -7,7 +7,7 @@ const Footer = () => {
   return (
     <div className="footer">
       <div className="footer__logo">
-        <img src={Logo} alt="Natours Logo"/>
+        <img src={Logo} alt="Freaking-Tours_Logo"/>
       </div>
       <ul className="footer_nav">
         <li><Link className='list' to="/">About us</Link></li>
