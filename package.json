@@ -12,6 +12,7 @@
     "client": "npm start --prefix client",
     "server": "nodemon server.js",
     "build": "npm install --only=dev && npm install && npm run build",
+    "heroku-postbuild": "cd client && npm install --only=dev && npm install && npm run build",
     "dev": "concurrently \"npm run server\" \"npm run client\"",
     "start:prod": "NODE_ENV=production nodemon server.js",
     "debug": "ndb server.js"
