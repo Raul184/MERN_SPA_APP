@@ -14,8 +14,7 @@
     "build": "cd client && npm run build",
     "dev": "concurrently \"npm run server\" \"npm run client\"",
     "start:prod": "NODE_ENV=production nodemon server.js",
-    "debug": "ndb server.js",
-    "heroku-postbuild": "NPM_CONFIG_PRODUCTION=false npm install npm && run build"
+    "debug": "ndb server.js"
   },
   "author": "Raul M",
   "license": "ISC",
