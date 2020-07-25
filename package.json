@@ -10,11 +10,12 @@
   "scripts": {
     "start": "node server.js",
     "client": "npm start --prefix client",
+    "build": "cd client && npm run build",
     "server": "nodemon server.js",
-    "heroku-postbuild": "cd client && npm install --only=dev && npm install && npm run build",
     "dev": "concurrently \"npm run server\" \"npm run client\"",
     "start:prod": "NODE_ENV=production nodemon server.js",
-    "debug": "ndb server.js"
+    "debug": "ndb server.js",
+    "heroku-postbuild": "cd client && npm install && npm install --only=dev --no-shrinkwrap && npm run build"
   },
   "author": "Raul M",
   "license": "ISC",

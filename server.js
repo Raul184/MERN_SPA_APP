@@ -1,6 +1,7 @@
 const path = require('path');
 const mongoose = require('mongoose');
 const dotenv = require('dotenv');
+const compression = require('compression');
 
 process.on('uncaughtException', err => {
   console.log('UNCAUGHT EXCEPTION! 💥 Shutting down...');
@@ -9,7 +10,6 @@ process.on('uncaughtException', err => {
 });
 
 dotenv.config({ path: path.join(__dirname ,'./config.env') });
-
 const app = require('./app');
 
 mongoose.connect(
@@ -21,6 +21,15 @@ mongoose.connect(
   }
 )
 .then(() => console.log(process.env.NODE_ENV));
+// On Hk Server
+if( process.env.NODE_ENV === 'production'){
+  // serving clientApp
+  app.use( compression() );
+  app.use( express.static(path.join(__dirname , 'client/build')));
+  app.get( '*' , function(req , res ){
+    res.sendFile( path.join( __dirname , 'client/build' , 'index.html'))
+  })
+}
 const port = process.env.PORT || 3000;
 const server = app.listen( port, () => {
     console.log(`App running on port ${process.env.PORT}...`);
