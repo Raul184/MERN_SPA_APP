@@ -28,8 +28,8 @@ exports.getCheckoutSession = catchAsync(async (req, res, next) => {
       }
     ],
     mode:'payment',
-    success_url: `${req.protocol}://${req.get('host')}/`,
-    cancel_url: `${req.protocol}://${req.get('host')}/tour/${tour.slug}`
+    success_url: `${req.protocol}://localhost:3000/`,
+    cancel_url: `${req.protocol}://localhost:3000/tour/${tour.slug}`
   });
 
   // 3) Create session as response
