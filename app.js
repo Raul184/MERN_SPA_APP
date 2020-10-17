@@ -23,7 +23,7 @@ app.enable('trust proxy');
 // 1) GLOBAL MIDDLEWARES
 app.use(cors());
 app.options('*', cors());
-app.use( express.static(path.join(__dirname , 'client/build')));
+app.use(express.static(path.join(__dirname, 'client/build')));
 // Set security HTTP headers
 app.use(helmet());
 // Development logging
@@ -70,7 +70,7 @@ app.use(
   })
 );
 // serving clientApp
-app.use( compression() );
+app.use(compression());
 
 // 3) ROUTES
 app.use('/api/v1/tours', tourRouter);
