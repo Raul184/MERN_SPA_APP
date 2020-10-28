@@ -22,7 +22,7 @@ app.enable('trust proxy');
 
 // 1) GLOBAL MIDDLEWARES
 app.use(cors());
-app.options('*', cors());
+// app.options('*', cors());
 app.use(express.static(path.join(__dirname, 'client/build')));
 // Set security HTTP headers
 app.use(helmet());
