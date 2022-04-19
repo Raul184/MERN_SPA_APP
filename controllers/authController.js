@@ -30,7 +30,7 @@ const createSendToken = (user, statusCode, res) => {
   res.status(statusCode).json({
     status: 'success',
     token,
-    data:{user}
+    data: { user }
   });
 };
 
@@ -40,10 +40,10 @@ exports.signup = catchAsync(async (req, res, next) => {
     email: req.body.email,
     password: req.body.password,
     passwordConfirm: req.body.passwordConfirm,
-    photo:''
+    photo: ''
   });
   const url = `${req.protocol}://${req.get('host')}/me`;
-  await new Email(newUser, url).sendWelcome()
+  await new Email(newUser, url).sendWelcome();
   createSendToken(newUser, 201, res);
 });
 
@@ -65,12 +65,12 @@ exports.login = catchAsync(async (req, res, next) => {
   createSendToken(user, 200, res);
 });
 
-exports.logout =  (req,res) => {
-  res.cookie('jwt' ,'dummy text', {
+exports.logout = (req, res) => {
+  res.cookie('jwt', 'dummy text', {
     expires: new Date(Date.now() + 10 * 1000),
     httpOnly: true
-  })
-  return res.status(200).json({status: 'success'})
+  });
+  return res.status(200).json({ status: 'success' });
 };
 
 exports.protect = catchAsync(async (req, res, next) => {
@@ -81,9 +81,8 @@ exports.protect = catchAsync(async (req, res, next) => {
     req.headers.authorization.startsWith('Bearer')
   ) {
     token = req.headers.authorization.split(' ')[1];
-  }
-  else if(req.cookies.jwt){
-    token = req.cookies.jwt
+  } else if (req.cookies.jwt) {
+    token = req.cookies.jwt;
   }
   if (!token) {
     return next(
@@ -138,16 +137,17 @@ exports.forgotPassword = catchAsync(async (req, res, next) => {
   await user.save({ validateBeforeSave: false });
 
   // 3) Send it to user's email
-  
+
   try {
-    const resetURL = `${req.protocol}://${req.get('host')}/api/v1/users/resetPassword/${resetToken}`;
-    await new Email(user, resetURL).sendPasswordReset()
+    const resetURL = `${req.protocol}://${req.get(
+      'host'
+    )}/api/v1/users/resetPassword/${resetToken}`;
+    await new Email(user, resetURL).sendPasswordReset();
     res.status(200).json({
       status: 'success',
       message: 'Token sent to email!'
     });
-  } 
-  catch (err) {
+  } catch (err) {
     user.passwordResetToken = undefined;
     user.passwordResetExpires = undefined;
     await user.save({ validateBeforeSave: false });
@@ -203,10 +203,13 @@ exports.updatePassword = catchAsync(async (req, res, next) => {
   createSendToken(user, 200, res);
 });
 exports.isLoggedIn = async (req, res, next) => {
-  if(req.cookies.jwt){
+  if (req.cookies.jwt) {
     try {
       // Verify token
-      const decoded = await promisify(jwt.verify)(req.cookies.jwt, process.env.JWT_SECRET);
+      const decoded = await promisify(jwt.verify)(
+        req.cookies.jwt,
+        process.env.JWT_SECRET
+      );
       // Check user exists
       const currentUser = await User.findById(decoded.id);
       if (!currentUser) {
@@ -216,12 +219,11 @@ exports.isLoggedIn = async (req, res, next) => {
       if (currentUser.changedPasswordAfter(decoded.iat)) {
         return next();
       }
-      // session control in Pug 
+      // session control
       res.locals.user = currentUser;
-      return next();  
-    } 
-    catch (error) {
-      return next()
+      return next();
+    } catch (error) {
+      return next();
     }
   }
   return next();
