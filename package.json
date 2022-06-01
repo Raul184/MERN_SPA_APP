@@ -43,7 +43,7 @@
     "node-sass": "^4.14.1",
     "nodemailer": "^6.4.10",
     "react-stripe-checkout": "^2.6.3",
-    "sharp": "^0.25.4",
+    "sharp": "^0.30.5",
     "slugify": "^1.4.2",
     "stripe": "^8.75.0",
     "validator": "^10.11.0",
